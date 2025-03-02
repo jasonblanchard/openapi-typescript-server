@@ -1,0 +1,19 @@
+{
+  "name": "openapi-typescript-server-monorepo",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gen:petstore": "openapi-typescript ./examples/petstore/openapi.yaml --output ./examples/petstore/gen/schema.d.ts",
+    "gen:examples": "npm run gen:petstore"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "openapi-typescript": "^7.6.1",
+    "typescript": "^5.8.2"
+  },
+  "workspaces": [
+    "packages/openapi-typescript-server"
+  ]
+}
