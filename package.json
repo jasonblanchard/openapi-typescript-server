@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gen:petstore": "openapi-typescript ./examples/petstore/openapi.yaml --output ./examples/petstore/gen/schema.d.ts",
-    "gen:examples": "npm run gen:petstore"
+    "gen:petstore": "openapi-typescript ./examples/petstore/spec.yaml --output ./examples/petstore/gen/schema.d.ts",
+    "gen:simple": "openapi-typescript ./examples/simple/spec.yaml --output ./examples/simple/gen/schema.d.ts",
+    "gen:examples": "npm run gen:petstore && npm run gen:simple"
   },
   "author": "",
   "license": "ISC",
