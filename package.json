@@ -9,11 +9,14 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "openapi-typescript": "^7.6.1",
     "typescript": "^5.8.2"
   },
-  "workspaces": [
-    "packages/openapi-typescript-server"
-  ]
+  "dependencies": {
+    "openapi-typescript-server": "^0.0.1"
+  }
 }
