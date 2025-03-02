@@ -1,6 +1,7 @@
 {
   "name": "openapi-typescript-server",
   "version": "0.0.1",
+  "type": "module",
   "bin": {
     "openapi-typescript-server": "bin/index.js"
   },
@@ -10,6 +11,13 @@
   "author": "",
   "license": "ISC",
   "main": "index.js",
-  "devDependencies": {},
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "commander": "^13.1.0",
+    "js-yaml": "^4.1.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9"
+  }
 }

@@ -1,6 +1,7 @@
 {
   "name": "openapi-typescript-server-monorepo",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "gen:petstore": "openapi-typescript ./examples/petstore/spec.yaml --output ./examples/petstore/gen/schema.d.ts",
