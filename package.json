@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "gen:petstore": "openapi-typescript ./examples/petstore/spec.yaml --output ./examples/petstore/gen/schema.d.ts",
-    "gen:simple": "openapi-typescript ./examples/simple/spec.yaml --output ./examples/simple/gen/schema.d.ts",
+    "gen:simple": "openapi-typescript ./examples/simple/spec.yaml --output ./examples/simple/gen/schema.d.ts && openapi-typescript-server build -s ./examples/simple/spec.yaml -o ./examples/simple/gen -t ./examples/simple/gen/schema.d.ts",
     "gen:examples": "npm run gen:petstore && npm run gen:simple"
   },
   "author": "",
