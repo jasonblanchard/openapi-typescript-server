@@ -20,86 +20,97 @@ export default function generate(
 
   sourceFile.addImportDeclaration({
     namedImports: ["Route"],
-    moduleSpecifier: "openapi-typescript-server/routeHandler",
+    moduleSpecifier: "openapi-typescript-server/route",
     isTypeOnly: true,
   });
 
-  //   TODO: For each path
-  //  - for each method/operation
+  const operationsById: Record<
+    string,
+    { path: string; method: string; args: string; result: string }
+  > = {};
 
-  const args = sourceFile.addInterface({
-    name: "GetPetByIdArgs",
-    isExported: true,
-    typeParameters: [{ name: "Req" }, { name: "Res" }],
-    properties: [
-      {
-        name: "parameters",
-        type: "operations['getPetById']['parameters']",
-      },
-      {
-        name: "requestBody",
-        type: "operations['getPetById']['requestBody']",
-      },
-      {
-        name: "req",
-        type: "Req",
-      },
-      {
-        name: "res",
-        type: "Res",
-      },
-    ],
-  });
+  for (const path in spec.paths) {
+    const pathSpec = spec.paths[path];
+    for (const method in pathSpec) {
+      const operation = pathSpec[method];
+      if (!operation?.operationId) {
+        throw new Error("Operation without operationId not implemented");
+      }
 
-  const response200 = sourceFile.addInterface({
-    name: "GetPetByIdResponse200",
-    properties: [
-      {
-        name: "responseType",
-        type: "'200'",
-      },
-      {
-        name: "content",
-        type: "operations['getPetById']['responses']['200']['content']",
-      },
-      {
-        name: "headers",
-        type: "{ [name: string]: any }",
-        hasQuestionToken: true,
-      },
-    ],
-  });
+      const args = sourceFile.addInterface({
+        name: `${capitalize(operation.operationId)}Args`,
+        isExported: true,
+        typeParameters: [{ name: "Req" }, { name: "Res" }],
+        properties: [
+          {
+            name: "parameters",
+            type: `operations['${operation.operationId}']['parameters']`,
+          },
+          {
+            name: "requestBody",
+            type: `operations['${operation.operationId}']['requestBody']`,
+          },
+          {
+            name: "req",
+            type: "Req",
+          },
+          {
+            name: "res",
+            type: "Res",
+          },
+        ],
+      });
 
-  const responseDefulat = sourceFile.addInterface({
-    name: "GetPetByIdResponsedefault",
-    properties: [
-      {
-        name: "responseType",
-        type: "'default'",
-      },
-      {
-        name: "content",
-        type: "operations['getPetById']['responses']['default']['content']",
-      },
-      {
-        name: "headers",
-        type: "{ [name: string]: any }",
-        hasQuestionToken: true,
-      },
-      {
-        name: "status",
-        type: "number",
-      },
-    ],
-  });
+      const responses: string[] = [];
 
-  const response = sourceFile.addTypeAlias({
-    name: "GetPetByIdResponse",
-    isExported: true,
-    type: `Promise<${response200.getName()} | ${responseDefulat.getName()}>`,
-  });
+      for (const responseType in operation.responses) {
+        const responseVariant = sourceFile.addInterface({
+          name: `${capitalize(operation.operationId)}Response${responseType}`,
+          properties: [
+            {
+              name: "responseType",
+              type: `'${responseType}'`,
+            },
+            {
+              name: "content",
+              type: `operations['${operation.operationId}']['responses']['200']['content']`,
+            },
+            {
+              name: "headers",
+              type: "{ [name: string]: any }",
+              hasQuestionToken: true,
+            },
+          ],
+        });
 
-  //   TODO: End for each
+        responses.push(responseVariant.getName());
+      }
+
+      const result = sourceFile.addTypeAlias({
+        name: `${capitalize(operation.operationId)}Response`,
+        isExported: true,
+        type: `Promise<${responses.join(" | ")}>`,
+      });
+
+      operationsById[operation.operationId] = {
+        path: path,
+        method: method,
+        args: args.getName(),
+        result: result.getName(),
+      };
+    }
+  }
+
+  const serverInferfaceProperties = Object.entries(operationsById).map(
+    ([operationId, { args, result }]) => {
+      return {
+        name: operationId,
+        type: `(
+          args: ${args}<Req, Res>
+          ) => ${result}`,
+      };
+    }
+  );
 
   const serverInterface = sourceFile.addInterface({
     name: "Server",
@@ -108,30 +119,26 @@ export default function generate(
       { name: "Req", default: "unknown" },
       { name: "Res", default: "unknown" },
     ],
-    properties: [
-      {
-        name: "getPetById",
-        type: `(
-            args: ${args.getName()}<Req, Res>
-            ) => ${response.getName()}`,
-      },
-    ],
+    properties: serverInferfaceProperties,
   });
 
   sourceFile.addFunction({
-    name: "registerHandlers",
+    name: "registerServerHandlers",
     isExported: true,
     parameters: [{ name: "server", type: serverInterface.getName() }],
     returnType: "Route[]",
     statements: (writer) => {
       writer.writeLine("return [");
 
-      // TODO: For each operation
-      writer.writeLine("{");
-      writer.writeLine('method: "get",');
-      writer.writeLine('path: "/pet/{petId}",');
-      writer.writeLine("handler: server.getPetById,");
-      writer.writeLine("}");
+      Object.entries(operationsById).forEach(
+        ([operationId, { path, method }]) => {
+          writer.writeLine("{");
+          writer.writeLine(`method: "${method}",`);
+          writer.writeLine(`path: "${path}",`);
+          writer.writeLine(`handler: server.${operationId},`);
+          writer.writeLine("},");
+        }
+      );
 
       writer.writeLine("]");
     },
@@ -153,4 +160,8 @@ export default function generate(
     indentSize: 2,
   });
   sourceFile.saveSync();
+}
+
+function capitalize(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }

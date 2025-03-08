@@ -7,39 +7,67 @@ import type { operations } from "./schema.d.ts";
 import type { Route } from "openapi-typescript-server/route";
 
 export interface GetPetByIdArgs<Req, Res> {
-  parameters: operations["getPetById"]["parameters"];
-  requestBody: operations["getPetById"]["requestBody"];
+  parameters: operations['getPetById']['parameters'];
+  requestBody: operations['getPetById']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface GetPetByIdResponse200 {
-  responseType: "200";
-  content: operations["getPetById"]["responses"]["200"]["content"];
+  responseType: '200';
+  content: operations['getPetById']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
 interface GetPetByIdResponsedefault {
-  responseType: "default";
-  content: operations["getPetById"]["responses"]["default"]["content"];
+  responseType: 'default';
+  content: operations['getPetById']['responses']['200']['content'];
   headers?: { [name: string]: any };
-  status: number;
 }
 
-export type GetPetByIdResponse = Promise<
-  GetPetByIdResponse200 | GetPetByIdResponsedefault
->;
+export type GetPetByIdResponse = Promise<GetPetByIdResponse200 | GetPetByIdResponsedefault>;
+
+export interface UpdatePetWithFormArgs<Req, Res> {
+  parameters: operations['updatePetWithForm']['parameters'];
+  requestBody: operations['updatePetWithForm']['requestBody'];
+  req: Req;
+  res: Res;
+}
+
+interface UpdatePetWithFormResponse200 {
+  responseType: '200';
+  content: operations['updatePetWithForm']['responses']['200']['content'];
+  headers?: { [name: string]: any };
+}
+
+interface UpdatePetWithFormResponsedefault {
+  responseType: 'default';
+  content: operations['updatePetWithForm']['responses']['200']['content'];
+  headers?: { [name: string]: any };
+}
+
+export type UpdatePetWithFormResponse = Promise<UpdatePetWithFormResponse200 | UpdatePetWithFormResponsedefault>;
 
 export interface Server<Req = unknown, Res = unknown> {
-  getPetById: (args: GetPetByIdArgs<Req, Res>) => GetPetByIdResponse;
+  getPetById: (
+    args: GetPetByIdArgs<Req, Res>
+  ) => GetPetByIdResponse;
+  updatePetWithForm: (
+    args: UpdatePetWithFormArgs<Req, Res>
+  ) => UpdatePetWithFormResponse;
 }
 
-export function registerHandlers(server: Server): Route[] {
+export function registerServerHandlers(server: Server): Route[] {
   return [
     {
       method: "get",
       path: "/pet/{petId}",
       handler: server.getPetById,
     },
-  ];
+    {
+      method: "post",
+      path: "/pet/{petId}",
+      handler: server.updatePetWithForm,
+    },
+  ]
 }

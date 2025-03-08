@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "express": "^4.21.2",
-    "openapi-typescript-server": "^0.0.1"
+    "openapi-typescript-server": "^0.0.1",
+    "openapi-typesript-server-express": "^0.0.1"
   }
 }
