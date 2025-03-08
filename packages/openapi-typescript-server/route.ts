@@ -22,7 +22,7 @@ type HandlerInput = {
 
 type HandlerResponse = {
   responseType: string;
-  content: {
+  content?: {
     [key: string]: any;
   };
   headers?: {

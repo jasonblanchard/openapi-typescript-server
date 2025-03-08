@@ -73,7 +73,7 @@ export default function generate(
             },
             {
               name: "content",
-              type: `operations['${operation.operationId}']['responses']['200']['content']`,
+              type: `operations['${operation.operationId}']['responses']['${responseType}']['content']`,
             },
             {
               name: "headers",

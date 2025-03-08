@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gen:petstore": "openapi-typescript ./examples/petstore/spec.yaml --output ./examples/petstore/gen/schema.d.ts",
-    "gen:simple": "openapi-typescript ./examples/simple/spec.yaml --output ./examples/simple/gen/schema.d.ts && openapi-typescript-server build -s ./examples/simple/spec.yaml -o ./examples/simple/gen -t ./schema.d.ts",
+    "gen:petstore": "openapi-typescript ./examples/petstore/spec.yaml --output ./examples/petstore/gen/schema.d.ts && openapi-typescript-server build -s ./examples/petstore/spec.yaml -t ./schema.d.ts -o ./examples/petstore/gen ",
+    "gen:simple": "openapi-typescript ./examples/simple/spec.yaml --output ./examples/simple/gen/schema.d.ts && openapi-typescript-server build -s ./examples/simple/spec.yaml -t ./schema.d.ts -o ./examples/simple/gen",
     "gen:examples": "npm run gen:petstore && npm run gen:simple"
   },
   "author": "",

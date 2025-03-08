@@ -37,8 +37,10 @@ export default function routesToExpressRouter(
         res.status(Number(result.responseType));
       }
 
-      // TODO: Deal with content type
-      res.json(result.content["application/json"]);
+      // TODO: Handle other content types
+      if (result.content?.["application/json"]) {
+        res.json(result.content["application/json"]);
+      }
 
       return;
     });

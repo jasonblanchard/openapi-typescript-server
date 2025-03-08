@@ -21,7 +21,7 @@ interface GetPetByIdResponse200 {
 
 interface GetPetByIdResponsedefault {
   responseType: 'default';
-  content: operations['getPetById']['responses']['200']['content'];
+  content: operations['getPetById']['responses']['default']['content'];
   headers?: { [name: string]: any };
 }
 
@@ -42,7 +42,7 @@ interface UpdatePetWithFormResponse200 {
 
 interface UpdatePetWithFormResponsedefault {
   responseType: 'default';
-  content: operations['updatePetWithForm']['responses']['200']['content'];
+  content: operations['updatePetWithForm']['responses']['default']['content'];
   headers?: { [name: string]: any };
 }
 
