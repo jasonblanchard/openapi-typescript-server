@@ -37,7 +37,7 @@ export default function generate(
         throw new Error("Operation without operationId not implemented");
       }
 
-      const args = sourceFile.addInterface({
+      const argsInterface = sourceFile.addInterface({
         name: `${capitalize(operation.operationId)}Args`,
         isExported: true,
         typeParameters: [{ name: "Req" }, { name: "Res" }],
@@ -61,19 +61,21 @@ export default function generate(
         ],
       });
 
-      const responses: string[] = [];
+      const responseVariantInterfaceNames: string[] = [];
 
-      for (const responseType in operation.responses) {
-        const responseVariant = sourceFile.addInterface({
-          name: `${capitalize(operation.operationId)}Response${responseType}`,
+      for (const responseVariant in operation.responses) {
+        const responseVariantInterface = sourceFile.addInterface({
+          name: `${capitalize(
+            operation.operationId
+          )}Response${responseVariant}`,
           properties: [
             {
               name: "responseType",
-              type: `'${responseType}'`,
+              type: `'${responseVariant}'`,
             },
             {
               name: "content",
-              type: `operations['${operation.operationId}']['responses']['${responseType}']['content']`,
+              type: `operations['${operation.operationId}']['responses']['${responseVariant}']['content']`,
             },
             {
               name: "headers",
@@ -83,20 +85,20 @@ export default function generate(
           ],
         });
 
-        responses.push(responseVariant.getName());
+        responseVariantInterfaceNames.push(responseVariantInterface.getName());
       }
 
-      const result = sourceFile.addTypeAlias({
-        name: `${capitalize(operation.operationId)}Response`,
+      const resultType = sourceFile.addTypeAlias({
+        name: `${capitalize(operation.operationId)}Result`,
         isExported: true,
-        type: `Promise<${responses.join(" | ")}>`,
+        type: `Promise<${responseVariantInterfaceNames.join(" | ")}>`,
       });
 
       operationsById[operation.operationId] = {
         path: path,
         method: method,
-        args: args.getName(),
-        result: result.getName(),
+        args: argsInterface.getName(),
+        result: resultType.getName(),
       };
     }
   }

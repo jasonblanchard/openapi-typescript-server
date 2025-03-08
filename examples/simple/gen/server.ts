@@ -25,7 +25,7 @@ interface GetPetByIdResponsedefault {
   headers?: { [name: string]: any };
 }
 
-export type GetPetByIdResponse = Promise<GetPetByIdResponse200 | GetPetByIdResponsedefault>;
+export type GetPetByIdResult = Promise<GetPetByIdResponse200 | GetPetByIdResponsedefault>;
 
 export interface UpdatePetWithFormArgs<Req, Res> {
   parameters: operations['updatePetWithForm']['parameters'];
@@ -46,15 +46,15 @@ interface UpdatePetWithFormResponsedefault {
   headers?: { [name: string]: any };
 }
 
-export type UpdatePetWithFormResponse = Promise<UpdatePetWithFormResponse200 | UpdatePetWithFormResponsedefault>;
+export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResponse200 | UpdatePetWithFormResponsedefault>;
 
 export interface Server<Req = unknown, Res = unknown> {
   getPetById: (
     args: GetPetByIdArgs<Req, Res>
-  ) => GetPetByIdResponse;
+  ) => GetPetByIdResult;
   updatePetWithForm: (
     args: UpdatePetWithFormArgs<Req, Res>
-  ) => UpdatePetWithFormResponse;
+  ) => UpdatePetWithFormResult;
 }
 
 export function registerServerHandlers(server: Server): Route[] {
