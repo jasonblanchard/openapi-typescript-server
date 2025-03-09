@@ -13,19 +13,20 @@ export interface GetPetByIdArgs<Req, Res> {
   res: Res;
 }
 
-interface GetPetByIdResponse200 {
-  responseType: '200';
+interface GetPetByIdResult_200 {
+  responseVariant: '200';
   content: operations['getPetById']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface GetPetByIdResponsedefault {
-  responseType: 'default';
+interface GetPetByIdResult_default {
+  responseVariant: 'default';
   content: operations['getPetById']['responses']['default']['content'];
   headers?: { [name: string]: any };
+  status: number;
 }
 
-export type GetPetByIdResult = Promise<GetPetByIdResponse200 | GetPetByIdResponsedefault>;
+export type GetPetByIdResult = Promise<GetPetByIdResult_200 | GetPetByIdResult_default>;
 
 export interface UpdatePetWithFormArgs<Req, Res> {
   parameters: operations['updatePetWithForm']['parameters'];
@@ -34,19 +35,20 @@ export interface UpdatePetWithFormArgs<Req, Res> {
   res: Res;
 }
 
-interface UpdatePetWithFormResponse200 {
-  responseType: '200';
+interface UpdatePetWithFormResult_200 {
+  responseVariant: '200';
   content: operations['updatePetWithForm']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface UpdatePetWithFormResponsedefault {
-  responseType: 'default';
+interface UpdatePetWithFormResult_default {
+  responseVariant: 'default';
   content: operations['updatePetWithForm']['responses']['default']['content'];
   headers?: { [name: string]: any };
+  status: number;
 }
 
-export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResponse200 | UpdatePetWithFormResponsedefault>;
+export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResult_200 | UpdatePetWithFormResult_default>;
 
 export interface Server<Req = unknown, Res = unknown> {
   getPetById: (

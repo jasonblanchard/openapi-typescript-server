@@ -13,31 +13,31 @@ export interface UpdatePetArgs<Req, Res> {
   res: Res;
 }
 
-interface UpdatePetResponse200 {
-  responseType: '200';
+interface UpdatePetResult_200 {
+  responseVariant: '200';
   content: operations['updatePet']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface UpdatePetResponse400 {
-  responseType: '400';
+interface UpdatePetResult_400 {
+  responseVariant: '400';
   content: operations['updatePet']['responses']['400']['content'];
   headers?: { [name: string]: any };
 }
 
-interface UpdatePetResponse404 {
-  responseType: '404';
+interface UpdatePetResult_404 {
+  responseVariant: '404';
   content: operations['updatePet']['responses']['404']['content'];
   headers?: { [name: string]: any };
 }
 
-interface UpdatePetResponse405 {
-  responseType: '405';
+interface UpdatePetResult_405 {
+  responseVariant: '405';
   content: operations['updatePet']['responses']['405']['content'];
   headers?: { [name: string]: any };
 }
 
-export type UpdatePetResult = Promise<UpdatePetResponse200 | UpdatePetResponse400 | UpdatePetResponse404 | UpdatePetResponse405>;
+export type UpdatePetResult = Promise<UpdatePetResult_200 | UpdatePetResult_400 | UpdatePetResult_404 | UpdatePetResult_405>;
 
 export interface AddPetArgs<Req, Res> {
   parameters: operations['addPet']['parameters'];
@@ -46,19 +46,19 @@ export interface AddPetArgs<Req, Res> {
   res: Res;
 }
 
-interface AddPetResponse200 {
-  responseType: '200';
+interface AddPetResult_200 {
+  responseVariant: '200';
   content: operations['addPet']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface AddPetResponse405 {
-  responseType: '405';
+interface AddPetResult_405 {
+  responseVariant: '405';
   content: operations['addPet']['responses']['405']['content'];
   headers?: { [name: string]: any };
 }
 
-export type AddPetResult = Promise<AddPetResponse200 | AddPetResponse405>;
+export type AddPetResult = Promise<AddPetResult_200 | AddPetResult_405>;
 
 export interface FindPetsByStatusArgs<Req, Res> {
   parameters: operations['findPetsByStatus']['parameters'];
@@ -67,19 +67,19 @@ export interface FindPetsByStatusArgs<Req, Res> {
   res: Res;
 }
 
-interface FindPetsByStatusResponse200 {
-  responseType: '200';
+interface FindPetsByStatusResult_200 {
+  responseVariant: '200';
   content: operations['findPetsByStatus']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface FindPetsByStatusResponse400 {
-  responseType: '400';
+interface FindPetsByStatusResult_400 {
+  responseVariant: '400';
   content: operations['findPetsByStatus']['responses']['400']['content'];
   headers?: { [name: string]: any };
 }
 
-export type FindPetsByStatusResult = Promise<FindPetsByStatusResponse200 | FindPetsByStatusResponse400>;
+export type FindPetsByStatusResult = Promise<FindPetsByStatusResult_200 | FindPetsByStatusResult_400>;
 
 export interface FindPetsByTagsArgs<Req, Res> {
   parameters: operations['findPetsByTags']['parameters'];
@@ -88,19 +88,19 @@ export interface FindPetsByTagsArgs<Req, Res> {
   res: Res;
 }
 
-interface FindPetsByTagsResponse200 {
-  responseType: '200';
+interface FindPetsByTagsResult_200 {
+  responseVariant: '200';
   content: operations['findPetsByTags']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface FindPetsByTagsResponse400 {
-  responseType: '400';
+interface FindPetsByTagsResult_400 {
+  responseVariant: '400';
   content: operations['findPetsByTags']['responses']['400']['content'];
   headers?: { [name: string]: any };
 }
 
-export type FindPetsByTagsResult = Promise<FindPetsByTagsResponse200 | FindPetsByTagsResponse400>;
+export type FindPetsByTagsResult = Promise<FindPetsByTagsResult_200 | FindPetsByTagsResult_400>;
 
 export interface GetPetByIdArgs<Req, Res> {
   parameters: operations['getPetById']['parameters'];
@@ -109,25 +109,25 @@ export interface GetPetByIdArgs<Req, Res> {
   res: Res;
 }
 
-interface GetPetByIdResponse200 {
-  responseType: '200';
+interface GetPetByIdResult_200 {
+  responseVariant: '200';
   content: operations['getPetById']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface GetPetByIdResponse400 {
-  responseType: '400';
+interface GetPetByIdResult_400 {
+  responseVariant: '400';
   content: operations['getPetById']['responses']['400']['content'];
   headers?: { [name: string]: any };
 }
 
-interface GetPetByIdResponse404 {
-  responseType: '404';
+interface GetPetByIdResult_404 {
+  responseVariant: '404';
   content: operations['getPetById']['responses']['404']['content'];
   headers?: { [name: string]: any };
 }
 
-export type GetPetByIdResult = Promise<GetPetByIdResponse200 | GetPetByIdResponse400 | GetPetByIdResponse404>;
+export type GetPetByIdResult = Promise<GetPetByIdResult_200 | GetPetByIdResult_400 | GetPetByIdResult_404>;
 
 export interface UpdatePetWithFormArgs<Req, Res> {
   parameters: operations['updatePetWithForm']['parameters'];
@@ -136,13 +136,13 @@ export interface UpdatePetWithFormArgs<Req, Res> {
   res: Res;
 }
 
-interface UpdatePetWithFormResponse405 {
-  responseType: '405';
+interface UpdatePetWithFormResult_405 {
+  responseVariant: '405';
   content: operations['updatePetWithForm']['responses']['405']['content'];
   headers?: { [name: string]: any };
 }
 
-export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResponse405>;
+export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResult_405>;
 
 export interface DeletePetArgs<Req, Res> {
   parameters: operations['deletePet']['parameters'];
@@ -151,13 +151,13 @@ export interface DeletePetArgs<Req, Res> {
   res: Res;
 }
 
-interface DeletePetResponse400 {
-  responseType: '400';
+interface DeletePetResult_400 {
+  responseVariant: '400';
   content: operations['deletePet']['responses']['400']['content'];
   headers?: { [name: string]: any };
 }
 
-export type DeletePetResult = Promise<DeletePetResponse400>;
+export type DeletePetResult = Promise<DeletePetResult_400>;
 
 export interface UploadFileArgs<Req, Res> {
   parameters: operations['uploadFile']['parameters'];
@@ -166,13 +166,13 @@ export interface UploadFileArgs<Req, Res> {
   res: Res;
 }
 
-interface UploadFileResponse200 {
-  responseType: '200';
+interface UploadFileResult_200 {
+  responseVariant: '200';
   content: operations['uploadFile']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-export type UploadFileResult = Promise<UploadFileResponse200>;
+export type UploadFileResult = Promise<UploadFileResult_200>;
 
 export interface GetInventoryArgs<Req, Res> {
   parameters: operations['getInventory']['parameters'];
@@ -181,13 +181,13 @@ export interface GetInventoryArgs<Req, Res> {
   res: Res;
 }
 
-interface GetInventoryResponse200 {
-  responseType: '200';
+interface GetInventoryResult_200 {
+  responseVariant: '200';
   content: operations['getInventory']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-export type GetInventoryResult = Promise<GetInventoryResponse200>;
+export type GetInventoryResult = Promise<GetInventoryResult_200>;
 
 export interface PlaceOrderArgs<Req, Res> {
   parameters: operations['placeOrder']['parameters'];
@@ -196,19 +196,19 @@ export interface PlaceOrderArgs<Req, Res> {
   res: Res;
 }
 
-interface PlaceOrderResponse200 {
-  responseType: '200';
+interface PlaceOrderResult_200 {
+  responseVariant: '200';
   content: operations['placeOrder']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface PlaceOrderResponse405 {
-  responseType: '405';
+interface PlaceOrderResult_405 {
+  responseVariant: '405';
   content: operations['placeOrder']['responses']['405']['content'];
   headers?: { [name: string]: any };
 }
 
-export type PlaceOrderResult = Promise<PlaceOrderResponse200 | PlaceOrderResponse405>;
+export type PlaceOrderResult = Promise<PlaceOrderResult_200 | PlaceOrderResult_405>;
 
 export interface GetOrderByIdArgs<Req, Res> {
   parameters: operations['getOrderById']['parameters'];
@@ -217,25 +217,25 @@ export interface GetOrderByIdArgs<Req, Res> {
   res: Res;
 }
 
-interface GetOrderByIdResponse200 {
-  responseType: '200';
+interface GetOrderByIdResult_200 {
+  responseVariant: '200';
   content: operations['getOrderById']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface GetOrderByIdResponse400 {
-  responseType: '400';
+interface GetOrderByIdResult_400 {
+  responseVariant: '400';
   content: operations['getOrderById']['responses']['400']['content'];
   headers?: { [name: string]: any };
 }
 
-interface GetOrderByIdResponse404 {
-  responseType: '404';
+interface GetOrderByIdResult_404 {
+  responseVariant: '404';
   content: operations['getOrderById']['responses']['404']['content'];
   headers?: { [name: string]: any };
 }
 
-export type GetOrderByIdResult = Promise<GetOrderByIdResponse200 | GetOrderByIdResponse400 | GetOrderByIdResponse404>;
+export type GetOrderByIdResult = Promise<GetOrderByIdResult_200 | GetOrderByIdResult_400 | GetOrderByIdResult_404>;
 
 export interface DeleteOrderArgs<Req, Res> {
   parameters: operations['deleteOrder']['parameters'];
@@ -244,19 +244,19 @@ export interface DeleteOrderArgs<Req, Res> {
   res: Res;
 }
 
-interface DeleteOrderResponse400 {
-  responseType: '400';
+interface DeleteOrderResult_400 {
+  responseVariant: '400';
   content: operations['deleteOrder']['responses']['400']['content'];
   headers?: { [name: string]: any };
 }
 
-interface DeleteOrderResponse404 {
-  responseType: '404';
+interface DeleteOrderResult_404 {
+  responseVariant: '404';
   content: operations['deleteOrder']['responses']['404']['content'];
   headers?: { [name: string]: any };
 }
 
-export type DeleteOrderResult = Promise<DeleteOrderResponse400 | DeleteOrderResponse404>;
+export type DeleteOrderResult = Promise<DeleteOrderResult_400 | DeleteOrderResult_404>;
 
 export interface CreateUserArgs<Req, Res> {
   parameters: operations['createUser']['parameters'];
@@ -265,13 +265,14 @@ export interface CreateUserArgs<Req, Res> {
   res: Res;
 }
 
-interface CreateUserResponsedefault {
-  responseType: 'default';
+interface CreateUserResult_default {
+  responseVariant: 'default';
   content: operations['createUser']['responses']['default']['content'];
   headers?: { [name: string]: any };
+  status: number;
 }
 
-export type CreateUserResult = Promise<CreateUserResponsedefault>;
+export type CreateUserResult = Promise<CreateUserResult_default>;
 
 export interface CreateUsersWithListInputArgs<Req, Res> {
   parameters: operations['createUsersWithListInput']['parameters'];
@@ -280,19 +281,20 @@ export interface CreateUsersWithListInputArgs<Req, Res> {
   res: Res;
 }
 
-interface CreateUsersWithListInputResponse200 {
-  responseType: '200';
+interface CreateUsersWithListInputResult_200 {
+  responseVariant: '200';
   content: operations['createUsersWithListInput']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface CreateUsersWithListInputResponsedefault {
-  responseType: 'default';
+interface CreateUsersWithListInputResult_default {
+  responseVariant: 'default';
   content: operations['createUsersWithListInput']['responses']['default']['content'];
   headers?: { [name: string]: any };
+  status: number;
 }
 
-export type CreateUsersWithListInputResult = Promise<CreateUsersWithListInputResponse200 | CreateUsersWithListInputResponsedefault>;
+export type CreateUsersWithListInputResult = Promise<CreateUsersWithListInputResult_200 | CreateUsersWithListInputResult_default>;
 
 export interface LoginUserArgs<Req, Res> {
   parameters: operations['loginUser']['parameters'];
@@ -301,19 +303,19 @@ export interface LoginUserArgs<Req, Res> {
   res: Res;
 }
 
-interface LoginUserResponse200 {
-  responseType: '200';
+interface LoginUserResult_200 {
+  responseVariant: '200';
   content: operations['loginUser']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface LoginUserResponse400 {
-  responseType: '400';
+interface LoginUserResult_400 {
+  responseVariant: '400';
   content: operations['loginUser']['responses']['400']['content'];
   headers?: { [name: string]: any };
 }
 
-export type LoginUserResult = Promise<LoginUserResponse200 | LoginUserResponse400>;
+export type LoginUserResult = Promise<LoginUserResult_200 | LoginUserResult_400>;
 
 export interface LogoutUserArgs<Req, Res> {
   parameters: operations['logoutUser']['parameters'];
@@ -322,13 +324,14 @@ export interface LogoutUserArgs<Req, Res> {
   res: Res;
 }
 
-interface LogoutUserResponsedefault {
-  responseType: 'default';
+interface LogoutUserResult_default {
+  responseVariant: 'default';
   content: operations['logoutUser']['responses']['default']['content'];
   headers?: { [name: string]: any };
+  status: number;
 }
 
-export type LogoutUserResult = Promise<LogoutUserResponsedefault>;
+export type LogoutUserResult = Promise<LogoutUserResult_default>;
 
 export interface GetUserByNameArgs<Req, Res> {
   parameters: operations['getUserByName']['parameters'];
@@ -337,25 +340,25 @@ export interface GetUserByNameArgs<Req, Res> {
   res: Res;
 }
 
-interface GetUserByNameResponse200 {
-  responseType: '200';
+interface GetUserByNameResult_200 {
+  responseVariant: '200';
   content: operations['getUserByName']['responses']['200']['content'];
   headers?: { [name: string]: any };
 }
 
-interface GetUserByNameResponse400 {
-  responseType: '400';
+interface GetUserByNameResult_400 {
+  responseVariant: '400';
   content: operations['getUserByName']['responses']['400']['content'];
   headers?: { [name: string]: any };
 }
 
-interface GetUserByNameResponse404 {
-  responseType: '404';
+interface GetUserByNameResult_404 {
+  responseVariant: '404';
   content: operations['getUserByName']['responses']['404']['content'];
   headers?: { [name: string]: any };
 }
 
-export type GetUserByNameResult = Promise<GetUserByNameResponse200 | GetUserByNameResponse400 | GetUserByNameResponse404>;
+export type GetUserByNameResult = Promise<GetUserByNameResult_200 | GetUserByNameResult_400 | GetUserByNameResult_404>;
 
 export interface UpdateUserArgs<Req, Res> {
   parameters: operations['updateUser']['parameters'];
@@ -364,13 +367,14 @@ export interface UpdateUserArgs<Req, Res> {
   res: Res;
 }
 
-interface UpdateUserResponsedefault {
-  responseType: 'default';
+interface UpdateUserResult_default {
+  responseVariant: 'default';
   content: operations['updateUser']['responses']['default']['content'];
   headers?: { [name: string]: any };
+  status: number;
 }
 
-export type UpdateUserResult = Promise<UpdateUserResponsedefault>;
+export type UpdateUserResult = Promise<UpdateUserResult_default>;
 
 export interface DeleteUserArgs<Req, Res> {
   parameters: operations['deleteUser']['parameters'];
@@ -379,19 +383,19 @@ export interface DeleteUserArgs<Req, Res> {
   res: Res;
 }
 
-interface DeleteUserResponse400 {
-  responseType: '400';
+interface DeleteUserResult_400 {
+  responseVariant: '400';
   content: operations['deleteUser']['responses']['400']['content'];
   headers?: { [name: string]: any };
 }
 
-interface DeleteUserResponse404 {
-  responseType: '404';
+interface DeleteUserResult_404 {
+  responseVariant: '404';
   content: operations['deleteUser']['responses']['404']['content'];
   headers?: { [name: string]: any };
 }
 
-export type DeleteUserResult = Promise<DeleteUserResponse400 | DeleteUserResponse404>;
+export type DeleteUserResult = Promise<DeleteUserResult_400 | DeleteUserResult_404>;
 
 export interface Server<Req = unknown, Res = unknown> {
   updatePet: (

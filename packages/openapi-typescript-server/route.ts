@@ -21,7 +21,7 @@ type HandlerInput = {
 };
 
 type HandlerResponse = {
-  responseType: string;
+  responseVariant: string;
   content?: {
     [key: string]: any;
   };

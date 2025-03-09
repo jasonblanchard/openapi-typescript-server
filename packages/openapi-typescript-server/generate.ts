@@ -64,25 +64,31 @@ export default function generate(
       const responseVariantInterfaceNames: string[] = [];
 
       for (const responseVariant in operation.responses) {
+        const responseVariantProperties = [
+          {
+            name: "responseVariant",
+            type: `'${responseVariant}'`,
+          },
+          {
+            name: "content",
+            type: `operations['${operation.operationId}']['responses']['${responseVariant}']['content']`,
+          },
+          {
+            name: "headers",
+            type: "{ [name: string]: any }",
+            hasQuestionToken: true,
+          },
+        ];
+
+        if (responseVariant === "default" || responseVariant.includes("XX")) {
+          responseVariantProperties.push({
+            name: "status",
+            type: "number",
+          });
+        }
         const responseVariantInterface = sourceFile.addInterface({
-          name: `${capitalize(
-            operation.operationId
-          )}Response${responseVariant}`,
-          properties: [
-            {
-              name: "responseType",
-              type: `'${responseVariant}'`,
-            },
-            {
-              name: "content",
-              type: `operations['${operation.operationId}']['responses']['${responseVariant}']['content']`,
-            },
-            {
-              name: "headers",
-              type: "{ [name: string]: any }",
-              hasQuestionToken: true,
-            },
-          ],
+          name: `${capitalize(operation.operationId)}Result_${responseVariant}`,
+          properties: responseVariantProperties,
         });
 
         responseVariantInterfaceNames.push(responseVariantInterface.getName());

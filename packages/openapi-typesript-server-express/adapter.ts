@@ -29,12 +29,12 @@ export default function routesToExpressRouter(
       }
 
       if (
-        result.responseType.toUpperCase().includes("XX") ||
-        result.responseType === "default"
+        result.responseVariant.toUpperCase().includes("XX") ||
+        result.responseVariant === "default"
       ) {
         res.status(result.status || 500);
       } else {
-        res.status(Number(result.responseType));
+        res.status(Number(result.responseVariant));
       }
 
       // TODO: Handle other content types

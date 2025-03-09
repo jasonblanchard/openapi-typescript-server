@@ -1,16 +1,32 @@
-import type { Server } from "./gen/server.ts";
+import type {
+  Server,
+  GetPetByIdResult,
+  UpdatePetWithFormResult,
+} from "./gen/server.ts";
 
 const Service: Server = {
-  getPetById: async () => {
+  getPetById: async ({ parameters }): GetPetByIdResult => {
+    if (parameters.path.petId === 42) {
+      return {
+        responseVariant: "default",
+        content: {
+          "application/json": {
+            message: "Pet not found",
+          },
+        },
+        status: 404,
+      };
+    }
+
     return {
-      responseType: "200",
+      responseVariant: "200",
       content: { "application/json": { pet: { id: 1, name: "dog" } } },
     };
   },
 
-  updatePetWithForm: async () => {
+  updatePetWithForm: async (): UpdatePetWithFormResult => {
     return {
-      responseType: "200",
+      responseVariant: "200",
       content: { "application/json": { pet: { id: 1, name: "dog" } } },
     };
   },
