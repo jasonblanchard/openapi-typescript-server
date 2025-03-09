@@ -14,26 +14,22 @@ export interface UpdatePetArgs<Req, Res> {
 }
 
 interface UpdatePetResult_200 {
-  responseVariant: '200';
-  content: operations['updatePet']['responses']['200']['content'];
+  content: { 200: operations['updatePet']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface UpdatePetResult_400 {
-  responseVariant: '400';
-  content: operations['updatePet']['responses']['400']['content'];
+  content: { 400: operations['updatePet']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface UpdatePetResult_404 {
-  responseVariant: '404';
-  content: operations['updatePet']['responses']['404']['content'];
+  content: { 404: operations['updatePet']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface UpdatePetResult_405 {
-  responseVariant: '405';
-  content: operations['updatePet']['responses']['405']['content'];
+  content: { 405: operations['updatePet']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -47,14 +43,12 @@ export interface AddPetArgs<Req, Res> {
 }
 
 interface AddPetResult_200 {
-  responseVariant: '200';
-  content: operations['addPet']['responses']['200']['content'];
+  content: { 200: operations['addPet']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface AddPetResult_405 {
-  responseVariant: '405';
-  content: operations['addPet']['responses']['405']['content'];
+  content: { 405: operations['addPet']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -68,14 +62,12 @@ export interface FindPetsByStatusArgs<Req, Res> {
 }
 
 interface FindPetsByStatusResult_200 {
-  responseVariant: '200';
-  content: operations['findPetsByStatus']['responses']['200']['content'];
+  content: { 200: operations['findPetsByStatus']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface FindPetsByStatusResult_400 {
-  responseVariant: '400';
-  content: operations['findPetsByStatus']['responses']['400']['content'];
+  content: { 400: operations['findPetsByStatus']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -89,14 +81,12 @@ export interface FindPetsByTagsArgs<Req, Res> {
 }
 
 interface FindPetsByTagsResult_200 {
-  responseVariant: '200';
-  content: operations['findPetsByTags']['responses']['200']['content'];
+  content: { 200: operations['findPetsByTags']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface FindPetsByTagsResult_400 {
-  responseVariant: '400';
-  content: operations['findPetsByTags']['responses']['400']['content'];
+  content: { 400: operations['findPetsByTags']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -110,20 +100,17 @@ export interface GetPetByIdArgs<Req, Res> {
 }
 
 interface GetPetByIdResult_200 {
-  responseVariant: '200';
-  content: operations['getPetById']['responses']['200']['content'];
+  content: { 200: operations['getPetById']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetPetByIdResult_400 {
-  responseVariant: '400';
-  content: operations['getPetById']['responses']['400']['content'];
+  content: { 400: operations['getPetById']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetPetByIdResult_404 {
-  responseVariant: '404';
-  content: operations['getPetById']['responses']['404']['content'];
+  content: { 404: operations['getPetById']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -137,8 +124,7 @@ export interface UpdatePetWithFormArgs<Req, Res> {
 }
 
 interface UpdatePetWithFormResult_405 {
-  responseVariant: '405';
-  content: operations['updatePetWithForm']['responses']['405']['content'];
+  content: { 405: operations['updatePetWithForm']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -152,8 +138,7 @@ export interface DeletePetArgs<Req, Res> {
 }
 
 interface DeletePetResult_400 {
-  responseVariant: '400';
-  content: operations['deletePet']['responses']['400']['content'];
+  content: { 400: operations['deletePet']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -167,8 +152,7 @@ export interface UploadFileArgs<Req, Res> {
 }
 
 interface UploadFileResult_200 {
-  responseVariant: '200';
-  content: operations['uploadFile']['responses']['200']['content'];
+  content: { 200: operations['uploadFile']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -182,8 +166,7 @@ export interface GetInventoryArgs<Req, Res> {
 }
 
 interface GetInventoryResult_200 {
-  responseVariant: '200';
-  content: operations['getInventory']['responses']['200']['content'];
+  content: { 200: operations['getInventory']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -197,14 +180,12 @@ export interface PlaceOrderArgs<Req, Res> {
 }
 
 interface PlaceOrderResult_200 {
-  responseVariant: '200';
-  content: operations['placeOrder']['responses']['200']['content'];
+  content: { 200: operations['placeOrder']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface PlaceOrderResult_405 {
-  responseVariant: '405';
-  content: operations['placeOrder']['responses']['405']['content'];
+  content: { 405: operations['placeOrder']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -218,20 +199,17 @@ export interface GetOrderByIdArgs<Req, Res> {
 }
 
 interface GetOrderByIdResult_200 {
-  responseVariant: '200';
-  content: operations['getOrderById']['responses']['200']['content'];
+  content: { 200: operations['getOrderById']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetOrderByIdResult_400 {
-  responseVariant: '400';
-  content: operations['getOrderById']['responses']['400']['content'];
+  content: { 400: operations['getOrderById']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetOrderByIdResult_404 {
-  responseVariant: '404';
-  content: operations['getOrderById']['responses']['404']['content'];
+  content: { 404: operations['getOrderById']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -245,14 +223,12 @@ export interface DeleteOrderArgs<Req, Res> {
 }
 
 interface DeleteOrderResult_400 {
-  responseVariant: '400';
-  content: operations['deleteOrder']['responses']['400']['content'];
+  content: { 400: operations['deleteOrder']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface DeleteOrderResult_404 {
-  responseVariant: '404';
-  content: operations['deleteOrder']['responses']['404']['content'];
+  content: { 404: operations['deleteOrder']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -266,8 +242,7 @@ export interface CreateUserArgs<Req, Res> {
 }
 
 interface CreateUserResult_default {
-  responseVariant: 'default';
-  content: operations['createUser']['responses']['default']['content'];
+  content: { default: operations['createUser']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -282,14 +257,12 @@ export interface CreateUsersWithListInputArgs<Req, Res> {
 }
 
 interface CreateUsersWithListInputResult_200 {
-  responseVariant: '200';
-  content: operations['createUsersWithListInput']['responses']['200']['content'];
+  content: { 200: operations['createUsersWithListInput']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface CreateUsersWithListInputResult_default {
-  responseVariant: 'default';
-  content: operations['createUsersWithListInput']['responses']['default']['content'];
+  content: { default: operations['createUsersWithListInput']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -304,14 +277,12 @@ export interface LoginUserArgs<Req, Res> {
 }
 
 interface LoginUserResult_200 {
-  responseVariant: '200';
-  content: operations['loginUser']['responses']['200']['content'];
+  content: { 200: operations['loginUser']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface LoginUserResult_400 {
-  responseVariant: '400';
-  content: operations['loginUser']['responses']['400']['content'];
+  content: { 400: operations['loginUser']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -325,8 +296,7 @@ export interface LogoutUserArgs<Req, Res> {
 }
 
 interface LogoutUserResult_default {
-  responseVariant: 'default';
-  content: operations['logoutUser']['responses']['default']['content'];
+  content: { default: operations['logoutUser']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -341,20 +311,17 @@ export interface GetUserByNameArgs<Req, Res> {
 }
 
 interface GetUserByNameResult_200 {
-  responseVariant: '200';
-  content: operations['getUserByName']['responses']['200']['content'];
+  content: { 200: operations['getUserByName']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetUserByNameResult_400 {
-  responseVariant: '400';
-  content: operations['getUserByName']['responses']['400']['content'];
+  content: { 400: operations['getUserByName']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetUserByNameResult_404 {
-  responseVariant: '404';
-  content: operations['getUserByName']['responses']['404']['content'];
+  content: { 404: operations['getUserByName']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -368,8 +335,7 @@ export interface UpdateUserArgs<Req, Res> {
 }
 
 interface UpdateUserResult_default {
-  responseVariant: 'default';
-  content: operations['updateUser']['responses']['default']['content'];
+  content: { default: operations['updateUser']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -384,14 +350,12 @@ export interface DeleteUserArgs<Req, Res> {
 }
 
 interface DeleteUserResult_400 {
-  responseVariant: '400';
-  content: operations['deleteUser']['responses']['400']['content'];
+  content: { 400: operations['deleteUser']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface DeleteUserResult_404 {
-  responseVariant: '404';
-  content: operations['deleteUser']['responses']['404']['content'];
+  content: { 404: operations['deleteUser']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 

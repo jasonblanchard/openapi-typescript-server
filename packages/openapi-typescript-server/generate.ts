@@ -66,12 +66,8 @@ export default function generate(
       for (const responseVariant in operation.responses) {
         const responseVariantProperties = [
           {
-            name: "responseVariant",
-            type: `'${responseVariant}'`,
-          },
-          {
             name: "content",
-            type: `operations['${operation.operationId}']['responses']['${responseVariant}']['content']`,
+            type: `{${responseVariant}: operations['${operation.operationId}']['responses']['${responseVariant}']['content']}`,
           },
           {
             name: "headers",

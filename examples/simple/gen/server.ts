@@ -14,14 +14,12 @@ export interface GetPetByIdArgs<Req, Res> {
 }
 
 interface GetPetByIdResult_200 {
-  responseVariant: '200';
-  content: operations['getPetById']['responses']['200']['content'];
+  content: { 200: operations['getPetById']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetPetByIdResult_default {
-  responseVariant: 'default';
-  content: operations['getPetById']['responses']['default']['content'];
+  content: { default: operations['getPetById']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -36,14 +34,12 @@ export interface UpdatePetWithFormArgs<Req, Res> {
 }
 
 interface UpdatePetWithFormResult_200 {
-  responseVariant: '200';
-  content: operations['updatePetWithForm']['responses']['200']['content'];
+  content: { 200: operations['updatePetWithForm']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface UpdatePetWithFormResult_default {
-  responseVariant: 'default';
-  content: operations['updatePetWithForm']['responses']['default']['content'];
+  content: { default: operations['updatePetWithForm']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }

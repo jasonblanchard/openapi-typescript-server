@@ -28,20 +28,22 @@ export default function routesToExpressRouter(
         res.setHeader(headerName, result.headers[headerName]);
       }
 
-      if (
-        result.responseVariant.toUpperCase().includes("XX") ||
-        result.responseVariant === "default"
-      ) {
-        res.status(result.status || 500);
+      const entry = Object.entries(result.content || {})[0];
+      const [responseVariant, content] = entry ? entry : ["default", {}];
+
+      if (result.status) {
+        res.status(result.status);
       } else {
-        res.status(Number(result.responseVariant));
+        res.status(Number(responseVariant));
       }
 
       // TODO: Handle other content types
-      if (result.content?.["application/json"]) {
-        res.json(result.content["application/json"]);
+      if (content?.["application/json"]) {
+        res.json(content["application/json"]);
+        return;
       }
 
+      res.end();
       return;
     });
   }

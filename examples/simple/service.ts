@@ -8,26 +8,31 @@ const Service: Server = {
   getPetById: async ({ parameters }): GetPetByIdResult => {
     if (parameters.path.petId === 42) {
       return {
-        responseVariant: "default",
         content: {
-          "application/json": {
-            message: "Pet not found",
+          default: {
+            "application/json": {
+              message: "Cannot get that pet",
+            },
           },
         },
-        status: 404,
+        status: 503,
       };
     }
 
     return {
-      responseVariant: "200",
-      content: { "application/json": { pet: { id: 1, name: "dog" } } },
+      content: {
+        200: {
+          "application/json": {
+            pet: { id: parameters.path.petId, name: "dog" },
+          },
+        },
+      },
     };
   },
 
   updatePetWithForm: async (): UpdatePetWithFormResult => {
     return {
-      responseVariant: "200",
-      content: { "application/json": { pet: { id: 1, name: "dog" } } },
+      content: { 200: { "application/json": { pet: { id: 1, name: "dog" } } } },
     };
   },
 };
