@@ -109,7 +109,7 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    status: unknown;
+                    status: string;
                 };
             };
         };
