@@ -24,6 +24,6 @@
     "express": "^4.21.2",
     "express-openapi-validator": "^5.4.6",
     "openapi-typescript-server": "^0.0.1",
-    "openapi-typesript-server-express": "^0.0.1"
+    "openapi-typescript-server-express": "^0.0.1"
   }
 }

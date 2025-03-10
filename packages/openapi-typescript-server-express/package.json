@@ -1,0 +1,26 @@
+{
+  "name": "openapi-typescript-server-express",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "devDependencies": {
+    "tsup": "^8.4.0"
+  },
+  "peerDependencies": {
+    "express": "^4.21.2",
+    "openapi-typescript-server": "^0.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

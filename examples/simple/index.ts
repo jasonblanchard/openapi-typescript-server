@@ -1,7 +1,7 @@
 import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import { registerServerHandlers } from "./gen/server.ts";
-import routesToExpressRouter from "openapi-typesript-server-express/adapter.ts";
+import routesToExpressRouter from "openapi-typescript-server-express";
 import Service from "./service.ts";
 import OpenApiValidator from "express-openapi-validator";
 
