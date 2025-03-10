@@ -1,8 +1,8 @@
 import express from "express";
 import type { Request, Response, NextFunction } from "express";
-import { registerServerHandlers } from "./gen/server.ts";
-import routesToExpressRouter from "openapi-typescript-server-express";
-import Service from "./service.ts";
+import { registerRouteHandlers } from "./gen/server.ts";
+import registerRoutes from "openapi-typescript-server-express";
+import API from "./api.ts";
 import OpenApiValidator from "express-openapi-validator";
 
 const app = express();
@@ -12,13 +12,14 @@ app.get("/", (_req, res) => {
 });
 
 const apiRouter = express();
+
 apiRouter.use(
   OpenApiValidator.middleware({
     apiSpec: "./examples/simple/spec.yaml",
     validateResponses: false,
   })
 );
-routesToExpressRouter(registerServerHandlers(Service), apiRouter);
+registerRoutes(registerRouteHandlers(API), apiRouter);
 
 app.use("/api/v3", apiRouter);
 

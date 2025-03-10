@@ -1,10 +1,7 @@
 import type { Application } from "express";
 import type { Route } from "openapi-typescript-server/route";
 
-export default function routesToExpressRouter(
-  routes: Route[],
-  app: Application
-) {
+export default function registerRoutes(routes: Route[], app: Application) {
   for (const route of routes) {
     app[route.method](openAPIPathToExpress(route.path), async (req, res) => {
       const result = await route.handler({

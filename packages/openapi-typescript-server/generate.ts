@@ -127,7 +127,7 @@ export default function generate(
   });
 
   sourceFile.addFunction({
-    name: "registerServerHandlers",
+    name: "registerRouteHandlers",
     isExported: true,
     parameters: [{ name: "server", type: serverInterface.getName() }],
     returnType: "Route[]",

@@ -4,7 +4,7 @@ import type {
   UpdatePetWithFormResult,
 } from "./gen/server.ts";
 
-const Service: Server = {
+const API: Server = {
   getPetById: async ({ parameters }): GetPetByIdResult => {
     if (parameters.path.petId === 42) {
       return {
@@ -37,4 +37,4 @@ const Service: Server = {
   },
 };
 
-export default Service;
+export default API;
