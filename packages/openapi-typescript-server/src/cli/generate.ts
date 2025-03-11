@@ -1,4 +1,4 @@
-import type { OpenAPISpec } from "./openapiValidator";
+import type { OpenAPISpec } from "../lib/schema";
 import { Project } from "ts-morph";
 
 export default function generate(
@@ -20,7 +20,7 @@ export default function generate(
 
   sourceFile.addImportDeclaration({
     namedImports: ["Route"],
-    moduleSpecifier: "openapi-typescript-server/route",
+    moduleSpecifier: "openapi-typescript-server",
     isTypeOnly: true,
   });
 

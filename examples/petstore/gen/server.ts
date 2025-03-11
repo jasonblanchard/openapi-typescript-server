@@ -4,7 +4,7 @@
  */
 
 import type { operations } from "./schema.d.ts";
-import type { Route } from "openapi-typescript-server/route";
+import type { Route } from "openapi-typescript-server";
 
 export interface UpdatePetArgs<Req, Res> {
   parameters: operations['updatePet']['parameters'];

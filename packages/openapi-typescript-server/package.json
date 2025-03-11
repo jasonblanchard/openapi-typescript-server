@@ -2,15 +2,22 @@
   "name": "openapi-typescript-server",
   "version": "0.0.1",
   "type": "module",
-  "bin": {
-    "openapi-typescript-server": "bin/index.js"
+  "bin": "./bin/index.cjs",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
   },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:lib": "tsup src/lib/index.ts --dts --format cjs,esm --clean",
+    "build:cli": "tsup src/cli/index.ts --format cjs --out-dir bin --clean",
+    "build": "npm run build:lib && npm run build:cli"
   },
   "author": "",
   "license": "ISC",
-  "main": "index.js",
   "description": "",
   "dependencies": {
     "commander": "^13.1.0",
@@ -19,6 +26,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/js-yaml": "^4.0.9"
+    "@types/js-yaml": "^4.0.9",
+    "tsup": "^8.4.0"
   }
 }

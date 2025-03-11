@@ -2,9 +2,9 @@
 
 import { Command } from "commander";
 import fs from "fs";
-import { OpenAPISpec } from "../openapiValidator.ts";
+import { OpenAPISpec } from "../lib/schema.ts";
 import yaml from "js-yaml";
-import generate from "../generate.ts";
+import generate from "./generate.ts";
 
 const program = new Command();
 
