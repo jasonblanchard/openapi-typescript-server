@@ -61,6 +61,10 @@ paths:
               properties:
                 status:
                   type: string
+                  enum:
+                    - available
+                    - pending
+                    - sold
               required:
                 - status
       responses:

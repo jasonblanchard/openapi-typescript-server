@@ -109,7 +109,8 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    status: string;
+                    /** @enum {string} */
+                    status: "available" | "pending" | "sold";
                 };
             };
         };

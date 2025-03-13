@@ -31,9 +31,20 @@ const API: Server<Request, Response> = {
     };
   },
 
-  updatePetWithForm: async (): UpdatePetWithFormResult => {
+  updatePetWithForm: async ({
+    parameters,
+    requestBody,
+  }): UpdatePetWithFormResult => {
+    const { name } = parameters.query ?? {};
+    const { status } = requestBody.content["application/json"];
     return {
-      content: { 200: { "application/json": { pet: { id: 1, name: "dog" } } } },
+      content: {
+        200: {
+          "application/json": {
+            pet: { id: 1, name: name || "dog", status },
+          },
+        },
+      },
     };
   },
 };
