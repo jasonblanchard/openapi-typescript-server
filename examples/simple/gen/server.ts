@@ -55,7 +55,7 @@ export interface Server<Req = unknown, Res = unknown> {
   ) => UpdatePetWithFormResult;
 }
 
-export function registerRouteHandlers(server: Server): Route[] {
+export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route[] {
   return [
     {
       method: "get",

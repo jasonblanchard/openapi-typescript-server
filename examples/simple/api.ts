@@ -3,8 +3,9 @@ import type {
   GetPetByIdResult,
   UpdatePetWithFormResult,
 } from "./gen/server.ts";
+import type { Request, Response } from "express";
 
-const API: Server = {
+const API: Server<Request, Response> = {
   getPetById: async ({ parameters }): GetPetByIdResult => {
     if (parameters.path.petId === 42) {
       return {

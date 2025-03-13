@@ -129,7 +129,10 @@ export default function generate(
   sourceFile.addFunction({
     name: "registerRouteHandlers",
     isExported: true,
-    parameters: [{ name: "server", type: serverInterface.getName() }],
+    parameters: [
+      { name: "server", type: `${serverInterface.getName()}<Req, Res>` },
+    ],
+    typeParameters: [{ name: "Req" }, { name: "Res" }],
     returnType: "Route[]",
     statements: (writer) => {
       writer.writeLine("return [");

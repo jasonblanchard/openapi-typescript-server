@@ -421,7 +421,7 @@ export interface Server<Req = unknown, Res = unknown> {
   ) => DeleteUserResult;
 }
 
-export function registerRouteHandlers(server: Server): Route[] {
+export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route[] {
   return [
     {
       method: "put",
