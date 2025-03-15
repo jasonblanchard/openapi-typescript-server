@@ -6,6 +6,30 @@
 import type { operations } from "./schema.d.ts";
 import type { Route } from "openapi-typescript-server";
 
+export interface ListPetsArgs<Req, Res> {
+  parameters: operations['listPets']['parameters'];
+  requestBody: operations['listPets']['requestBody'];
+  req: Req;
+  res: Res;
+}
+
+interface ListPetsResult_200 {
+  content: { 200: operations['listPets']['responses']['200']['content'] };
+  headers?: { [name: string]: any };
+}
+
+interface ListPetsResult_default {
+  content: { default: operations['listPets']['responses']['default']['content'] };
+  headers?: { [name: string]: any };
+  status: number;
+}
+
+export type ListPetsResult = Promise<ListPetsResult_200 | ListPetsResult_default>;
+
+export async function listPets_unimplemented(): ListPetsResult {
+  throw new Error('unimplemented');
+}
+
 export interface GetPetByIdArgs<Req, Res> {
   parameters: operations['getPetById']['parameters'];
   requestBody: operations['getPetById']['requestBody'];
@@ -25,6 +49,10 @@ interface GetPetByIdResult_default {
 }
 
 export type GetPetByIdResult = Promise<GetPetByIdResult_200 | GetPetByIdResult_default>;
+
+export async function getPetById_unimplemented(): GetPetByIdResult {
+  throw new Error('unimplemented');
+}
 
 export interface UpdatePetWithFormArgs<Req, Res> {
   parameters: operations['updatePetWithForm']['parameters'];
@@ -46,7 +74,14 @@ interface UpdatePetWithFormResult_default {
 
 export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResult_200 | UpdatePetWithFormResult_default>;
 
+export async function updatePetWithForm_unimplemented(): UpdatePetWithFormResult {
+  throw new Error('unimplemented');
+}
+
 export interface Server<Req = unknown, Res = unknown> {
+  listPets: (
+    args: ListPetsArgs<Req, Res>
+  ) => ListPetsResult;
   getPetById: (
     args: GetPetByIdArgs<Req, Res>
   ) => GetPetByIdResult;
@@ -57,6 +92,11 @@ export interface Server<Req = unknown, Res = unknown> {
 
 export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route[] {
   return [
+    {
+      method: "get",
+      path: "/pets",
+      handler: server.listPets,
+    },
     {
       method: "get",
       path: "/pet/{petId}",

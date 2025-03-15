@@ -1,12 +1,9 @@
-import type {
-  Server,
-  GetPetByIdResult,
-  UpdatePetWithFormResult,
-} from "./gen/server.ts";
+import type * as ServerTypes from "./gen/server.ts";
+import * as server from "./gen/server.ts";
 import type { Request, Response } from "express";
 
-const API: Server<Request, Response> = {
-  getPetById: async ({ parameters }): GetPetByIdResult => {
+const API: ServerTypes.Server<Request, Response> = {
+  getPetById: async ({ parameters }): ServerTypes.GetPetByIdResult => {
     if (parameters.path.petId === 42) {
       return {
         content: {
@@ -38,7 +35,7 @@ const API: Server<Request, Response> = {
   updatePetWithForm: async ({
     parameters,
     requestBody,
-  }): UpdatePetWithFormResult => {
+  }): ServerTypes.UpdatePetWithFormResult => {
     const { petId } = parameters.path;
     const { name } = parameters.query ?? {};
     const { status } = requestBody.content["application/json"];
@@ -53,6 +50,8 @@ const API: Server<Request, Response> = {
       },
     };
   },
+
+  listPets: server.listPets_unimplemented,
 };
 
 export default API;

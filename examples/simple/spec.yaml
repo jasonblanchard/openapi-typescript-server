@@ -5,6 +5,27 @@ info:
 servers:
   - url: /api/v3
 paths:
+  /pets:
+    get:
+      operationId: listPets
+      responses:
+        "200":
+          description: A list of pets.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pets:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Pet"
+        "default":
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /pet/{petId}:
     get:
       operationId: getPetById
@@ -26,12 +47,6 @@ paths:
                 properties:
                   pet:
                     $ref: "#/components/schemas/Pet"
-        # "4xx":
-        #   description: auth error
-        #   content:
-        #     application/json:
-        #       schema:
-        #         $ref: "#/components/schemas/ErrorResponse"
         "default":
           description: unexpected error
           content:

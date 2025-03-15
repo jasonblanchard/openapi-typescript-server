@@ -4,6 +4,22 @@
  */
 
 export interface paths {
+    "/pets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listPets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/pet/{petId}": {
         parameters: {
             query?: never;
@@ -59,6 +75,37 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    listPets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A list of pets. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        pets?: components["schemas"]["Pet"][];
+                    };
+                };
+            };
+            /** @description unexpected error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     getPetById: {
         parameters: {
             query?: never;

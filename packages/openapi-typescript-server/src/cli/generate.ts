@@ -102,6 +102,16 @@ export default function generate(
         args: argsInterface.getName(),
         result: resultType.getName(),
       };
+
+      sourceFile.addFunction({
+        name: `${operation.operationId}_unimplemented`,
+        isExported: true,
+        isAsync: true,
+        returnType: resultType.getName(),
+        statements: (writer) => {
+          writer.writeLine("throw new Error('unimplemented');");
+        },
+      });
     }
   }
 

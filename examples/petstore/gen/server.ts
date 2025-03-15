@@ -35,6 +35,10 @@ interface UpdatePetResult_405 {
 
 export type UpdatePetResult = Promise<UpdatePetResult_200 | UpdatePetResult_400 | UpdatePetResult_404 | UpdatePetResult_405>;
 
+export async function updatePet_unimplemented(): UpdatePetResult {
+  throw new Error('unimplemented');
+}
+
 export interface AddPetArgs<Req, Res> {
   parameters: operations['addPet']['parameters'];
   requestBody: operations['addPet']['requestBody'];
@@ -53,6 +57,10 @@ interface AddPetResult_405 {
 }
 
 export type AddPetResult = Promise<AddPetResult_200 | AddPetResult_405>;
+
+export async function addPet_unimplemented(): AddPetResult {
+  throw new Error('unimplemented');
+}
 
 export interface FindPetsByStatusArgs<Req, Res> {
   parameters: operations['findPetsByStatus']['parameters'];
@@ -73,6 +81,10 @@ interface FindPetsByStatusResult_400 {
 
 export type FindPetsByStatusResult = Promise<FindPetsByStatusResult_200 | FindPetsByStatusResult_400>;
 
+export async function findPetsByStatus_unimplemented(): FindPetsByStatusResult {
+  throw new Error('unimplemented');
+}
+
 export interface FindPetsByTagsArgs<Req, Res> {
   parameters: operations['findPetsByTags']['parameters'];
   requestBody: operations['findPetsByTags']['requestBody'];
@@ -91,6 +103,10 @@ interface FindPetsByTagsResult_400 {
 }
 
 export type FindPetsByTagsResult = Promise<FindPetsByTagsResult_200 | FindPetsByTagsResult_400>;
+
+export async function findPetsByTags_unimplemented(): FindPetsByTagsResult {
+  throw new Error('unimplemented');
+}
 
 export interface GetPetByIdArgs<Req, Res> {
   parameters: operations['getPetById']['parameters'];
@@ -116,6 +132,10 @@ interface GetPetByIdResult_404 {
 
 export type GetPetByIdResult = Promise<GetPetByIdResult_200 | GetPetByIdResult_400 | GetPetByIdResult_404>;
 
+export async function getPetById_unimplemented(): GetPetByIdResult {
+  throw new Error('unimplemented');
+}
+
 export interface UpdatePetWithFormArgs<Req, Res> {
   parameters: operations['updatePetWithForm']['parameters'];
   requestBody: operations['updatePetWithForm']['requestBody'];
@@ -129,6 +149,10 @@ interface UpdatePetWithFormResult_405 {
 }
 
 export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResult_405>;
+
+export async function updatePetWithForm_unimplemented(): UpdatePetWithFormResult {
+  throw new Error('unimplemented');
+}
 
 export interface DeletePetArgs<Req, Res> {
   parameters: operations['deletePet']['parameters'];
@@ -144,6 +168,10 @@ interface DeletePetResult_400 {
 
 export type DeletePetResult = Promise<DeletePetResult_400>;
 
+export async function deletePet_unimplemented(): DeletePetResult {
+  throw new Error('unimplemented');
+}
+
 export interface UploadFileArgs<Req, Res> {
   parameters: operations['uploadFile']['parameters'];
   requestBody: operations['uploadFile']['requestBody'];
@@ -158,6 +186,10 @@ interface UploadFileResult_200 {
 
 export type UploadFileResult = Promise<UploadFileResult_200>;
 
+export async function uploadFile_unimplemented(): UploadFileResult {
+  throw new Error('unimplemented');
+}
+
 export interface GetInventoryArgs<Req, Res> {
   parameters: operations['getInventory']['parameters'];
   requestBody: operations['getInventory']['requestBody'];
@@ -171,6 +203,10 @@ interface GetInventoryResult_200 {
 }
 
 export type GetInventoryResult = Promise<GetInventoryResult_200>;
+
+export async function getInventory_unimplemented(): GetInventoryResult {
+  throw new Error('unimplemented');
+}
 
 export interface PlaceOrderArgs<Req, Res> {
   parameters: operations['placeOrder']['parameters'];
@@ -190,6 +226,10 @@ interface PlaceOrderResult_405 {
 }
 
 export type PlaceOrderResult = Promise<PlaceOrderResult_200 | PlaceOrderResult_405>;
+
+export async function placeOrder_unimplemented(): PlaceOrderResult {
+  throw new Error('unimplemented');
+}
 
 export interface GetOrderByIdArgs<Req, Res> {
   parameters: operations['getOrderById']['parameters'];
@@ -215,6 +255,10 @@ interface GetOrderByIdResult_404 {
 
 export type GetOrderByIdResult = Promise<GetOrderByIdResult_200 | GetOrderByIdResult_400 | GetOrderByIdResult_404>;
 
+export async function getOrderById_unimplemented(): GetOrderByIdResult {
+  throw new Error('unimplemented');
+}
+
 export interface DeleteOrderArgs<Req, Res> {
   parameters: operations['deleteOrder']['parameters'];
   requestBody: operations['deleteOrder']['requestBody'];
@@ -234,6 +278,10 @@ interface DeleteOrderResult_404 {
 
 export type DeleteOrderResult = Promise<DeleteOrderResult_400 | DeleteOrderResult_404>;
 
+export async function deleteOrder_unimplemented(): DeleteOrderResult {
+  throw new Error('unimplemented');
+}
+
 export interface CreateUserArgs<Req, Res> {
   parameters: operations['createUser']['parameters'];
   requestBody: operations['createUser']['requestBody'];
@@ -248,6 +296,10 @@ interface CreateUserResult_default {
 }
 
 export type CreateUserResult = Promise<CreateUserResult_default>;
+
+export async function createUser_unimplemented(): CreateUserResult {
+  throw new Error('unimplemented');
+}
 
 export interface CreateUsersWithListInputArgs<Req, Res> {
   parameters: operations['createUsersWithListInput']['parameters'];
@@ -269,6 +321,10 @@ interface CreateUsersWithListInputResult_default {
 
 export type CreateUsersWithListInputResult = Promise<CreateUsersWithListInputResult_200 | CreateUsersWithListInputResult_default>;
 
+export async function createUsersWithListInput_unimplemented(): CreateUsersWithListInputResult {
+  throw new Error('unimplemented');
+}
+
 export interface LoginUserArgs<Req, Res> {
   parameters: operations['loginUser']['parameters'];
   requestBody: operations['loginUser']['requestBody'];
@@ -288,6 +344,10 @@ interface LoginUserResult_400 {
 
 export type LoginUserResult = Promise<LoginUserResult_200 | LoginUserResult_400>;
 
+export async function loginUser_unimplemented(): LoginUserResult {
+  throw new Error('unimplemented');
+}
+
 export interface LogoutUserArgs<Req, Res> {
   parameters: operations['logoutUser']['parameters'];
   requestBody: operations['logoutUser']['requestBody'];
@@ -302,6 +362,10 @@ interface LogoutUserResult_default {
 }
 
 export type LogoutUserResult = Promise<LogoutUserResult_default>;
+
+export async function logoutUser_unimplemented(): LogoutUserResult {
+  throw new Error('unimplemented');
+}
 
 export interface GetUserByNameArgs<Req, Res> {
   parameters: operations['getUserByName']['parameters'];
@@ -327,6 +391,10 @@ interface GetUserByNameResult_404 {
 
 export type GetUserByNameResult = Promise<GetUserByNameResult_200 | GetUserByNameResult_400 | GetUserByNameResult_404>;
 
+export async function getUserByName_unimplemented(): GetUserByNameResult {
+  throw new Error('unimplemented');
+}
+
 export interface UpdateUserArgs<Req, Res> {
   parameters: operations['updateUser']['parameters'];
   requestBody: operations['updateUser']['requestBody'];
@@ -341,6 +409,10 @@ interface UpdateUserResult_default {
 }
 
 export type UpdateUserResult = Promise<UpdateUserResult_default>;
+
+export async function updateUser_unimplemented(): UpdateUserResult {
+  throw new Error('unimplemented');
+}
 
 export interface DeleteUserArgs<Req, Res> {
   parameters: operations['deleteUser']['parameters'];
@@ -360,6 +432,10 @@ interface DeleteUserResult_404 {
 }
 
 export type DeleteUserResult = Promise<DeleteUserResult_400 | DeleteUserResult_404>;
+
+export async function deleteUser_unimplemented(): DeleteUserResult {
+  throw new Error('unimplemented');
+}
 
 export interface Server<Req = unknown, Res = unknown> {
   updatePet: (

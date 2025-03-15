@@ -30,14 +30,6 @@ describe("getPetById", async () => {
       message: "Cannot get that pet",
     });
   });
-
-  it("returns 500 from thrown errors via propagation to global error handler", async () => {
-    const response = await request(app)
-      .get("/api/v3/pet/500")
-      .set("Accept", "application/json");
-
-    assert.equal(response.status, 500);
-  });
 });
 
 describe("updatePetWithForm", async () => {
@@ -55,5 +47,15 @@ describe("updatePetWithForm", async () => {
         status: "sold",
       },
     });
+  });
+});
+
+describe("listPets", async () => {
+  it("propagates unimplemented error", async () => {
+    const response = await request(app)
+      .get("/api/v3/pets")
+      .set("Accept", "application/json");
+
+    assert.equal(response.status, 500);
   });
 });
