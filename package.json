@@ -13,6 +13,9 @@
     "format:check": "npx prettier . --check",
     "format": "npx prettier . --write"
   },
+  "engines": {
+    "node": ">=23.6.0"
+  },
   "author": "",
   "license": "ISC",
   "description": "",
