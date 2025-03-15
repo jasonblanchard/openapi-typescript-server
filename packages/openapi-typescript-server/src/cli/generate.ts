@@ -1,7 +1,11 @@
 import type { OpenAPISpec } from "../lib/schema";
 import { Project } from "ts-morph";
 
-export default function generate(spec: OpenAPISpec, types: string, outdir: string) {
+export default function generate(
+  spec: OpenAPISpec,
+  types: string,
+  outdir: string,
+) {
   const project = new Project();
 
   const sourceFile = project.createSourceFile(`${outdir}/server.ts`, "", {
@@ -124,7 +128,7 @@ export default function generate(spec: OpenAPISpec, types: string, outdir: strin
           args: ${args}<Req, Res>
           ) => ${result}`,
       };
-    }
+    },
   );
 
   const serverInterface = sourceFile.addInterface({
@@ -155,7 +159,7 @@ export default function generate(spec: OpenAPISpec, types: string, outdir: strin
           writer.writeLine(`path: "${path}",`);
           writer.writeLine(`handler: server.${operationId},`);
           writer.writeLine("},");
-        }
+        },
       );
 
       writer.writeLine("]");
@@ -169,7 +173,7 @@ export default function generate(spec: OpenAPISpec, types: string, outdir: strin
  * Do not make direct changes to the file.
  */
 
-  `
+  `,
   );
 
   sourceFile.formatText({

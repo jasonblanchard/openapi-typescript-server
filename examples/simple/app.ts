@@ -21,7 +21,7 @@ export default function makeApp() {
     OpenApiValidator.middleware({
       apiSpec: "./examples/simple/spec.yaml",
       validateResponses: false,
-    })
+    }),
   );
   registerRoutes(registerRouteHandlers(API), apiRouter);
 
