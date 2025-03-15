@@ -35,13 +35,14 @@ const API: Server<Request, Response> = {
     parameters,
     requestBody,
   }): UpdatePetWithFormResult => {
+    const { petId } = parameters.path;
     const { name } = parameters.query ?? {};
     const { status } = requestBody.content["application/json"];
     return {
       content: {
         200: {
           "application/json": {
-            pet: { id: 1, name: name || "dog", status },
+            pet: { id: petId, name: name || "dog", status },
           },
         },
       },

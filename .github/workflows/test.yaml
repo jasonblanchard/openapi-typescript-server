@@ -19,3 +19,4 @@ jobs:
     - run: npm run build:all
     - run: npm run typecheck
     - run: npm run gen
+    - run: npm test

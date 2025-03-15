@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test",
     "typecheck": "tsc --noEmit",
     "gen:petstore": "openapi-typescript ./examples/petstore/spec.yaml --output ./examples/petstore/gen/schema.d.ts && openapi-typescript-server build -s ./examples/petstore/spec.yaml -t ./schema.d.ts -o ./examples/petstore/gen ",
     "gen:simple": "openapi-typescript ./examples/simple/spec.yaml --output ./examples/simple/gen/schema.d.ts && openapi-typescript-server build -s ./examples/simple/spec.yaml -t ./schema.d.ts -o ./examples/simple/gen",
@@ -20,7 +20,9 @@
   ],
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/supertest": "^6.0.2",
     "openapi-typescript": "^7.6.1",
+    "supertest": "^7.0.0",
     "typescript": "^5.8.2"
   },
   "dependencies": {
