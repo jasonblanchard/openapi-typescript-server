@@ -7,29 +7,21 @@ var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __copyProps = (to, from, except, desc) => {
-  if ((from && typeof from === "object") || typeof from === "function") {
+  if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, {
-          get: () => from[key],
-          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
-        });
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (
-  (target = mod != null ? __create(__getProtoOf(mod)) : {}),
-  __copyProps(
-    // If the importer is in node compatibility mode or this is not an ESM
-    // file that has been converted to a CommonJS file using a Babel-
-    // compatible transform (i.e. "__esModule" has not been set), then set
-    // "default" to the CommonJS "module.exports" for node compatibility.
-    isNodeMode || !mod || !mod.__esModule
-      ? __defProp(target, "default", { value: mod, enumerable: true })
-      : target,
-    mod,
-  )
-);
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __async = (__this, __arguments, generator) => {
   return new Promise((resolve, reject) => {
     var fulfilled = (value) => {
@@ -46,10 +38,7 @@ var __async = (__this, __arguments, generator) => {
         reject(e);
       }
     };
-    var step = (x) =>
-      x.done
-        ? resolve(x.value)
-        : Promise.resolve(x.value).then(fulfilled, rejected);
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
     step((generator = generator.apply(__this, __arguments)).next());
   });
 };
@@ -64,61 +53,53 @@ var bastSchema = import_zod.default.object({
   $ref: import_zod.default.string().optional(),
   type: import_zod.default.string().optional(),
   // Actually a set of known literals. Can probably do a discriminated union instead of making the types optional
-  required: import_zod.default.array(import_zod.default.string()).optional(),
+  required: import_zod.default.array(import_zod.default.string()).optional()
 });
 var Schema = bastSchema.extend({
-  properties: import_zod.default.lazy(() =>
-    import_zod.default.record(Schema).optional(),
-  ),
+  properties: import_zod.default.lazy(() => import_zod.default.record(Schema).optional())
 });
 var OpenAPISpec = import_zod.default.object({
   openapi: import_zod.default.string(),
   info: import_zod.default.object({
     title: import_zod.default.string().optional(),
-    version: import_zod.default.string().optional(),
+    version: import_zod.default.string().optional()
   }),
   paths: import_zod.default.record(
     import_zod.default.record(
       import_zod.default.object({
         summary: import_zod.default.string().optional(),
         operationId: import_zod.default.string(),
-        parameters: import_zod.default
-          .array(
-            import_zod.default.object({
-              name: import_zod.default.string(),
-              in: import_zod.default.string(),
-              required: import_zod.default.boolean().optional(),
-              schema: import_zod.default.object({
-                type: import_zod.default.string(),
-              }),
-            }),
-          )
-          .optional(),
-        requestBody: import_zod.default
-          .object({
-            description: import_zod.default.string().optional(),
-            content: import_zod.default.record(
-              import_zod.default.object({
-                schema: Schema,
-              }),
-            ),
+        parameters: import_zod.default.array(
+          import_zod.default.object({
+            name: import_zod.default.string(),
+            in: import_zod.default.string(),
+            required: import_zod.default.boolean().optional(),
+            schema: import_zod.default.object({
+              type: import_zod.default.string()
+            })
           })
-          .optional(),
+        ).optional(),
+        requestBody: import_zod.default.object({
+          description: import_zod.default.string().optional(),
+          content: import_zod.default.record(
+            import_zod.default.object({
+              schema: Schema
+            })
+          )
+        }).optional(),
         responses: import_zod.default.record(
           import_zod.default.object({
             description: import_zod.default.string().optional(),
-            content: import_zod.default
-              .record(
-                import_zod.default.object({
-                  schema: Schema,
-                }),
-              )
-              .optional(),
-          }),
-        ),
-      }),
-    ),
-  ),
+            content: import_zod.default.record(
+              import_zod.default.object({
+                schema: Schema
+              })
+            ).optional()
+          })
+        )
+      })
+    )
+  )
 });
 
 // src/cli/index.ts
@@ -129,17 +110,17 @@ var import_ts_morph = require("ts-morph");
 function generate(spec, types, outdir) {
   const project = new import_ts_morph.Project();
   const sourceFile = project.createSourceFile(`${outdir}/server.ts`, "", {
-    overwrite: true,
+    overwrite: true
   });
   sourceFile.addImportDeclaration({
     namedImports: ["operations"],
     moduleSpecifier: types,
-    isTypeOnly: true,
+    isTypeOnly: true
   });
   sourceFile.addImportDeclaration({
     namedImports: ["Route"],
     moduleSpecifier: "openapi-typescript-server",
-    isTypeOnly: true,
+    isTypeOnly: true
   });
   const operationsById = {};
   for (const path in spec.paths) {
@@ -156,57 +137,57 @@ function generate(spec, types, outdir) {
         properties: [
           {
             name: "parameters",
-            type: `operations['${operation.operationId}']['parameters']`,
+            type: `operations['${operation.operationId}']['parameters']`
           },
           {
             name: "requestBody",
-            type: `operations['${operation.operationId}']['requestBody']`,
+            type: `operations['${operation.operationId}']['requestBody']`
           },
           {
             name: "req",
-            type: "Req",
+            type: "Req"
           },
           {
             name: "res",
-            type: "Res",
-          },
-        ],
+            type: "Res"
+          }
+        ]
       });
       const responseVariantInterfaceNames = [];
       for (const responseVariant in operation.responses) {
         const responseVariantProperties = [
           {
             name: "content",
-            type: `{${responseVariant}: operations['${operation.operationId}']['responses']['${responseVariant}']['content']}`,
+            type: `{${responseVariant}: operations['${operation.operationId}']['responses']['${responseVariant}']['content']}`
           },
           {
             name: "headers",
             type: "{ [name: string]: any }",
-            hasQuestionToken: true,
-          },
+            hasQuestionToken: true
+          }
         ];
         if (responseVariant === "default" || responseVariant.includes("XX")) {
           responseVariantProperties.push({
             name: "status",
-            type: "number",
+            type: "number"
           });
         }
         const responseVariantInterface = sourceFile.addInterface({
           name: `${capitalize(operation.operationId)}Result_${responseVariant}`,
-          properties: responseVariantProperties,
+          properties: responseVariantProperties
         });
         responseVariantInterfaceNames.push(responseVariantInterface.getName());
       }
       const resultType = sourceFile.addTypeAlias({
         name: `${capitalize(operation.operationId)}Result`,
         isExported: true,
-        type: `Promise<${responseVariantInterfaceNames.join(" | ")}>`,
+        type: `Promise<${responseVariantInterfaceNames.join(" | ")}>`
       });
       operationsById[operation.operationId] = {
         path,
         method,
         args: argsInterface.getName(),
-        result: resultType.getName(),
+        result: resultType.getName()
       };
     }
   }
@@ -216,24 +197,24 @@ function generate(spec, types, outdir) {
         name: operationId,
         type: `(
           args: ${args}<Req, Res>
-          ) => ${result}`,
+          ) => ${result}`
       };
-    },
+    }
   );
   const serverInterface = sourceFile.addInterface({
     name: "Server",
     isExported: true,
     typeParameters: [
       { name: "Req", default: "unknown" },
-      { name: "Res", default: "unknown" },
+      { name: "Res", default: "unknown" }
     ],
-    properties: serverInferfaceProperties,
+    properties: serverInferfaceProperties
   });
   sourceFile.addFunction({
     name: "registerRouteHandlers",
     isExported: true,
     parameters: [
-      { name: "server", type: `${serverInterface.getName()}<Req, Res>` },
+      { name: "server", type: `${serverInterface.getName()}<Req, Res>` }
     ],
     typeParameters: [{ name: "Req" }, { name: "Res" }],
     returnType: "Route[]",
@@ -246,10 +227,10 @@ function generate(spec, types, outdir) {
           writer.writeLine(`path: "${path}",`);
           writer.writeLine(`handler: server.${operationId},`);
           writer.writeLine("},");
-        },
+        }
       );
       writer.writeLine("]");
-    },
+    }
   });
   sourceFile.insertText(
     0,
@@ -258,12 +239,12 @@ function generate(spec, types, outdir) {
  * Do not make direct changes to the file.
  */
 
-  `,
+  `
   );
   sourceFile.formatText({
     indentMultiLineObjectLiteralBeginningOnBlankLine: true,
     ensureNewLineAtEndOfFile: true,
-    indentSize: 2,
+    indentSize: 2
   });
   sourceFile.saveSync();
 }
@@ -273,30 +254,19 @@ function capitalize(string) {
 
 // src/cli/index.ts
 var program = new import_commander.Command();
-program
-  .name("open-api-typescript-server")
-  .description("CLI to some Open API Stuff")
-  .version("0.0.0");
-program
-  .command("build")
-  .description("Output generated code")
-  .option("-s, --spec <file>", "OpenAPI spec file", "")
-  .option(
-    "-t, --types <types>",
-    "File path for type schema generated by open-api-typescript",
-    "",
-  )
-  .option("-o, --out <dir>", "output directory", "")
-  .action((options) =>
-    __async(void 0, null, function* () {
-      const specS = import_fs.default.readFileSync(options.spec, "utf-8");
-      const specPojo = import_js_yaml.default.load(specS);
-      const validateSpecResponse = OpenAPISpec.safeParse(specPojo);
-      if (!validateSpecResponse.success) {
-        console.error(validateSpecResponse.error.errors);
-        return;
-      }
-      generate(validateSpecResponse.data, options.types, options.out);
-    }),
-  );
+program.name("open-api-typescript-server").description("CLI to some Open API Stuff").version("0.0.0");
+program.command("build").description("Output generated code").option("-s, --spec <file>", "OpenAPI spec file", "").option(
+  "-t, --types <types>",
+  "File path for type schema generated by open-api-typescript",
+  ""
+).option("-o, --out <dir>", "output directory", "").action((options) => __async(void 0, null, function* () {
+  const specS = import_fs.default.readFileSync(options.spec, "utf-8");
+  const specPojo = import_js_yaml.default.load(specS);
+  const validateSpecResponse = OpenAPISpec.safeParse(specPojo);
+  if (!validateSpecResponse.success) {
+    console.error(validateSpecResponse.error.errors);
+    return;
+  }
+  generate(validateSpecResponse.data, options.types, options.out);
+}));
 program.parse();
