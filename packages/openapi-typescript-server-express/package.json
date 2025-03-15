@@ -17,7 +17,6 @@
     "openapi-typescript-server": "^0.0.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsup src/index.ts --dts --format cjs,esm --clean"
   },
   "author": "",
