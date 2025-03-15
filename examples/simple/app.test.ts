@@ -56,6 +56,7 @@ describe("listPets", async () => {
       .get("/api/v3/pets")
       .set("Accept", "application/json");
 
-    assert.equal(response.status, 500);
+    assert.equal(response.status, 501);
+    assert.equal(response.body.message, "Not Implemented");
   });
 });

@@ -5,6 +5,7 @@
 
 import type { operations } from "./schema.d.ts";
 import type { Route } from "openapi-typescript-server";
+import { NotImplementedError } from "openapi-typescript-server";
 
 export interface UpdatePetArgs<Req, Res> {
   parameters: operations['updatePet']['parameters'];
@@ -36,7 +37,7 @@ interface UpdatePetResult_405 {
 export type UpdatePetResult = Promise<UpdatePetResult_200 | UpdatePetResult_400 | UpdatePetResult_404 | UpdatePetResult_405>;
 
 export async function updatePet_unimplemented(): UpdatePetResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface AddPetArgs<Req, Res> {
@@ -59,7 +60,7 @@ interface AddPetResult_405 {
 export type AddPetResult = Promise<AddPetResult_200 | AddPetResult_405>;
 
 export async function addPet_unimplemented(): AddPetResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface FindPetsByStatusArgs<Req, Res> {
@@ -82,7 +83,7 @@ interface FindPetsByStatusResult_400 {
 export type FindPetsByStatusResult = Promise<FindPetsByStatusResult_200 | FindPetsByStatusResult_400>;
 
 export async function findPetsByStatus_unimplemented(): FindPetsByStatusResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface FindPetsByTagsArgs<Req, Res> {
@@ -105,7 +106,7 @@ interface FindPetsByTagsResult_400 {
 export type FindPetsByTagsResult = Promise<FindPetsByTagsResult_200 | FindPetsByTagsResult_400>;
 
 export async function findPetsByTags_unimplemented(): FindPetsByTagsResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface GetPetByIdArgs<Req, Res> {
@@ -133,7 +134,7 @@ interface GetPetByIdResult_404 {
 export type GetPetByIdResult = Promise<GetPetByIdResult_200 | GetPetByIdResult_400 | GetPetByIdResult_404>;
 
 export async function getPetById_unimplemented(): GetPetByIdResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface UpdatePetWithFormArgs<Req, Res> {
@@ -151,7 +152,7 @@ interface UpdatePetWithFormResult_405 {
 export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResult_405>;
 
 export async function updatePetWithForm_unimplemented(): UpdatePetWithFormResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface DeletePetArgs<Req, Res> {
@@ -169,7 +170,7 @@ interface DeletePetResult_400 {
 export type DeletePetResult = Promise<DeletePetResult_400>;
 
 export async function deletePet_unimplemented(): DeletePetResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface UploadFileArgs<Req, Res> {
@@ -187,7 +188,7 @@ interface UploadFileResult_200 {
 export type UploadFileResult = Promise<UploadFileResult_200>;
 
 export async function uploadFile_unimplemented(): UploadFileResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface GetInventoryArgs<Req, Res> {
@@ -205,7 +206,7 @@ interface GetInventoryResult_200 {
 export type GetInventoryResult = Promise<GetInventoryResult_200>;
 
 export async function getInventory_unimplemented(): GetInventoryResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface PlaceOrderArgs<Req, Res> {
@@ -228,7 +229,7 @@ interface PlaceOrderResult_405 {
 export type PlaceOrderResult = Promise<PlaceOrderResult_200 | PlaceOrderResult_405>;
 
 export async function placeOrder_unimplemented(): PlaceOrderResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface GetOrderByIdArgs<Req, Res> {
@@ -256,7 +257,7 @@ interface GetOrderByIdResult_404 {
 export type GetOrderByIdResult = Promise<GetOrderByIdResult_200 | GetOrderByIdResult_400 | GetOrderByIdResult_404>;
 
 export async function getOrderById_unimplemented(): GetOrderByIdResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface DeleteOrderArgs<Req, Res> {
@@ -279,7 +280,7 @@ interface DeleteOrderResult_404 {
 export type DeleteOrderResult = Promise<DeleteOrderResult_400 | DeleteOrderResult_404>;
 
 export async function deleteOrder_unimplemented(): DeleteOrderResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface CreateUserArgs<Req, Res> {
@@ -298,7 +299,7 @@ interface CreateUserResult_default {
 export type CreateUserResult = Promise<CreateUserResult_default>;
 
 export async function createUser_unimplemented(): CreateUserResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface CreateUsersWithListInputArgs<Req, Res> {
@@ -322,7 +323,7 @@ interface CreateUsersWithListInputResult_default {
 export type CreateUsersWithListInputResult = Promise<CreateUsersWithListInputResult_200 | CreateUsersWithListInputResult_default>;
 
 export async function createUsersWithListInput_unimplemented(): CreateUsersWithListInputResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface LoginUserArgs<Req, Res> {
@@ -345,7 +346,7 @@ interface LoginUserResult_400 {
 export type LoginUserResult = Promise<LoginUserResult_200 | LoginUserResult_400>;
 
 export async function loginUser_unimplemented(): LoginUserResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface LogoutUserArgs<Req, Res> {
@@ -364,7 +365,7 @@ interface LogoutUserResult_default {
 export type LogoutUserResult = Promise<LogoutUserResult_default>;
 
 export async function logoutUser_unimplemented(): LogoutUserResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface GetUserByNameArgs<Req, Res> {
@@ -392,7 +393,7 @@ interface GetUserByNameResult_404 {
 export type GetUserByNameResult = Promise<GetUserByNameResult_200 | GetUserByNameResult_400 | GetUserByNameResult_404>;
 
 export async function getUserByName_unimplemented(): GetUserByNameResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface UpdateUserArgs<Req, Res> {
@@ -411,7 +412,7 @@ interface UpdateUserResult_default {
 export type UpdateUserResult = Promise<UpdateUserResult_default>;
 
 export async function updateUser_unimplemented(): UpdateUserResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface DeleteUserArgs<Req, Res> {
@@ -434,7 +435,7 @@ interface DeleteUserResult_404 {
 export type DeleteUserResult = Promise<DeleteUserResult_400 | DeleteUserResult_404>;
 
 export async function deleteUser_unimplemented(): DeleteUserResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface Server<Req = unknown, Res = unknown> {

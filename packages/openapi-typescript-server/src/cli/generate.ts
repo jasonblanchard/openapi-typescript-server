@@ -1,11 +1,7 @@
 import type { OpenAPISpec } from "../lib/schema";
 import { Project } from "ts-morph";
 
-export default function generate(
-  spec: OpenAPISpec,
-  types: string,
-  outdir: string,
-) {
+export default function generate(spec: OpenAPISpec, types: string, outdir: string) {
   const project = new Project();
 
   const sourceFile = project.createSourceFile(`${outdir}/server.ts`, "", {
@@ -22,6 +18,11 @@ export default function generate(
     namedImports: ["Route"],
     moduleSpecifier: "openapi-typescript-server",
     isTypeOnly: true,
+  });
+
+  sourceFile.addImportDeclaration({
+    namedImports: ["NotImplementedError"],
+    moduleSpecifier: "openapi-typescript-server",
   });
 
   const operationsById: Record<
@@ -109,7 +110,7 @@ export default function generate(
         isAsync: true,
         returnType: resultType.getName(),
         statements: (writer) => {
-          writer.writeLine("throw new Error('unimplemented');");
+          writer.writeLine("throw new NotImplementedError()");
         },
       });
     }
@@ -123,7 +124,7 @@ export default function generate(
           args: ${args}<Req, Res>
           ) => ${result}`,
       };
-    },
+    }
   );
 
   const serverInterface = sourceFile.addInterface({
@@ -154,7 +155,7 @@ export default function generate(
           writer.writeLine(`path: "${path}",`);
           writer.writeLine(`handler: server.${operationId},`);
           writer.writeLine("},");
-        },
+        }
       );
 
       writer.writeLine("]");
@@ -168,7 +169,7 @@ export default function generate(
  * Do not make direct changes to the file.
  */
 
-  `,
+  `
   );
 
   sourceFile.formatText({

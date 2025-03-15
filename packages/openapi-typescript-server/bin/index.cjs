@@ -122,6 +122,10 @@ function generate(spec, types, outdir) {
     moduleSpecifier: "openapi-typescript-server",
     isTypeOnly: true
   });
+  sourceFile.addImportDeclaration({
+    namedImports: ["NotImplementedError"],
+    moduleSpecifier: "openapi-typescript-server"
+  });
   const operationsById = {};
   for (const path in spec.paths) {
     const pathSpec = spec.paths[path];
@@ -195,7 +199,7 @@ function generate(spec, types, outdir) {
         isAsync: true,
         returnType: resultType.getName(),
         statements: (writer) => {
-          writer.writeLine("throw new Error('unimplemented');");
+          writer.writeLine("throw new NotImplementedError()");
         }
       });
     }

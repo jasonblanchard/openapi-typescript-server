@@ -4,6 +4,7 @@ import { registerRouteHandlers } from "./gen/server.ts";
 import registerRoutes from "openapi-typescript-server-express";
 import API from "./api.ts";
 import OpenApiValidator from "express-openapi-validator";
+import { NotImplementedError } from "openapi-typescript-server";
 
 export default function makeApp() {
   const app = express();
@@ -20,7 +21,7 @@ export default function makeApp() {
     OpenApiValidator.middleware({
       apiSpec: "./examples/simple/spec.yaml",
       validateResponses: false,
-    }),
+    })
   );
   registerRoutes(registerRouteHandlers(API), apiRouter);
 
@@ -38,11 +39,20 @@ export default function makeApp() {
         message: validationError.message,
         errors: validationError.errors,
       });
-    } else {
-      res.status(500).json({
-        message: "Internal Server Error",
-      });
+      return;
     }
+
+    if (err instanceof NotImplementedError) {
+      res.status(501).json({
+        message: "Not Implemented",
+      });
+      return;
+    }
+
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+    return;
   });
 
   return app;

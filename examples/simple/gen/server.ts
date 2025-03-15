@@ -5,6 +5,7 @@
 
 import type { operations } from "./schema.d.ts";
 import type { Route } from "openapi-typescript-server";
+import { NotImplementedError } from "openapi-typescript-server";
 
 export interface ListPetsArgs<Req, Res> {
   parameters: operations['listPets']['parameters'];
@@ -27,7 +28,7 @@ interface ListPetsResult_default {
 export type ListPetsResult = Promise<ListPetsResult_200 | ListPetsResult_default>;
 
 export async function listPets_unimplemented(): ListPetsResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface GetPetByIdArgs<Req, Res> {
@@ -51,7 +52,7 @@ interface GetPetByIdResult_default {
 export type GetPetByIdResult = Promise<GetPetByIdResult_200 | GetPetByIdResult_default>;
 
 export async function getPetById_unimplemented(): GetPetByIdResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface UpdatePetWithFormArgs<Req, Res> {
@@ -75,7 +76,7 @@ interface UpdatePetWithFormResult_default {
 export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResult_200 | UpdatePetWithFormResult_default>;
 
 export async function updatePetWithForm_unimplemented(): UpdatePetWithFormResult {
-  throw new Error('unimplemented');
+  throw new NotImplementedError()
 }
 
 export interface Server<Req = unknown, Res = unknown> {
