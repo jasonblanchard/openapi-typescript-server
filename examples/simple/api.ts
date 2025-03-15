@@ -20,6 +20,10 @@ const API: Server<Request, Response> = {
       };
     }
 
+    if (parameters.path.petId === 500) {
+      throw new Error("Cannot get that pet");
+    }
+
     return {
       content: {
         200: {
@@ -38,6 +42,7 @@ const API: Server<Request, Response> = {
     const { petId } = parameters.path;
     const { name } = parameters.query ?? {};
     const { status } = requestBody.content["application/json"];
+
     return {
       content: {
         200: {

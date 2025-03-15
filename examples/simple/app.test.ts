@@ -20,7 +20,7 @@ describe("getPetById", async () => {
     });
   });
 
-  it("returns 503", async () => {
+  it("returns 503 via default response and custom status code", async () => {
     const response = await request(app)
       .get("/api/v3/pet/42")
       .set("Accept", "application/json");
@@ -29,6 +29,14 @@ describe("getPetById", async () => {
     assert.deepEqual(response.body, {
       message: "Cannot get that pet",
     });
+  });
+
+  it("returns 500 from thrown errors via propagation to global error handler", async () => {
+    const response = await request(app)
+      .get("/api/v3/pet/500")
+      .set("Accept", "application/json");
+
+    assert.equal(response.status, 500);
   });
 });
 

@@ -38,6 +38,10 @@ export default function makeApp() {
         message: validationError.message,
         errors: validationError.errors,
       });
+    } else {
+      res.status(500).json({
+        message: "Internal Server Error",
+      });
     }
   });
 
