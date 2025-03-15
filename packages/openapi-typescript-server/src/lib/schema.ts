@@ -35,7 +35,7 @@ export const OpenAPISpec = z.object({
               schema: z.object({
                 type: z.string(),
               }),
-            })
+            }),
           )
           .optional(),
         requestBody: z
@@ -44,7 +44,7 @@ export const OpenAPISpec = z.object({
             content: z.record(
               z.object({
                 schema: Schema,
-              })
+              }),
             ),
           })
           .optional(),
@@ -55,13 +55,13 @@ export const OpenAPISpec = z.object({
               .record(
                 z.object({
                   schema: Schema,
-                })
+                }),
               )
               .optional(),
-          })
+          }),
         ),
-      })
-    )
+      }),
+    ),
   ),
 });
 

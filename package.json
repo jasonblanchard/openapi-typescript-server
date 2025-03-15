@@ -9,7 +9,9 @@
     "gen:simple": "openapi-typescript ./examples/simple/spec.yaml --output ./examples/simple/gen/schema.d.ts && openapi-typescript-server build -s ./examples/simple/spec.yaml -t ./schema.d.ts -o ./examples/simple/gen",
     "gen": "npm run gen:petstore && npm run gen:simple",
     "build:all": "npm run build --workspaces --if-present",
-    "pack": "npm run build:all && npm pack --workspaces --pack-destination /tmp"
+    "pack": "npm run build:all && npm pack --workspaces --pack-destination /tmp",
+    "format:check": "npx prettier . --check",
+    "format": "npx prettier . --write"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +24,7 @@
     "@types/express": "^5.0.0",
     "@types/supertest": "^6.0.2",
     "openapi-typescript": "^7.6.1",
+    "prettier": "3.5.3",
     "supertest": "^7.0.0",
     "typescript": "^5.8.2"
   },

@@ -44,7 +44,7 @@ export default function registerRoutes(routes: Route[], app: Application) {
 
         res.end();
         return;
-      }
+      },
     );
   }
 }

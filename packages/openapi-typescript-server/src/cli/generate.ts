@@ -4,7 +4,7 @@ import { Project } from "ts-morph";
 export default function generate(
   spec: OpenAPISpec,
   types: string,
-  outdir: string
+  outdir: string,
 ) {
   const project = new Project();
 
@@ -113,7 +113,7 @@ export default function generate(
           args: ${args}<Req, Res>
           ) => ${result}`,
       };
-    }
+    },
   );
 
   const serverInterface = sourceFile.addInterface({
@@ -144,7 +144,7 @@ export default function generate(
           writer.writeLine(`path: "${path}",`);
           writer.writeLine(`handler: server.${operationId},`);
           writer.writeLine("},");
-        }
+        },
       );
 
       writer.writeLine("]");
@@ -158,7 +158,7 @@ export default function generate(
  * Do not make direct changes to the file.
  */
 
-  `
+  `,
   );
 
   sourceFile.formatText({
