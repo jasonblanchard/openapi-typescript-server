@@ -150,3 +150,33 @@ describe("non status code responses", () => {
     assert.deepEqual(response.body, { status: "ok" });
   });
 });
+
+describe("adds headers", () => {
+  it("adds headers to the response", async () => {
+    registerRoutes(
+      [
+        {
+          path: "/foo",
+          method: "get",
+          handler: async () => {
+            return {
+              content: {
+                200: {
+                  "application/json": { status: "ok" },
+                },
+              },
+              headers: {
+                "x-test-header": "set",
+              },
+            };
+          },
+        },
+      ],
+      app,
+    );
+    const response = await request(app)
+      .get("/foo")
+      .set("Accept", "application/json");
+    assert.strictEqual(response.headers["x-test-header"], "set");
+  });
+});
