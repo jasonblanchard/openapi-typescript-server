@@ -1,4 +1,4 @@
-import type { Application, NextFunction, Request, Response } from "express";
+import { response, type Application, type NextFunction, type Request, type Response } from "express";
 import type { Route } from "openapi-typescript-server";
 
 export default function registerRoutes(routes: Route[], app: Application) {
@@ -31,6 +31,12 @@ export default function registerRoutes(routes: Route[], app: Application) {
           const entry = Object.entries(result.content || {})[0];
           const [responseVariant, content] = entry ? entry : ["default", {}];
 
+          const variantStatusCode = Number(responseVariant)
+
+          if (!isValidStatusCode(variantStatusCode) && !result.status) {
+            throw new Error(`${responseVariant} must include \`status\``)
+          }
+
           if (result.status) {
             res.status(result.status);
           } else {
@@ -55,4 +61,8 @@ export default function registerRoutes(routes: Route[], app: Application) {
 
 function openAPIPathToExpress(path: string) {
   return path.replace(/{([^}]+)}/g, ":$1");
+}
+
+function isValidStatusCode(statusCode: number) {
+  return statusCode >= 100 && statusCode <= 599;
 }
