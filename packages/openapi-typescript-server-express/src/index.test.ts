@@ -180,3 +180,27 @@ describe("adds headers", () => {
     assert.strictEqual(response.headers["x-test-header"], "set");
   });
 });
+
+it("routes terminated before mounted handlers win", async () => {
+  app.get("/foo", (_, res) => {
+    res.json({ status: "ok" });
+  });
+
+  registerRoutes(
+    [
+      {
+        path: "/foo",
+        method: "get",
+        handler: async () => {
+          throw new Error("This should not be called");
+        },
+      },
+    ],
+    app,
+  );
+  const response = await request(app)
+    .get("/foo")
+    .set("Accept", "application/json");
+  assert.strictEqual(response.status, 200);
+  assert.deepEqual(response.body, { status: "ok" });
+});
