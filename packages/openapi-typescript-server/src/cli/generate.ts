@@ -181,7 +181,8 @@ export default function generate(
     ensureNewLineAtEndOfFile: true,
     indentSize: 2,
   });
-  sourceFile.saveSync();
+
+  return sourceFile;
 }
 
 function capitalize(string: string) {
