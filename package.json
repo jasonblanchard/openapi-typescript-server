@@ -5,8 +5,8 @@
   "scripts": {
     "test": "node --test",
     "typecheck": "tsc --noEmit",
-    "gen:petstore": "openapi-typescript ./examples/petstore/spec.yaml --output ./examples/petstore/gen/schema.d.ts && openapi-typescript-server -s ./examples/petstore/spec.yaml -t ./schema.d.ts -o ./examples/petstore/gen ",
-    "gen:simple": "openapi-typescript ./examples/simple/spec.yaml --output ./examples/simple/gen/schema.d.ts && openapi-typescript-server -s ./examples/simple/spec.yaml -t ./schema.d.ts -o ./examples/simple/gen",
+    "gen:petstore": "openapi-typescript ./examples/petstore/spec.yaml --output ./examples/petstore/gen/schema.d.ts && openapi-typescript-server ./examples/petstore/spec.yaml -t ./schema.d.ts -o ./examples/petstore/gen ",
+    "gen:simple": "openapi-typescript ./examples/simple/spec.yaml --output ./examples/simple/gen/schema.d.ts && openapi-typescript-server ./examples/simple/spec.yaml -t ./schema.d.ts -o ./examples/simple/gen",
     "gen": "npm run gen:petstore && npm run gen:simple",
     "build:packages": "npm run build --workspaces --if-present",
     "pack": "npm run build:all && npm pack --workspaces --pack-destination /tmp",
