@@ -182,7 +182,9 @@ function generate(spec, types, outdir) {
           });
         }
         const responseVariantInterface = sourceFile.addInterface({
-          name: `${capitalize(operationId)}Result_${responseVariant}`,
+          name: `${capitalize(operationId)}Result${capitalize(
+            responseVariant
+          )}`,
           properties: responseVariantProperties
         });
         responseVariantInterfaceNames.push(responseVariantInterface.getName());
@@ -199,7 +201,7 @@ function generate(spec, types, outdir) {
         result: resultType.getName()
       };
       sourceFile.addFunction({
-        name: `${operationId}_unimplemented`,
+        name: `${operationId}Unimplemented`,
         isExported: true,
         isAsync: true,
         returnType: resultType.getName(),

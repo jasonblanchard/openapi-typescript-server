@@ -95,7 +95,9 @@ export default function generate(
           });
         }
         const responseVariantInterface = sourceFile.addInterface({
-          name: `${capitalize(operationId)}Result_${responseVariant}`,
+          name: `${capitalize(operationId)}Result${capitalize(
+            responseVariant
+          )}`,
           properties: responseVariantProperties,
         });
 
@@ -116,7 +118,7 @@ export default function generate(
       };
 
       sourceFile.addFunction({
-        name: `${operationId}_unimplemented`,
+        name: `${operationId}Unimplemented`,
         isExported: true,
         isAsync: true,
         returnType: resultType.getName(),

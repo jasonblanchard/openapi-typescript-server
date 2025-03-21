@@ -14,29 +14,29 @@ export interface UpdatePetArgs<Req, Res> {
   res: Res;
 }
 
-interface UpdatePetResult_200 {
+interface UpdatePetResult200 {
   content: { 200: paths['/pet']['put']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface UpdatePetResult_400 {
+interface UpdatePetResult400 {
   content: { 400: paths['/pet']['put']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface UpdatePetResult_404 {
+interface UpdatePetResult404 {
   content: { 404: paths['/pet']['put']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface UpdatePetResult_405 {
+interface UpdatePetResult405 {
   content: { 405: paths['/pet']['put']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type UpdatePetResult = Promise<UpdatePetResult_200 | UpdatePetResult_400 | UpdatePetResult_404 | UpdatePetResult_405>;
+export type UpdatePetResult = Promise<UpdatePetResult200 | UpdatePetResult400 | UpdatePetResult404 | UpdatePetResult405>;
 
-export async function updatePet_unimplemented(): UpdatePetResult {
+export async function updatePetUnimplemented(): UpdatePetResult {
   throw new NotImplementedError()
 }
 
@@ -47,19 +47,19 @@ export interface AddPetArgs<Req, Res> {
   res: Res;
 }
 
-interface AddPetResult_200 {
+interface AddPetResult200 {
   content: { 200: paths['/pet']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface AddPetResult_405 {
+interface AddPetResult405 {
   content: { 405: paths['/pet']['post']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type AddPetResult = Promise<AddPetResult_200 | AddPetResult_405>;
+export type AddPetResult = Promise<AddPetResult200 | AddPetResult405>;
 
-export async function addPet_unimplemented(): AddPetResult {
+export async function addPetUnimplemented(): AddPetResult {
   throw new NotImplementedError()
 }
 
@@ -70,19 +70,19 @@ export interface FindPetsByStatusArgs<Req, Res> {
   res: Res;
 }
 
-interface FindPetsByStatusResult_200 {
+interface FindPetsByStatusResult200 {
   content: { 200: paths['/pet/findByStatus']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface FindPetsByStatusResult_400 {
+interface FindPetsByStatusResult400 {
   content: { 400: paths['/pet/findByStatus']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type FindPetsByStatusResult = Promise<FindPetsByStatusResult_200 | FindPetsByStatusResult_400>;
+export type FindPetsByStatusResult = Promise<FindPetsByStatusResult200 | FindPetsByStatusResult400>;
 
-export async function findPetsByStatus_unimplemented(): FindPetsByStatusResult {
+export async function findPetsByStatusUnimplemented(): FindPetsByStatusResult {
   throw new NotImplementedError()
 }
 
@@ -93,19 +93,19 @@ export interface FindPetsByTagsArgs<Req, Res> {
   res: Res;
 }
 
-interface FindPetsByTagsResult_200 {
+interface FindPetsByTagsResult200 {
   content: { 200: paths['/pet/findByTags']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface FindPetsByTagsResult_400 {
+interface FindPetsByTagsResult400 {
   content: { 400: paths['/pet/findByTags']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type FindPetsByTagsResult = Promise<FindPetsByTagsResult_200 | FindPetsByTagsResult_400>;
+export type FindPetsByTagsResult = Promise<FindPetsByTagsResult200 | FindPetsByTagsResult400>;
 
-export async function findPetsByTags_unimplemented(): FindPetsByTagsResult {
+export async function findPetsByTagsUnimplemented(): FindPetsByTagsResult {
   throw new NotImplementedError()
 }
 
@@ -116,24 +116,24 @@ export interface GetPetByIdArgs<Req, Res> {
   res: Res;
 }
 
-interface GetPetByIdResult_200 {
+interface GetPetByIdResult200 {
   content: { 200: paths['/pet/{petId}']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface GetPetByIdResult_400 {
+interface GetPetByIdResult400 {
   content: { 400: paths['/pet/{petId}']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface GetPetByIdResult_404 {
+interface GetPetByIdResult404 {
   content: { 404: paths['/pet/{petId}']['get']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type GetPetByIdResult = Promise<GetPetByIdResult_200 | GetPetByIdResult_400 | GetPetByIdResult_404>;
+export type GetPetByIdResult = Promise<GetPetByIdResult200 | GetPetByIdResult400 | GetPetByIdResult404>;
 
-export async function getPetById_unimplemented(): GetPetByIdResult {
+export async function getPetByIdUnimplemented(): GetPetByIdResult {
   throw new NotImplementedError()
 }
 
@@ -144,14 +144,14 @@ export interface UpdatePetWithFormArgs<Req, Res> {
   res: Res;
 }
 
-interface UpdatePetWithFormResult_405 {
+interface UpdatePetWithFormResult405 {
   content: { 405: paths['/pet/{petId}']['post']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResult_405>;
+export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResult405>;
 
-export async function updatePetWithForm_unimplemented(): UpdatePetWithFormResult {
+export async function updatePetWithFormUnimplemented(): UpdatePetWithFormResult {
   throw new NotImplementedError()
 }
 
@@ -162,14 +162,14 @@ export interface DeletePetArgs<Req, Res> {
   res: Res;
 }
 
-interface DeletePetResult_400 {
+interface DeletePetResult400 {
   content: { 400: paths['/pet/{petId}']['delete']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type DeletePetResult = Promise<DeletePetResult_400>;
+export type DeletePetResult = Promise<DeletePetResult400>;
 
-export async function deletePet_unimplemented(): DeletePetResult {
+export async function deletePetUnimplemented(): DeletePetResult {
   throw new NotImplementedError()
 }
 
@@ -180,14 +180,14 @@ export interface UploadFileArgs<Req, Res> {
   res: Res;
 }
 
-interface UploadFileResult_200 {
+interface UploadFileResult200 {
   content: { 200: paths['/pet/{petId}/uploadImage']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type UploadFileResult = Promise<UploadFileResult_200>;
+export type UploadFileResult = Promise<UploadFileResult200>;
 
-export async function uploadFile_unimplemented(): UploadFileResult {
+export async function uploadFileUnimplemented(): UploadFileResult {
   throw new NotImplementedError()
 }
 
@@ -198,14 +198,14 @@ export interface GetInventoryArgs<Req, Res> {
   res: Res;
 }
 
-interface GetInventoryResult_200 {
+interface GetInventoryResult200 {
   content: { 200: paths['/store/inventory']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type GetInventoryResult = Promise<GetInventoryResult_200>;
+export type GetInventoryResult = Promise<GetInventoryResult200>;
 
-export async function getInventory_unimplemented(): GetInventoryResult {
+export async function getInventoryUnimplemented(): GetInventoryResult {
   throw new NotImplementedError()
 }
 
@@ -216,19 +216,19 @@ export interface PlaceOrderArgs<Req, Res> {
   res: Res;
 }
 
-interface PlaceOrderResult_200 {
+interface PlaceOrderResult200 {
   content: { 200: paths['/store/order']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface PlaceOrderResult_405 {
+interface PlaceOrderResult405 {
   content: { 405: paths['/store/order']['post']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type PlaceOrderResult = Promise<PlaceOrderResult_200 | PlaceOrderResult_405>;
+export type PlaceOrderResult = Promise<PlaceOrderResult200 | PlaceOrderResult405>;
 
-export async function placeOrder_unimplemented(): PlaceOrderResult {
+export async function placeOrderUnimplemented(): PlaceOrderResult {
   throw new NotImplementedError()
 }
 
@@ -239,24 +239,24 @@ export interface GetOrderByIdArgs<Req, Res> {
   res: Res;
 }
 
-interface GetOrderByIdResult_200 {
+interface GetOrderByIdResult200 {
   content: { 200: paths['/store/order/{orderId}']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface GetOrderByIdResult_400 {
+interface GetOrderByIdResult400 {
   content: { 400: paths['/store/order/{orderId}']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface GetOrderByIdResult_404 {
+interface GetOrderByIdResult404 {
   content: { 404: paths['/store/order/{orderId}']['get']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type GetOrderByIdResult = Promise<GetOrderByIdResult_200 | GetOrderByIdResult_400 | GetOrderByIdResult_404>;
+export type GetOrderByIdResult = Promise<GetOrderByIdResult200 | GetOrderByIdResult400 | GetOrderByIdResult404>;
 
-export async function getOrderById_unimplemented(): GetOrderByIdResult {
+export async function getOrderByIdUnimplemented(): GetOrderByIdResult {
   throw new NotImplementedError()
 }
 
@@ -267,19 +267,19 @@ export interface DeleteOrderArgs<Req, Res> {
   res: Res;
 }
 
-interface DeleteOrderResult_400 {
+interface DeleteOrderResult400 {
   content: { 400: paths['/store/order/{orderId}']['delete']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface DeleteOrderResult_404 {
+interface DeleteOrderResult404 {
   content: { 404: paths['/store/order/{orderId}']['delete']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type DeleteOrderResult = Promise<DeleteOrderResult_400 | DeleteOrderResult_404>;
+export type DeleteOrderResult = Promise<DeleteOrderResult400 | DeleteOrderResult404>;
 
-export async function deleteOrder_unimplemented(): DeleteOrderResult {
+export async function deleteOrderUnimplemented(): DeleteOrderResult {
   throw new NotImplementedError()
 }
 
@@ -290,15 +290,15 @@ export interface CreateUserArgs<Req, Res> {
   res: Res;
 }
 
-interface CreateUserResult_default {
+interface CreateUserResultDefault {
   content: { default: paths['/user']['post']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
 
-export type CreateUserResult = Promise<CreateUserResult_default>;
+export type CreateUserResult = Promise<CreateUserResultDefault>;
 
-export async function createUser_unimplemented(): CreateUserResult {
+export async function createUserUnimplemented(): CreateUserResult {
   throw new NotImplementedError()
 }
 
@@ -309,20 +309,20 @@ export interface CreateUsersWithListInputArgs<Req, Res> {
   res: Res;
 }
 
-interface CreateUsersWithListInputResult_200 {
+interface CreateUsersWithListInputResult200 {
   content: { 200: paths['/user/createWithList']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface CreateUsersWithListInputResult_default {
+interface CreateUsersWithListInputResultDefault {
   content: { default: paths['/user/createWithList']['post']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
 
-export type CreateUsersWithListInputResult = Promise<CreateUsersWithListInputResult_200 | CreateUsersWithListInputResult_default>;
+export type CreateUsersWithListInputResult = Promise<CreateUsersWithListInputResult200 | CreateUsersWithListInputResultDefault>;
 
-export async function createUsersWithListInput_unimplemented(): CreateUsersWithListInputResult {
+export async function createUsersWithListInputUnimplemented(): CreateUsersWithListInputResult {
   throw new NotImplementedError()
 }
 
@@ -333,19 +333,19 @@ export interface LoginUserArgs<Req, Res> {
   res: Res;
 }
 
-interface LoginUserResult_200 {
+interface LoginUserResult200 {
   content: { 200: paths['/user/login']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface LoginUserResult_400 {
+interface LoginUserResult400 {
   content: { 400: paths['/user/login']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type LoginUserResult = Promise<LoginUserResult_200 | LoginUserResult_400>;
+export type LoginUserResult = Promise<LoginUserResult200 | LoginUserResult400>;
 
-export async function loginUser_unimplemented(): LoginUserResult {
+export async function loginUserUnimplemented(): LoginUserResult {
   throw new NotImplementedError()
 }
 
@@ -356,15 +356,15 @@ export interface LogoutUserArgs<Req, Res> {
   res: Res;
 }
 
-interface LogoutUserResult_default {
+interface LogoutUserResultDefault {
   content: { default: paths['/user/logout']['get']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
 
-export type LogoutUserResult = Promise<LogoutUserResult_default>;
+export type LogoutUserResult = Promise<LogoutUserResultDefault>;
 
-export async function logoutUser_unimplemented(): LogoutUserResult {
+export async function logoutUserUnimplemented(): LogoutUserResult {
   throw new NotImplementedError()
 }
 
@@ -375,24 +375,24 @@ export interface GetUserByNameArgs<Req, Res> {
   res: Res;
 }
 
-interface GetUserByNameResult_200 {
+interface GetUserByNameResult200 {
   content: { 200: paths['/user/{username}']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface GetUserByNameResult_400 {
+interface GetUserByNameResult400 {
   content: { 400: paths['/user/{username}']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface GetUserByNameResult_404 {
+interface GetUserByNameResult404 {
   content: { 404: paths['/user/{username}']['get']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type GetUserByNameResult = Promise<GetUserByNameResult_200 | GetUserByNameResult_400 | GetUserByNameResult_404>;
+export type GetUserByNameResult = Promise<GetUserByNameResult200 | GetUserByNameResult400 | GetUserByNameResult404>;
 
-export async function getUserByName_unimplemented(): GetUserByNameResult {
+export async function getUserByNameUnimplemented(): GetUserByNameResult {
   throw new NotImplementedError()
 }
 
@@ -403,15 +403,15 @@ export interface UpdateUserArgs<Req, Res> {
   res: Res;
 }
 
-interface UpdateUserResult_default {
+interface UpdateUserResultDefault {
   content: { default: paths['/user/{username}']['put']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
 
-export type UpdateUserResult = Promise<UpdateUserResult_default>;
+export type UpdateUserResult = Promise<UpdateUserResultDefault>;
 
-export async function updateUser_unimplemented(): UpdateUserResult {
+export async function updateUserUnimplemented(): UpdateUserResult {
   throw new NotImplementedError()
 }
 
@@ -422,19 +422,19 @@ export interface DeleteUserArgs<Req, Res> {
   res: Res;
 }
 
-interface DeleteUserResult_400 {
+interface DeleteUserResult400 {
   content: { 400: paths['/user/{username}']['delete']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface DeleteUserResult_404 {
+interface DeleteUserResult404 {
   content: { 404: paths['/user/{username}']['delete']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type DeleteUserResult = Promise<DeleteUserResult_400 | DeleteUserResult_404>;
+export type DeleteUserResult = Promise<DeleteUserResult400 | DeleteUserResult404>;
 
-export async function deleteUser_unimplemented(): DeleteUserResult {
+export async function deleteUserUnimplemented(): DeleteUserResult {
   throw new NotImplementedError()
 }
 

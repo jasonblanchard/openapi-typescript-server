@@ -51,7 +51,7 @@ const API: ServerTypes.Server<Request, Response> = {
     };
   },
 
-  listPets: server.listPets_unimplemented,
+  listPets: server.listPetsUnimplemented,
 };
 
 export default API;

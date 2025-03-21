@@ -69,16 +69,14 @@ describe("with operationId", () => {
       "paths['/path']['get']['requestBody']",
     );
 
-    const result200Interface = sourceFile.getInterface(
-      "GetOperationResult_200",
-    );
+    const result200Interface = sourceFile.getInterface("GetOperationResult200");
     assert.equal(
       result200Interface?.getProperty("content")?.getTypeNode()?.getText(),
       "{ 200: paths['/path']['get']['responses']['200']['content'] }",
     );
 
     const resultDefaultInterface = sourceFile.getInterface(
-      "GetOperationResult_default",
+      "GetOperationResultDefault",
     );
     assert.equal(
       resultDefaultInterface?.getProperty("content")?.getTypeNode()?.getText(),
@@ -88,7 +86,7 @@ describe("with operationId", () => {
 
   it("adds inimplemented function", () => {
     const functionDeclaration = sourceFile.getFunction(
-      "getOperation_unimplemented",
+      "getOperationUnimplemented",
     );
     assert(functionDeclaration);
     assert.match(
@@ -199,7 +197,7 @@ describe("wihout operationId", () => {
     );
 
     const result200Interface = sourceFile.getInterface(
-      "GetSomethingIdResult_200",
+      "GetSomethingIdResult200",
     );
     assert.equal(
       result200Interface?.getProperty("content")?.getTypeNode()?.getText(),
@@ -207,7 +205,7 @@ describe("wihout operationId", () => {
     );
 
     const resultDefaultInterface = sourceFile.getInterface(
-      "GetSomethingIdResult_default",
+      "GetSomethingIdResultDefault",
     );
     assert.equal(
       resultDefaultInterface?.getProperty("content")?.getTypeNode()?.getText(),

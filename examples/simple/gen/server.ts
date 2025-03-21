@@ -14,20 +14,20 @@ export interface ListPetsArgs<Req, Res> {
   res: Res;
 }
 
-interface ListPetsResult_200 {
+interface ListPetsResult200 {
   content: { 200: paths['/pets']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface ListPetsResult_default {
+interface ListPetsResultDefault {
   content: { default: paths['/pets']['get']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
 
-export type ListPetsResult = Promise<ListPetsResult_200 | ListPetsResult_default>;
+export type ListPetsResult = Promise<ListPetsResult200 | ListPetsResultDefault>;
 
-export async function listPets_unimplemented(): ListPetsResult {
+export async function listPetsUnimplemented(): ListPetsResult {
   throw new NotImplementedError()
 }
 
@@ -38,20 +38,20 @@ export interface GetPetByIdArgs<Req, Res> {
   res: Res;
 }
 
-interface GetPetByIdResult_200 {
+interface GetPetByIdResult200 {
   content: { 200: paths['/pet/{petId}']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface GetPetByIdResult_default {
+interface GetPetByIdResultDefault {
   content: { default: paths['/pet/{petId}']['get']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
 
-export type GetPetByIdResult = Promise<GetPetByIdResult_200 | GetPetByIdResult_default>;
+export type GetPetByIdResult = Promise<GetPetByIdResult200 | GetPetByIdResultDefault>;
 
-export async function getPetById_unimplemented(): GetPetByIdResult {
+export async function getPetByIdUnimplemented(): GetPetByIdResult {
   throw new NotImplementedError()
 }
 
@@ -62,20 +62,20 @@ export interface UpdatePetWithFormArgs<Req, Res> {
   res: Res;
 }
 
-interface UpdatePetWithFormResult_200 {
+interface UpdatePetWithFormResult200 {
   content: { 200: paths['/pet/{petId}']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface UpdatePetWithFormResult_default {
+interface UpdatePetWithFormResultDefault {
   content: { default: paths['/pet/{petId}']['post']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
 
-export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResult_200 | UpdatePetWithFormResult_default>;
+export type UpdatePetWithFormResult = Promise<UpdatePetWithFormResult200 | UpdatePetWithFormResultDefault>;
 
-export async function updatePetWithForm_unimplemented(): UpdatePetWithFormResult {
+export async function updatePetWithFormUnimplemented(): UpdatePetWithFormResult {
   throw new NotImplementedError()
 }
 
