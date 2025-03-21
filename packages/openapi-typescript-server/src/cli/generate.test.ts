@@ -1,39 +1,38 @@
 import { describe, it } from "node:test";
 import assert from "node:assert";
 import generate from "./generate.ts";
+import type { OpenAPISpec } from "../lib/schema.ts";
 
-const sourceFile = generate(
-  {
-    openapi: "3.0.0",
-    info: {},
-    paths: {
-      "/path": {
-        get: {
-          operationId: "getOperation",
-          responses: {
-            200: {
-              content: {
-                "application/json": {
-                  schema: {
-                    type: "object",
-                    properties: {
-                      id: {
-                        type: "string",
-                      },
+const spec: OpenAPISpec = {
+  openapi: "3.0.0",
+  info: {},
+  paths: {
+    "/path": {
+      get: {
+        operationId: "getOperation",
+        responses: {
+          200: {
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "string",
                     },
                   },
                 },
               },
             },
-            default: {
-              content: {
-                "application/json": {
-                  schema: {
-                    type: "object",
-                    properties: {
-                      message: {
-                        type: "string",
-                      },
+          },
+          default: {
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    message: {
+                      type: "string",
                     },
                   },
                 },
@@ -44,9 +43,9 @@ const sourceFile = generate(
       },
     },
   },
-  "./schema.d.ts",
-  "outdir",
-);
+};
+
+const sourceFile = generate(spec, "./schema.d.ts", "outdir");
 
 it("writes imports", () => {
   const operationsImport = sourceFile.getImportDeclaration("./schema.d.ts");
@@ -142,4 +141,43 @@ it("writes register handler", () => {
   assert.match(bodyText, /path: "\/path"/);
   assert.match(bodyText, /handler: server.getOperation/);
   assert.match(bodyText, /\]/);
+});
+
+describe("wihout operationId", () => {
+  const modifiedSpec = structuredClone(spec);
+  delete modifiedSpec?.paths?.["/path"]?.get?.operationId;
+  // const sourceFile = generate(modifiedSpec, "./schema.d.ts", "outdir");
+
+  it("~writes function inputs and results~ throws an error", () => {
+    const argsInterface = sourceFile.getInterface("GetOperationArgs");
+    assert.equal(argsInterface?.getTypeParameters().length, 2);
+    assert.throws(() => {
+      generate(modifiedSpec, "./schema.d.ts", "outdir");
+    });
+
+    // assert.equal(
+    //   argsInterface?.getProperty("parameters")?.getTypeNode()?.getText(),
+    //   "operations['getOperation']['parameters']",
+    // );
+    // assert.equal(
+    //   argsInterface?.getProperty("requestBody")?.getTypeNode()?.getText(),
+    //   "operations['getOperation']['requestBody']",
+    // );
+
+    // const result200Interface = sourceFile.getInterface(
+    //   "GetOperationResult_200",
+    // );
+    // assert.equal(
+    //   result200Interface?.getProperty("content")?.getTypeNode()?.getText(),
+    //   "{ 200: operations['getOperation']['responses']['200']['content'] }",
+    // );
+
+    // const resultDefaultInterface = sourceFile.getInterface(
+    //   "GetOperationResult_default",
+    // );
+    // assert.equal(
+    //   resultDefaultInterface?.getProperty("content")?.getTypeNode()?.getText(),
+    //   "{ default: operations['getOperation']['responses']['default']['content'] }",
+    // );
+  });
 });
