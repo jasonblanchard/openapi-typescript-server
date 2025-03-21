@@ -96,7 +96,7 @@ export default function generate(
         }
         const responseVariantInterface = sourceFile.addInterface({
           name: `${capitalize(operationId)}Result${capitalize(
-            responseVariant
+            responseVariant,
           )}`,
           properties: responseVariantProperties,
         });
