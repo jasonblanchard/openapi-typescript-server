@@ -113,7 +113,7 @@ function generate(spec, types, outdir) {
     overwrite: true
   });
   sourceFile.addImportDeclaration({
-    namedImports: ["operations"],
+    namedImports: ["paths"],
     moduleSpecifier: types,
     isTypeOnly: true
   });
@@ -131,21 +131,26 @@ function generate(spec, types, outdir) {
     const pathSpec = spec.paths[path];
     for (const method in pathSpec) {
       const operation = pathSpec[method];
-      if (!(operation == null ? void 0 : operation.operationId)) {
-        throw new Error("Operation without operationId not implemented");
+      if (!operation) {
+        throw new Error("no operation");
       }
+      const operationId = getOperationId({
+        operationId: operation.operationId,
+        path,
+        method
+      });
       const argsInterface = sourceFile.addInterface({
-        name: `${capitalize(operation.operationId)}Args`,
+        name: `${capitalize(operationId)}Args`,
         isExported: true,
         typeParameters: [{ name: "Req" }, { name: "Res" }],
         properties: [
           {
             name: "parameters",
-            type: `operations['${operation.operationId}']['parameters']`
+            type: `paths['${path}']['${method}']['parameters']`
           },
           {
             name: "requestBody",
-            type: `operations['${operation.operationId}']['requestBody']`
+            type: `paths['${path}']['${method}']['requestBody']`
           },
           {
             name: "req",
@@ -162,7 +167,7 @@ function generate(spec, types, outdir) {
         const responseVariantProperties = [
           {
             name: "content",
-            type: `{${responseVariant}: operations['${operation.operationId}']['responses']['${responseVariant}']['content']}`
+            type: `{${responseVariant}: paths['${path}']['${method}']['responses']['${responseVariant}']['content']}`
           },
           {
             name: "headers",
@@ -177,24 +182,24 @@ function generate(spec, types, outdir) {
           });
         }
         const responseVariantInterface = sourceFile.addInterface({
-          name: `${capitalize(operation.operationId)}Result_${responseVariant}`,
+          name: `${capitalize(operationId)}Result_${responseVariant}`,
           properties: responseVariantProperties
         });
         responseVariantInterfaceNames.push(responseVariantInterface.getName());
       }
       const resultType = sourceFile.addTypeAlias({
-        name: `${capitalize(operation.operationId)}Result`,
+        name: `${capitalize(operationId)}Result`,
         isExported: true,
         type: `Promise<${responseVariantInterfaceNames.join(" | ")}>`
       });
-      operationsById[operation.operationId] = {
+      operationsById[operationId] = {
         path,
         method,
         args: argsInterface.getName(),
         result: resultType.getName()
       };
       sourceFile.addFunction({
-        name: `${operation.operationId}_unimplemented`,
+        name: `${operationId}_unimplemented`,
         isExported: true,
         isAsync: true,
         returnType: resultType.getName(),
@@ -263,6 +268,17 @@ function generate(spec, types, outdir) {
 }
 function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+function getOperationId({
+  operationId,
+  path,
+  method
+}) {
+  if (operationId) {
+    return operationId;
+  }
+  const pathParts = path.replace("{", "").replace("}", "").split("/").map((part) => capitalize(part)).join("");
+  return `${method}${pathParts}`;
 }
 
 // src/cli/index.ts

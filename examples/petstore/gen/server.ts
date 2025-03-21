@@ -3,34 +3,34 @@
  * Do not make direct changes to the file.
  */
 
-import type { operations } from "./schema.d.ts";
+import type { paths } from "./schema.d.ts";
 import type { Route } from "openapi-typescript-server";
 import { NotImplementedError } from "openapi-typescript-server";
 
 export interface UpdatePetArgs<Req, Res> {
-  parameters: operations['updatePet']['parameters'];
-  requestBody: operations['updatePet']['requestBody'];
+  parameters: paths['/pet']['put']['parameters'];
+  requestBody: paths['/pet']['put']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface UpdatePetResult_200 {
-  content: { 200: operations['updatePet']['responses']['200']['content'] };
+  content: { 200: paths['/pet']['put']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface UpdatePetResult_400 {
-  content: { 400: operations['updatePet']['responses']['400']['content'] };
+  content: { 400: paths['/pet']['put']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface UpdatePetResult_404 {
-  content: { 404: operations['updatePet']['responses']['404']['content'] };
+  content: { 404: paths['/pet']['put']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface UpdatePetResult_405 {
-  content: { 405: operations['updatePet']['responses']['405']['content'] };
+  content: { 405: paths['/pet']['put']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -41,19 +41,19 @@ export async function updatePet_unimplemented(): UpdatePetResult {
 }
 
 export interface AddPetArgs<Req, Res> {
-  parameters: operations['addPet']['parameters'];
-  requestBody: operations['addPet']['requestBody'];
+  parameters: paths['/pet']['post']['parameters'];
+  requestBody: paths['/pet']['post']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface AddPetResult_200 {
-  content: { 200: operations['addPet']['responses']['200']['content'] };
+  content: { 200: paths['/pet']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface AddPetResult_405 {
-  content: { 405: operations['addPet']['responses']['405']['content'] };
+  content: { 405: paths['/pet']['post']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -64,19 +64,19 @@ export async function addPet_unimplemented(): AddPetResult {
 }
 
 export interface FindPetsByStatusArgs<Req, Res> {
-  parameters: operations['findPetsByStatus']['parameters'];
-  requestBody: operations['findPetsByStatus']['requestBody'];
+  parameters: paths['/pet/findByStatus']['get']['parameters'];
+  requestBody: paths['/pet/findByStatus']['get']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface FindPetsByStatusResult_200 {
-  content: { 200: operations['findPetsByStatus']['responses']['200']['content'] };
+  content: { 200: paths['/pet/findByStatus']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface FindPetsByStatusResult_400 {
-  content: { 400: operations['findPetsByStatus']['responses']['400']['content'] };
+  content: { 400: paths['/pet/findByStatus']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -87,19 +87,19 @@ export async function findPetsByStatus_unimplemented(): FindPetsByStatusResult {
 }
 
 export interface FindPetsByTagsArgs<Req, Res> {
-  parameters: operations['findPetsByTags']['parameters'];
-  requestBody: operations['findPetsByTags']['requestBody'];
+  parameters: paths['/pet/findByTags']['get']['parameters'];
+  requestBody: paths['/pet/findByTags']['get']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface FindPetsByTagsResult_200 {
-  content: { 200: operations['findPetsByTags']['responses']['200']['content'] };
+  content: { 200: paths['/pet/findByTags']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface FindPetsByTagsResult_400 {
-  content: { 400: operations['findPetsByTags']['responses']['400']['content'] };
+  content: { 400: paths['/pet/findByTags']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -110,24 +110,24 @@ export async function findPetsByTags_unimplemented(): FindPetsByTagsResult {
 }
 
 export interface GetPetByIdArgs<Req, Res> {
-  parameters: operations['getPetById']['parameters'];
-  requestBody: operations['getPetById']['requestBody'];
+  parameters: paths['/pet/{petId}']['get']['parameters'];
+  requestBody: paths['/pet/{petId}']['get']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface GetPetByIdResult_200 {
-  content: { 200: operations['getPetById']['responses']['200']['content'] };
+  content: { 200: paths['/pet/{petId}']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetPetByIdResult_400 {
-  content: { 400: operations['getPetById']['responses']['400']['content'] };
+  content: { 400: paths['/pet/{petId}']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetPetByIdResult_404 {
-  content: { 404: operations['getPetById']['responses']['404']['content'] };
+  content: { 404: paths['/pet/{petId}']['get']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -138,14 +138,14 @@ export async function getPetById_unimplemented(): GetPetByIdResult {
 }
 
 export interface UpdatePetWithFormArgs<Req, Res> {
-  parameters: operations['updatePetWithForm']['parameters'];
-  requestBody: operations['updatePetWithForm']['requestBody'];
+  parameters: paths['/pet/{petId}']['post']['parameters'];
+  requestBody: paths['/pet/{petId}']['post']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface UpdatePetWithFormResult_405 {
-  content: { 405: operations['updatePetWithForm']['responses']['405']['content'] };
+  content: { 405: paths['/pet/{petId}']['post']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -156,14 +156,14 @@ export async function updatePetWithForm_unimplemented(): UpdatePetWithFormResult
 }
 
 export interface DeletePetArgs<Req, Res> {
-  parameters: operations['deletePet']['parameters'];
-  requestBody: operations['deletePet']['requestBody'];
+  parameters: paths['/pet/{petId}']['delete']['parameters'];
+  requestBody: paths['/pet/{petId}']['delete']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface DeletePetResult_400 {
-  content: { 400: operations['deletePet']['responses']['400']['content'] };
+  content: { 400: paths['/pet/{petId}']['delete']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -174,14 +174,14 @@ export async function deletePet_unimplemented(): DeletePetResult {
 }
 
 export interface UploadFileArgs<Req, Res> {
-  parameters: operations['uploadFile']['parameters'];
-  requestBody: operations['uploadFile']['requestBody'];
+  parameters: paths['/pet/{petId}/uploadImage']['post']['parameters'];
+  requestBody: paths['/pet/{petId}/uploadImage']['post']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface UploadFileResult_200 {
-  content: { 200: operations['uploadFile']['responses']['200']['content'] };
+  content: { 200: paths['/pet/{petId}/uploadImage']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -192,14 +192,14 @@ export async function uploadFile_unimplemented(): UploadFileResult {
 }
 
 export interface GetInventoryArgs<Req, Res> {
-  parameters: operations['getInventory']['parameters'];
-  requestBody: operations['getInventory']['requestBody'];
+  parameters: paths['/store/inventory']['get']['parameters'];
+  requestBody: paths['/store/inventory']['get']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface GetInventoryResult_200 {
-  content: { 200: operations['getInventory']['responses']['200']['content'] };
+  content: { 200: paths['/store/inventory']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -210,19 +210,19 @@ export async function getInventory_unimplemented(): GetInventoryResult {
 }
 
 export interface PlaceOrderArgs<Req, Res> {
-  parameters: operations['placeOrder']['parameters'];
-  requestBody: operations['placeOrder']['requestBody'];
+  parameters: paths['/store/order']['post']['parameters'];
+  requestBody: paths['/store/order']['post']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface PlaceOrderResult_200 {
-  content: { 200: operations['placeOrder']['responses']['200']['content'] };
+  content: { 200: paths['/store/order']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface PlaceOrderResult_405 {
-  content: { 405: operations['placeOrder']['responses']['405']['content'] };
+  content: { 405: paths['/store/order']['post']['responses']['405']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -233,24 +233,24 @@ export async function placeOrder_unimplemented(): PlaceOrderResult {
 }
 
 export interface GetOrderByIdArgs<Req, Res> {
-  parameters: operations['getOrderById']['parameters'];
-  requestBody: operations['getOrderById']['requestBody'];
+  parameters: paths['/store/order/{orderId}']['get']['parameters'];
+  requestBody: paths['/store/order/{orderId}']['get']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface GetOrderByIdResult_200 {
-  content: { 200: operations['getOrderById']['responses']['200']['content'] };
+  content: { 200: paths['/store/order/{orderId}']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetOrderByIdResult_400 {
-  content: { 400: operations['getOrderById']['responses']['400']['content'] };
+  content: { 400: paths['/store/order/{orderId}']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetOrderByIdResult_404 {
-  content: { 404: operations['getOrderById']['responses']['404']['content'] };
+  content: { 404: paths['/store/order/{orderId}']['get']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -261,19 +261,19 @@ export async function getOrderById_unimplemented(): GetOrderByIdResult {
 }
 
 export interface DeleteOrderArgs<Req, Res> {
-  parameters: operations['deleteOrder']['parameters'];
-  requestBody: operations['deleteOrder']['requestBody'];
+  parameters: paths['/store/order/{orderId}']['delete']['parameters'];
+  requestBody: paths['/store/order/{orderId}']['delete']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface DeleteOrderResult_400 {
-  content: { 400: operations['deleteOrder']['responses']['400']['content'] };
+  content: { 400: paths['/store/order/{orderId}']['delete']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface DeleteOrderResult_404 {
-  content: { 404: operations['deleteOrder']['responses']['404']['content'] };
+  content: { 404: paths['/store/order/{orderId}']['delete']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -284,14 +284,14 @@ export async function deleteOrder_unimplemented(): DeleteOrderResult {
 }
 
 export interface CreateUserArgs<Req, Res> {
-  parameters: operations['createUser']['parameters'];
-  requestBody: operations['createUser']['requestBody'];
+  parameters: paths['/user']['post']['parameters'];
+  requestBody: paths['/user']['post']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface CreateUserResult_default {
-  content: { default: operations['createUser']['responses']['default']['content'] };
+  content: { default: paths['/user']['post']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -303,19 +303,19 @@ export async function createUser_unimplemented(): CreateUserResult {
 }
 
 export interface CreateUsersWithListInputArgs<Req, Res> {
-  parameters: operations['createUsersWithListInput']['parameters'];
-  requestBody: operations['createUsersWithListInput']['requestBody'];
+  parameters: paths['/user/createWithList']['post']['parameters'];
+  requestBody: paths['/user/createWithList']['post']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface CreateUsersWithListInputResult_200 {
-  content: { 200: operations['createUsersWithListInput']['responses']['200']['content'] };
+  content: { 200: paths['/user/createWithList']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface CreateUsersWithListInputResult_default {
-  content: { default: operations['createUsersWithListInput']['responses']['default']['content'] };
+  content: { default: paths['/user/createWithList']['post']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -327,19 +327,19 @@ export async function createUsersWithListInput_unimplemented(): CreateUsersWithL
 }
 
 export interface LoginUserArgs<Req, Res> {
-  parameters: operations['loginUser']['parameters'];
-  requestBody: operations['loginUser']['requestBody'];
+  parameters: paths['/user/login']['get']['parameters'];
+  requestBody: paths['/user/login']['get']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface LoginUserResult_200 {
-  content: { 200: operations['loginUser']['responses']['200']['content'] };
+  content: { 200: paths['/user/login']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface LoginUserResult_400 {
-  content: { 400: operations['loginUser']['responses']['400']['content'] };
+  content: { 400: paths['/user/login']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -350,14 +350,14 @@ export async function loginUser_unimplemented(): LoginUserResult {
 }
 
 export interface LogoutUserArgs<Req, Res> {
-  parameters: operations['logoutUser']['parameters'];
-  requestBody: operations['logoutUser']['requestBody'];
+  parameters: paths['/user/logout']['get']['parameters'];
+  requestBody: paths['/user/logout']['get']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface LogoutUserResult_default {
-  content: { default: operations['logoutUser']['responses']['default']['content'] };
+  content: { default: paths['/user/logout']['get']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -369,24 +369,24 @@ export async function logoutUser_unimplemented(): LogoutUserResult {
 }
 
 export interface GetUserByNameArgs<Req, Res> {
-  parameters: operations['getUserByName']['parameters'];
-  requestBody: operations['getUserByName']['requestBody'];
+  parameters: paths['/user/{username}']['get']['parameters'];
+  requestBody: paths['/user/{username}']['get']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface GetUserByNameResult_200 {
-  content: { 200: operations['getUserByName']['responses']['200']['content'] };
+  content: { 200: paths['/user/{username}']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetUserByNameResult_400 {
-  content: { 400: operations['getUserByName']['responses']['400']['content'] };
+  content: { 400: paths['/user/{username}']['get']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetUserByNameResult_404 {
-  content: { 404: operations['getUserByName']['responses']['404']['content'] };
+  content: { 404: paths['/user/{username}']['get']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 
@@ -397,14 +397,14 @@ export async function getUserByName_unimplemented(): GetUserByNameResult {
 }
 
 export interface UpdateUserArgs<Req, Res> {
-  parameters: operations['updateUser']['parameters'];
-  requestBody: operations['updateUser']['requestBody'];
+  parameters: paths['/user/{username}']['put']['parameters'];
+  requestBody: paths['/user/{username}']['put']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface UpdateUserResult_default {
-  content: { default: operations['updateUser']['responses']['default']['content'] };
+  content: { default: paths['/user/{username}']['put']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -416,19 +416,19 @@ export async function updateUser_unimplemented(): UpdateUserResult {
 }
 
 export interface DeleteUserArgs<Req, Res> {
-  parameters: operations['deleteUser']['parameters'];
-  requestBody: operations['deleteUser']['requestBody'];
+  parameters: paths['/user/{username}']['delete']['parameters'];
+  requestBody: paths['/user/{username}']['delete']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface DeleteUserResult_400 {
-  content: { 400: operations['deleteUser']['responses']['400']['content'] };
+  content: { 400: paths['/user/{username}']['delete']['responses']['400']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface DeleteUserResult_404 {
-  content: { 404: operations['deleteUser']['responses']['404']['content'] };
+  content: { 404: paths['/user/{username}']['delete']['responses']['404']['content'] };
   headers?: { [name: string]: any };
 }
 

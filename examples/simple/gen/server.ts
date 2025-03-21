@@ -3,24 +3,24 @@
  * Do not make direct changes to the file.
  */
 
-import type { operations } from "./schema.d.ts";
+import type { paths } from "./schema.d.ts";
 import type { Route } from "openapi-typescript-server";
 import { NotImplementedError } from "openapi-typescript-server";
 
 export interface ListPetsArgs<Req, Res> {
-  parameters: operations['listPets']['parameters'];
-  requestBody: operations['listPets']['requestBody'];
+  parameters: paths['/pets']['get']['parameters'];
+  requestBody: paths['/pets']['get']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface ListPetsResult_200 {
-  content: { 200: operations['listPets']['responses']['200']['content'] };
+  content: { 200: paths['/pets']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface ListPetsResult_default {
-  content: { default: operations['listPets']['responses']['default']['content'] };
+  content: { default: paths['/pets']['get']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -32,19 +32,19 @@ export async function listPets_unimplemented(): ListPetsResult {
 }
 
 export interface GetPetByIdArgs<Req, Res> {
-  parameters: operations['getPetById']['parameters'];
-  requestBody: operations['getPetById']['requestBody'];
+  parameters: paths['/pet/{petId}']['get']['parameters'];
+  requestBody: paths['/pet/{petId}']['get']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface GetPetByIdResult_200 {
-  content: { 200: operations['getPetById']['responses']['200']['content'] };
+  content: { 200: paths['/pet/{petId}']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface GetPetByIdResult_default {
-  content: { default: operations['getPetById']['responses']['default']['content'] };
+  content: { default: paths['/pet/{petId}']['get']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
@@ -56,19 +56,19 @@ export async function getPetById_unimplemented(): GetPetByIdResult {
 }
 
 export interface UpdatePetWithFormArgs<Req, Res> {
-  parameters: operations['updatePetWithForm']['parameters'];
-  requestBody: operations['updatePetWithForm']['requestBody'];
+  parameters: paths['/pet/{petId}']['post']['parameters'];
+  requestBody: paths['/pet/{petId}']['post']['requestBody'];
   req: Req;
   res: Res;
 }
 
 interface UpdatePetWithFormResult_200 {
-  content: { 200: operations['updatePetWithForm']['responses']['200']['content'] };
+  content: { 200: paths['/pet/{petId}']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
 interface UpdatePetWithFormResult_default {
-  content: { default: operations['updatePetWithForm']['responses']['default']['content'] };
+  content: { default: paths['/pet/{petId}']['post']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }

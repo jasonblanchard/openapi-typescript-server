@@ -1,9 +1,8 @@
 import { describe, it } from "node:test";
 import assert from "node:assert";
 import generate from "./generate.ts";
-import type { OpenAPISpec } from "../lib/schema.ts";
 
-const spec: OpenAPISpec = {
+const spec = {
   openapi: "3.0.0",
   info: {},
   paths: {
@@ -49,9 +48,7 @@ const sourceFile = generate(spec, "./schema.d.ts", "outdir");
 
 it("writes imports", () => {
   const operationsImport = sourceFile.getImportDeclaration("./schema.d.ts");
-  assert.equal(operationsImport?.getNamedImports()[0]?.getName(), [
-    "operations",
-  ]);
+  assert.equal(operationsImport?.getNamedImports()[0]?.getName(), ["paths"]);
 
   const serverImport = sourceFile.getImportDeclaration(
     "openapi-typescript-server",
@@ -65,11 +62,11 @@ describe("with operationId", () => {
     assert.equal(argsInterface?.getTypeParameters().length, 2);
     assert.equal(
       argsInterface?.getProperty("parameters")?.getTypeNode()?.getText(),
-      "operations['getOperation']['parameters']",
+      "paths['/path']['get']['parameters']",
     );
     assert.equal(
       argsInterface?.getProperty("requestBody")?.getTypeNode()?.getText(),
-      "operations['getOperation']['requestBody']",
+      "paths['/path']['get']['requestBody']",
     );
 
     const result200Interface = sourceFile.getInterface(
@@ -77,7 +74,7 @@ describe("with operationId", () => {
     );
     assert.equal(
       result200Interface?.getProperty("content")?.getTypeNode()?.getText(),
-      "{ 200: operations['getOperation']['responses']['200']['content'] }",
+      "{ 200: paths['/path']['get']['responses']['200']['content'] }",
     );
 
     const resultDefaultInterface = sourceFile.getInterface(
@@ -85,7 +82,7 @@ describe("with operationId", () => {
     );
     assert.equal(
       resultDefaultInterface?.getProperty("content")?.getTypeNode()?.getText(),
-      "{ default: operations['getOperation']['responses']['default']['content'] }",
+      "{ default: paths['/path']['get']['responses']['default']['content'] }",
     );
   });
 
@@ -144,40 +141,77 @@ it("writes register handler", () => {
 });
 
 describe("wihout operationId", () => {
+  const spec = {
+    openapi: "3.0.0",
+    info: {},
+    paths: {
+      "/something/{id}": {
+        get: {
+          responses: {
+            200: {
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      id: {
+                        type: "string",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            default: {
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      message: {
+                        type: "string",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  };
   const modifiedSpec = structuredClone(spec);
-  delete modifiedSpec?.paths?.["/path"]?.get?.operationId;
-  // const sourceFile = generate(modifiedSpec, "./schema.d.ts", "outdir");
+  const sourceFile = generate(modifiedSpec, "./schema.d.ts", "outdir");
 
-  it("~writes function inputs and results~ throws an error", () => {
-    const argsInterface = sourceFile.getInterface("GetOperationArgs");
-    assert.equal(argsInterface?.getTypeParameters().length, 2);
-    assert.throws(() => {
-      generate(modifiedSpec, "./schema.d.ts", "outdir");
-    });
+  it("writes function inputs and results", () => {
+    const argsInterface = sourceFile.getInterface("GetSomethingIdArgs");
+    assert(argsInterface);
+    assert.equal(argsInterface.getTypeParameters().length, 2);
 
-    // assert.equal(
-    //   argsInterface?.getProperty("parameters")?.getTypeNode()?.getText(),
-    //   "operations['getOperation']['parameters']",
-    // );
-    // assert.equal(
-    //   argsInterface?.getProperty("requestBody")?.getTypeNode()?.getText(),
-    //   "operations['getOperation']['requestBody']",
-    // );
+    assert.equal(
+      argsInterface?.getProperty("parameters")?.getTypeNode()?.getText(),
+      "paths['/something/{id}']['get']['parameters']",
+    );
+    assert.equal(
+      argsInterface?.getProperty("requestBody")?.getTypeNode()?.getText(),
+      "paths['/something/{id}']['get']['requestBody']",
+    );
 
-    // const result200Interface = sourceFile.getInterface(
-    //   "GetOperationResult_200",
-    // );
-    // assert.equal(
-    //   result200Interface?.getProperty("content")?.getTypeNode()?.getText(),
-    //   "{ 200: operations['getOperation']['responses']['200']['content'] }",
-    // );
+    const result200Interface = sourceFile.getInterface(
+      "GetSomethingIdResult_200",
+    );
+    assert.equal(
+      result200Interface?.getProperty("content")?.getTypeNode()?.getText(),
+      "{ 200: paths['/something/{id}']['get']['responses']['200']['content'] }",
+    );
 
-    // const resultDefaultInterface = sourceFile.getInterface(
-    //   "GetOperationResult_default",
-    // );
-    // assert.equal(
-    //   resultDefaultInterface?.getProperty("content")?.getTypeNode()?.getText(),
-    //   "{ default: operations['getOperation']['responses']['default']['content'] }",
-    // );
+    const resultDefaultInterface = sourceFile.getInterface(
+      "GetSomethingIdResult_default",
+    );
+    assert.equal(
+      resultDefaultInterface?.getProperty("content")?.getTypeNode()?.getText(),
+      "{ default: paths['/something/{id}']['get']['responses']['default']['content'] }",
+    );
   });
 });

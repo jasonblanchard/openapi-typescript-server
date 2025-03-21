@@ -13,7 +13,7 @@ export default function generate(
   });
 
   sourceFile.addImportDeclaration({
-    namedImports: ["operations"],
+    namedImports: ["paths"],
     moduleSpecifier: types,
     isTypeOnly: true,
   });
@@ -38,22 +38,29 @@ export default function generate(
     const pathSpec = spec.paths[path];
     for (const method in pathSpec) {
       const operation = pathSpec[method];
-      if (!operation?.operationId) {
-        throw new Error("Operation without operationId not implemented");
+
+      if (!operation) {
+        throw new Error("no operation");
       }
 
+      const operationId = getOperationId({
+        operationId: operation.operationId,
+        path,
+        method,
+      });
+
       const argsInterface = sourceFile.addInterface({
-        name: `${capitalize(operation.operationId)}Args`,
+        name: `${capitalize(operationId)}Args`,
         isExported: true,
         typeParameters: [{ name: "Req" }, { name: "Res" }],
         properties: [
           {
             name: "parameters",
-            type: `operations['${operation.operationId}']['parameters']`,
+            type: `paths['${path}']['${method}']['parameters']`,
           },
           {
             name: "requestBody",
-            type: `operations['${operation.operationId}']['requestBody']`,
+            type: `paths['${path}']['${method}']['requestBody']`,
           },
           {
             name: "req",
@@ -72,7 +79,7 @@ export default function generate(
         const responseVariantProperties = [
           {
             name: "content",
-            type: `{${responseVariant}: operations['${operation.operationId}']['responses']['${responseVariant}']['content']}`,
+            type: `{${responseVariant}: paths['${path}']['${method}']['responses']['${responseVariant}']['content']}`,
           },
           {
             name: "headers",
@@ -88,7 +95,7 @@ export default function generate(
           });
         }
         const responseVariantInterface = sourceFile.addInterface({
-          name: `${capitalize(operation.operationId)}Result_${responseVariant}`,
+          name: `${capitalize(operationId)}Result_${responseVariant}`,
           properties: responseVariantProperties,
         });
 
@@ -96,12 +103,12 @@ export default function generate(
       }
 
       const resultType = sourceFile.addTypeAlias({
-        name: `${capitalize(operation.operationId)}Result`,
+        name: `${capitalize(operationId)}Result`,
         isExported: true,
         type: `Promise<${responseVariantInterfaceNames.join(" | ")}>`,
       });
 
-      operationsById[operation.operationId] = {
+      operationsById[operationId] = {
         path: path,
         method: method,
         args: argsInterface.getName(),
@@ -109,7 +116,7 @@ export default function generate(
       };
 
       sourceFile.addFunction({
-        name: `${operation.operationId}_unimplemented`,
+        name: `${operationId}_unimplemented`,
         isExported: true,
         isAsync: true,
         returnType: resultType.getName(),
@@ -187,4 +194,27 @@ export default function generate(
 
 function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function getOperationId({
+  operationId,
+  path,
+  method,
+}: {
+  operationId?: string;
+  path: string;
+  method: string;
+}) {
+  if (operationId) {
+    return operationId;
+  }
+
+  const pathParts = path
+    .replace("{", "")
+    .replace("}", "")
+    .split("/")
+    .map((part) => capitalize(part))
+    .join("");
+
+  return `${method}${pathParts}`;
 }
