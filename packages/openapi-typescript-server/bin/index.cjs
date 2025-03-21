@@ -68,7 +68,7 @@ var OpenAPISpec = import_zod.default.object({
     import_zod.default.record(
       import_zod.default.object({
         summary: import_zod.default.string().optional(),
-        operationId: import_zod.default.string(),
+        operationId: import_zod.default.string().optional(),
         parameters: import_zod.default.array(
           import_zod.default.object({
             name: import_zod.default.string(),
