@@ -64,10 +64,6 @@ describe("with operationId", () => {
       argsInterface?.getProperty("parameters")?.getTypeNode()?.getText(),
       "paths['/path']['get']['parameters']",
     );
-    assert.equal(
-      argsInterface?.getProperty("requestBody")?.getTypeNode()?.getText(),
-      "paths['/path']['get']['requestBody']",
-    );
 
     const result200Interface = sourceFile.getInterface("GetOperationResult200");
     assert.equal(
@@ -182,7 +178,7 @@ describe("wihout operationId", () => {
   const modifiedSpec = structuredClone(spec);
   const sourceFile = generate(modifiedSpec, "./schema.d.ts", "outdir");
 
-  it("writes function inputs and results", () => {
+  it.only("writes function inputs and results", () => {
     const argsInterface = sourceFile.getInterface("GetSomethingIdArgs");
     assert(argsInterface);
     assert.equal(argsInterface.getTypeParameters().length, 2);
@@ -190,10 +186,6 @@ describe("wihout operationId", () => {
     assert.equal(
       argsInterface?.getProperty("parameters")?.getTypeNode()?.getText(),
       "paths['/something/{id}']['get']['parameters']",
-    );
-    assert.equal(
-      argsInterface?.getProperty("requestBody")?.getTypeNode()?.getText(),
-      "paths['/something/{id}']['get']['requestBody']",
     );
 
     const result200Interface = sourceFile.getInterface(
@@ -210,6 +202,199 @@ describe("wihout operationId", () => {
     assert.equal(
       resultDefaultInterface?.getProperty("content")?.getTypeNode()?.getText(),
       "{ default: paths['/something/{id}']['get']['responses']['default']['content'] }",
+    );
+  });
+});
+
+describe("request body", () => {
+  it("writes required request body", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: {},
+      paths: {
+        "/something/{id}": {
+          post: {
+            operationId: "postSomething",
+            requestBody: {
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      id: {
+                        type: "string",
+                      },
+                    },
+                  },
+                },
+              },
+              required: true,
+            },
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: {
+                        id: {
+                          type: "string",
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const modifiedSpec = structuredClone(spec);
+    const sourceFile = generate(modifiedSpec, "./schema.d.ts", "outdir");
+    const argsInterface = sourceFile.getInterface("PostSomethingArgs");
+    assert(argsInterface);
+    assert.match(
+      argsInterface.getProperty("requestBody")?.getTypeNode()?.getText() || "",
+      /mediaType: \"application\/json\"/,
+    );
+    assert.match(
+      argsInterface.getProperty("requestBody")?.getTypeNode()?.getText() || "",
+      /content: paths\['\/something\/{id}']\['post']\['requestBody']\['content']\['application\/json']/,
+    );
+  });
+  it("writes optional request body", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: {},
+      paths: {
+        "/something/{id}": {
+          post: {
+            operationId: "postSomething",
+            requestBody: {
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      id: {
+                        type: "string",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: {
+                        id: {
+                          type: "string",
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const modifiedSpec = structuredClone(spec);
+    const sourceFile = generate(modifiedSpec, "./schema.d.ts", "outdir");
+    const argsInterface = sourceFile.getInterface("PostSomethingArgs");
+    assert(argsInterface);
+    assert.match(
+      argsInterface.getProperty("requestBody")?.getTypeNode()?.getText() || "",
+      /mediaType: \"application\/json\"/,
+    );
+    assert.match(
+      argsInterface.getProperty("requestBody")?.getTypeNode()?.getText() || "",
+      /content\?: NonNullable<paths\['\/something\/{id}']\['post']\['requestBody']>\['content']\['application\/json']/,
+    );
+  });
+
+  it("writes request body with multiple content types", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: {},
+      paths: {
+        "/something/{id}": {
+          post: {
+            operationId: "postSomething",
+            requestBody: {
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      id: {
+                        type: "string",
+                      },
+                    },
+                  },
+                },
+                "application/xml": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      id: {
+                        type: "string",
+                      },
+                    },
+                  },
+                },
+              },
+              required: true,
+            },
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: {
+                        id: {
+                          type: "string",
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const modifiedSpec = structuredClone(spec);
+    const sourceFile = generate(modifiedSpec, "./schema.d.ts", "outdir");
+    const argsInterface = sourceFile.getInterface("PostSomethingArgs");
+    assert(argsInterface);
+    assert.match(
+      argsInterface.getProperty("requestBody")?.getTypeNode()?.getText() || "",
+      /mediaType: \"application\/json\"/,
+    );
+    assert.match(
+      argsInterface.getProperty("requestBody")?.getTypeNode()?.getText() || "",
+      /content: paths\['\/something\/{id}']\['post']\['requestBody']\['content']\['application\/json']/,
+    );
+    assert.match(
+      argsInterface.getProperty("requestBody")?.getTypeNode()?.getText() || "",
+      /\|/,
+    );
+    assert.match(
+      argsInterface.getProperty("requestBody")?.getTypeNode()?.getText() || "",
+      /mediaType: \"application\/xml\"/,
+    );
+    assert.match(
+      argsInterface.getProperty("requestBody")?.getTypeNode()?.getText() || "",
+      /content: paths\['\/something\/{id}']\['post']\['requestBody']\['content']\['application\/xml']/,
     );
   });
 });

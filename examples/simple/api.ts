@@ -38,13 +38,49 @@ const API: ServerTypes.Server<Request, Response> = {
   }): ServerTypes.UpdatePetWithFormResult => {
     const { petId } = parameters.path;
     const { name } = parameters.query ?? {};
-    const { status } = requestBody.content["application/json"];
+    const { status } = requestBody.content;
 
     return {
       content: {
         200: {
           "application/json": {
             pet: { id: petId, name: name || "dog", status },
+          },
+        },
+      },
+    };
+  },
+
+  mixedContentTypes: async ({
+    parameters,
+    requestBody,
+    contentType,
+  }): ServerTypes.UpdatePetWithFormResult => {
+    const { petId } = parameters.path;
+    let status: "available" | "pending" | "sold" | undefined;
+
+    // Since each content type has different structures,
+    // use the request content type and requestBody discriminator to narrow the type in each case.
+
+    if (
+      contentType === "application/json" &&
+      requestBody.mediaType === "application/json"
+    ) {
+      status = requestBody.content.jsonstatus;
+    }
+
+    if (
+      contentType == "application/xml" &&
+      requestBody.mediaType === "application/xml"
+    ) {
+      status = requestBody.content.xmlstatus;
+    }
+
+    return {
+      content: {
+        200: {
+          "application/json": {
+            pet: { id: petId, name: "dog", status },
           },
         },
       },

@@ -9,7 +9,7 @@ import { NotImplementedError } from "openapi-typescript-server";
 
 export interface ListPetsArgs<Req, Res> {
   parameters: paths['/pets']['get']['parameters'];
-  requestBody: paths['/pets']['get']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -33,7 +33,7 @@ export async function listPetsUnimplemented(): ListPetsResult {
 
 export interface GetPetByIdArgs<Req, Res> {
   parameters: paths['/pet/{petId}']['get']['parameters'];
-  requestBody: paths['/pet/{petId}']['get']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -57,9 +57,18 @@ export async function getPetByIdUnimplemented(): GetPetByIdResult {
 
 export interface UpdatePetWithFormArgs<Req, Res> {
   parameters: paths['/pet/{petId}']['post']['parameters'];
-  requestBody: paths['/pet/{petId}']['post']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
+  requestBody: {
+    mediaType: "application/json";
+    content: paths['/pet/{petId}']['post']['requestBody']['content']['application/json']
+  }
+  | {
+    mediaType: "application/xml";
+    content: paths['/pet/{petId}']['post']['requestBody']['content']['application/xml']
+  }
+  ;
 }
 
 interface UpdatePetWithFormResult200 {
@@ -79,6 +88,39 @@ export async function updatePetWithFormUnimplemented(): UpdatePetWithFormResult 
   throw new NotImplementedError()
 }
 
+export interface MixedContentTypesArgs<Req, Res> {
+  parameters: paths['/pet/{petId}/mixed-content-types']['post']['parameters'];
+  contentType: string;
+  req: Req;
+  res: Res;
+  requestBody: {
+    mediaType: "application/json";
+    content: paths['/pet/{petId}/mixed-content-types']['post']['requestBody']['content']['application/json']
+  }
+  | {
+    mediaType: "application/xml";
+    content: paths['/pet/{petId}/mixed-content-types']['post']['requestBody']['content']['application/xml']
+  }
+  ;
+}
+
+interface MixedContentTypesResult200 {
+  content: { 200: paths['/pet/{petId}/mixed-content-types']['post']['responses']['200']['content'] };
+  headers?: { [name: string]: any };
+}
+
+interface MixedContentTypesResultDefault {
+  content: { default: paths['/pet/{petId}/mixed-content-types']['post']['responses']['default']['content'] };
+  headers?: { [name: string]: any };
+  status: number;
+}
+
+export type MixedContentTypesResult = Promise<MixedContentTypesResult200 | MixedContentTypesResultDefault>;
+
+export async function mixedContentTypesUnimplemented(): MixedContentTypesResult {
+  throw new NotImplementedError()
+}
+
 export interface Server<Req = unknown, Res = unknown> {
   listPets: (
     args: ListPetsArgs<Req, Res>
@@ -89,6 +131,9 @@ export interface Server<Req = unknown, Res = unknown> {
   updatePetWithForm: (
     args: UpdatePetWithFormArgs<Req, Res>
   ) => UpdatePetWithFormResult;
+  mixedContentTypes: (
+    args: MixedContentTypesArgs<Req, Res>
+  ) => MixedContentTypesResult;
 }
 
 export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route[] {
@@ -107,6 +152,11 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
       method: "post",
       path: "/pet/{petId}",
       handler: server.updatePetWithForm,
+    },
+    {
+      method: "post",
+      path: "/pet/{petId}/mixed-content-types",
+      handler: server.mixedContentTypes,
     },
   ]
 }

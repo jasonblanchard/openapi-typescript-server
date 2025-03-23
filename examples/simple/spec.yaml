@@ -82,6 +82,71 @@ paths:
                     - sold
               required:
                 - status
+          application/xml:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - available
+                    - pending
+                    - sold
+              required:
+                - status
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pet:
+                    $ref: "#/components/schemas/Pet"
+        "default":
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /pet/{petId}/mixed-content-types:
+    post:
+      operationId: mixedContentTypes
+      parameters:
+        - name: petId
+          in: path
+          description: ID of pet that needs to be updated
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jsonstatus:
+                  type: string
+                  enum:
+                    - available
+                    - pending
+                    - sold
+              required:
+                - jsonstatus
+          application/xml:
+            schema:
+              type: object
+              properties:
+                xmlstatus:
+                  type: string
+                  enum:
+                    - available
+                    - pending
+                    - sold
+              required:
+                - xmlstatus
       responses:
         "200":
           description: successful operation

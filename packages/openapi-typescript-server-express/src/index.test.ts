@@ -1,4 +1,4 @@
-import { describe, it, beforeEach } from "node:test";
+import { describe, it, beforeEach, before } from "node:test";
 import assert from "node:assert";
 import express from "express";
 import type { Application } from "express";
@@ -10,6 +10,12 @@ let app: Application;
 beforeEach(() => {
   app = express();
   app.use(express.json());
+  app.use(
+    express.urlencoded({
+      extended: true,
+      type: "application/x-www-form-urlencoded",
+    }),
+  );
 });
 
 describe("status code responses", () => {
@@ -203,4 +209,63 @@ it("routes terminated before mounted handlers win", async () => {
     .set("Accept", "application/json");
   assert.strictEqual(response.status, 200);
   assert.deepEqual(response.body, { status: "ok" });
+});
+
+describe("content types", () => {
+  beforeEach(() => {
+    registerRoutes(
+      [
+        {
+          path: "/foo",
+          method: "post",
+          handler: async ({ requestBody, contentType }) => {
+            let source = "";
+            const { greeting } = requestBody.content;
+
+            if (contentType === "application/x-www-form-urlencoded") {
+              source = `${greeting} from urlencoded`;
+            }
+
+            if (contentType === "application/json") {
+              source = `${greeting} from json`;
+            }
+
+            return {
+              content: {
+                200: {
+                  "application/json": {
+                    source,
+                  },
+                },
+              },
+            };
+          },
+        },
+      ],
+      app,
+    );
+  });
+
+  it("handles json by default", async () => {
+    const response = await request(app)
+      .post("/foo")
+      .set("Accept", "application/json")
+      .send({ greeting: "hello" });
+    assert.strictEqual(response.status, 200);
+    assert.deepEqual(response.body, {
+      source: "hello from json",
+    });
+  });
+
+  it("handles urlencoded", async () => {
+    const response = await request(app)
+      .post("/foo")
+      .set("Accept", "application/json")
+      .type("application/x-www-form-urlencoded")
+      .send("greeting=hello");
+    assert.strictEqual(response.status, 200);
+    assert.deepEqual(response.body, {
+      source: "hello from urlencoded",
+    });
+  });
 });

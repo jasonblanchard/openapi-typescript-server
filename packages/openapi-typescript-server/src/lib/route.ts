@@ -15,7 +15,11 @@ type HandlerInput = {
     path: any;
     cookie: any;
   };
-  requestBody: any;
+  requestBody: {
+    mediaType: any;
+    content: any;
+  };
+  contentType: string;
   req: any;
   res: any;
 };

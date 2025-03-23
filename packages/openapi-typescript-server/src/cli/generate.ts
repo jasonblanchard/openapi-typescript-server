@@ -49,28 +49,54 @@ export default function generate(
         method,
       });
 
+      const argProperties = [
+        {
+          name: "parameters",
+          type: `paths['${path}']['${method}']['parameters']`,
+        },
+        {
+          name: "contentType",
+          type: "string",
+        },
+        {
+          name: "req",
+          type: "Req",
+        },
+        {
+          name: "res",
+          type: "Res",
+        },
+      ];
+
+      if (operation.requestBody) {
+        const type = Object.keys(operation.requestBody.content)
+          .map((key) => {
+            if (operation.requestBody?.required) {
+              return `{
+  mediaType: "${key}";
+  content: paths['${path}']['${method}']['requestBody']['content']['${key}']
+}
+`;
+            }
+            return `{
+  mediaType: "${key}";
+  content?: NonNullable<paths['${path}']['${method}']['requestBody']>['content']['${key}']
+}
+`;
+          })
+          .join(" | ");
+
+        argProperties.push({
+          name: "requestBody",
+          type,
+        });
+      }
+
       const argsInterface = sourceFile.addInterface({
         name: `${capitalize(operationId)}Args`,
         isExported: true,
         typeParameters: [{ name: "Req" }, { name: "Res" }],
-        properties: [
-          {
-            name: "parameters",
-            type: `paths['${path}']['${method}']['parameters']`,
-          },
-          {
-            name: "requestBody",
-            type: `paths['${path}']['${method}']['requestBody']`,
-          },
-          {
-            name: "req",
-            type: "Req",
-          },
-          {
-            name: "res",
-            type: "Res",
-          },
-        ],
+        properties: argProperties,
       });
 
       const responseVariantInterfaceNames: string[] = [];
