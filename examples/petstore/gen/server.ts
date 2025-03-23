@@ -9,9 +9,22 @@ import { NotImplementedError } from "openapi-typescript-server";
 
 export interface UpdatePetArgs<Req, Res> {
   parameters: paths['/pet']['put']['parameters'];
-  requestBody: paths['/pet']['put']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
+  requestBody: {
+    mediaType: "application/json";
+    content: paths['/pet']['put']['requestBody']['content']['application/json']
+  }
+  | {
+    mediaType: "application/xml";
+    content: paths['/pet']['put']['requestBody']['content']['application/xml']
+  }
+  | {
+    mediaType: "application/x-www-form-urlencoded";
+    content: paths['/pet']['put']['requestBody']['content']['application/x-www-form-urlencoded']
+  }
+  ;
 }
 
 interface UpdatePetResult200 {
@@ -42,9 +55,22 @@ export async function updatePetUnimplemented(): UpdatePetResult {
 
 export interface AddPetArgs<Req, Res> {
   parameters: paths['/pet']['post']['parameters'];
-  requestBody: paths['/pet']['post']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
+  requestBody: {
+    mediaType: "application/json";
+    content: paths['/pet']['post']['requestBody']['content']['application/json']
+  }
+  | {
+    mediaType: "application/xml";
+    content: paths['/pet']['post']['requestBody']['content']['application/xml']
+  }
+  | {
+    mediaType: "application/x-www-form-urlencoded";
+    content: paths['/pet']['post']['requestBody']['content']['application/x-www-form-urlencoded']
+  }
+  ;
 }
 
 interface AddPetResult200 {
@@ -65,7 +91,7 @@ export async function addPetUnimplemented(): AddPetResult {
 
 export interface FindPetsByStatusArgs<Req, Res> {
   parameters: paths['/pet/findByStatus']['get']['parameters'];
-  requestBody: paths['/pet/findByStatus']['get']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -88,7 +114,7 @@ export async function findPetsByStatusUnimplemented(): FindPetsByStatusResult {
 
 export interface FindPetsByTagsArgs<Req, Res> {
   parameters: paths['/pet/findByTags']['get']['parameters'];
-  requestBody: paths['/pet/findByTags']['get']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -111,7 +137,7 @@ export async function findPetsByTagsUnimplemented(): FindPetsByTagsResult {
 
 export interface GetPetByIdArgs<Req, Res> {
   parameters: paths['/pet/{petId}']['get']['parameters'];
-  requestBody: paths['/pet/{petId}']['get']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -139,7 +165,7 @@ export async function getPetByIdUnimplemented(): GetPetByIdResult {
 
 export interface UpdatePetWithFormArgs<Req, Res> {
   parameters: paths['/pet/{petId}']['post']['parameters'];
-  requestBody: paths['/pet/{petId}']['post']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -157,7 +183,7 @@ export async function updatePetWithFormUnimplemented(): UpdatePetWithFormResult 
 
 export interface DeletePetArgs<Req, Res> {
   parameters: paths['/pet/{petId}']['delete']['parameters'];
-  requestBody: paths['/pet/{petId}']['delete']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -175,9 +201,14 @@ export async function deletePetUnimplemented(): DeletePetResult {
 
 export interface UploadFileArgs<Req, Res> {
   parameters: paths['/pet/{petId}/uploadImage']['post']['parameters'];
-  requestBody: paths['/pet/{petId}/uploadImage']['post']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
+  requestBody: {
+    mediaType: "application/octet-stream";
+    content?: NonNullable<paths['/pet/{petId}/uploadImage']['post']['requestBody']>['content']['application/octet-stream']
+  }
+  ;
 }
 
 interface UploadFileResult200 {
@@ -193,7 +224,7 @@ export async function uploadFileUnimplemented(): UploadFileResult {
 
 export interface GetInventoryArgs<Req, Res> {
   parameters: paths['/store/inventory']['get']['parameters'];
-  requestBody: paths['/store/inventory']['get']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -211,9 +242,22 @@ export async function getInventoryUnimplemented(): GetInventoryResult {
 
 export interface PlaceOrderArgs<Req, Res> {
   parameters: paths['/store/order']['post']['parameters'];
-  requestBody: paths['/store/order']['post']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
+  requestBody: {
+    mediaType: "application/json";
+    content?: NonNullable<paths['/store/order']['post']['requestBody']>['content']['application/json']
+  }
+  | {
+    mediaType: "application/xml";
+    content?: NonNullable<paths['/store/order']['post']['requestBody']>['content']['application/xml']
+  }
+  | {
+    mediaType: "application/x-www-form-urlencoded";
+    content?: NonNullable<paths['/store/order']['post']['requestBody']>['content']['application/x-www-form-urlencoded']
+  }
+  ;
 }
 
 interface PlaceOrderResult200 {
@@ -234,7 +278,7 @@ export async function placeOrderUnimplemented(): PlaceOrderResult {
 
 export interface GetOrderByIdArgs<Req, Res> {
   parameters: paths['/store/order/{orderId}']['get']['parameters'];
-  requestBody: paths['/store/order/{orderId}']['get']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -262,7 +306,7 @@ export async function getOrderByIdUnimplemented(): GetOrderByIdResult {
 
 export interface DeleteOrderArgs<Req, Res> {
   parameters: paths['/store/order/{orderId}']['delete']['parameters'];
-  requestBody: paths['/store/order/{orderId}']['delete']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -285,9 +329,22 @@ export async function deleteOrderUnimplemented(): DeleteOrderResult {
 
 export interface CreateUserArgs<Req, Res> {
   parameters: paths['/user']['post']['parameters'];
-  requestBody: paths['/user']['post']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
+  requestBody: {
+    mediaType: "application/json";
+    content?: NonNullable<paths['/user']['post']['requestBody']>['content']['application/json']
+  }
+  | {
+    mediaType: "application/xml";
+    content?: NonNullable<paths['/user']['post']['requestBody']>['content']['application/xml']
+  }
+  | {
+    mediaType: "application/x-www-form-urlencoded";
+    content?: NonNullable<paths['/user']['post']['requestBody']>['content']['application/x-www-form-urlencoded']
+  }
+  ;
 }
 
 interface CreateUserResultDefault {
@@ -304,9 +361,14 @@ export async function createUserUnimplemented(): CreateUserResult {
 
 export interface CreateUsersWithListInputArgs<Req, Res> {
   parameters: paths['/user/createWithList']['post']['parameters'];
-  requestBody: paths['/user/createWithList']['post']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
+  requestBody: {
+    mediaType: "application/json";
+    content?: NonNullable<paths['/user/createWithList']['post']['requestBody']>['content']['application/json']
+  }
+  ;
 }
 
 interface CreateUsersWithListInputResult200 {
@@ -328,7 +390,7 @@ export async function createUsersWithListInputUnimplemented(): CreateUsersWithLi
 
 export interface LoginUserArgs<Req, Res> {
   parameters: paths['/user/login']['get']['parameters'];
-  requestBody: paths['/user/login']['get']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -351,7 +413,7 @@ export async function loginUserUnimplemented(): LoginUserResult {
 
 export interface LogoutUserArgs<Req, Res> {
   parameters: paths['/user/logout']['get']['parameters'];
-  requestBody: paths['/user/logout']['get']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -370,7 +432,7 @@ export async function logoutUserUnimplemented(): LogoutUserResult {
 
 export interface GetUserByNameArgs<Req, Res> {
   parameters: paths['/user/{username}']['get']['parameters'];
-  requestBody: paths['/user/{username}']['get']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }
@@ -398,9 +460,22 @@ export async function getUserByNameUnimplemented(): GetUserByNameResult {
 
 export interface UpdateUserArgs<Req, Res> {
   parameters: paths['/user/{username}']['put']['parameters'];
-  requestBody: paths['/user/{username}']['put']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
+  requestBody: {
+    mediaType: "application/json";
+    content?: NonNullable<paths['/user/{username}']['put']['requestBody']>['content']['application/json']
+  }
+  | {
+    mediaType: "application/xml";
+    content?: NonNullable<paths['/user/{username}']['put']['requestBody']>['content']['application/xml']
+  }
+  | {
+    mediaType: "application/x-www-form-urlencoded";
+    content?: NonNullable<paths['/user/{username}']['put']['requestBody']>['content']['application/x-www-form-urlencoded']
+  }
+  ;
 }
 
 interface UpdateUserResultDefault {
@@ -417,7 +492,7 @@ export async function updateUserUnimplemented(): UpdateUserResult {
 
 export interface DeleteUserArgs<Req, Res> {
   parameters: paths['/user/{username}']['delete']['parameters'];
-  requestBody: paths['/user/{username}']['delete']['requestBody'];
+  contentType: string;
   req: Req;
   res: Res;
 }

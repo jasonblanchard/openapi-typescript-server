@@ -81,6 +81,7 @@ var OpenAPISpec = import_zod.default.object({
         ).optional(),
         requestBody: import_zod.default.object({
           description: import_zod.default.string().optional(),
+          required: import_zod.default.boolean().optional(),
           content: import_zod.default.record(
             import_zod.default.object({
               schema: Schema
@@ -139,28 +140,50 @@ function generate(spec, types, outdir) {
         path,
         method
       });
+      const argProperties = [
+        {
+          name: "parameters",
+          type: `paths['${path}']['${method}']['parameters']`
+        },
+        {
+          name: "contentType",
+          type: "string"
+        },
+        {
+          name: "req",
+          type: "Req"
+        },
+        {
+          name: "res",
+          type: "Res"
+        }
+      ];
+      if (operation.requestBody) {
+        const type = Object.keys(operation.requestBody.content).map((key) => {
+          var _a;
+          if ((_a = operation.requestBody) == null ? void 0 : _a.required) {
+            return `{
+  mediaType: "${key}";
+  content: paths['${path}']['${method}']['requestBody']['content']['${key}']
+}
+`;
+          }
+          return `{
+  mediaType: "${key}";
+  content?: NonNullable<paths['${path}']['${method}']['requestBody']>['content']['${key}']
+}
+`;
+        }).join(" | ");
+        argProperties.push({
+          name: "requestBody",
+          type
+        });
+      }
       const argsInterface = sourceFile.addInterface({
         name: `${capitalize(operationId)}Args`,
         isExported: true,
         typeParameters: [{ name: "Req" }, { name: "Res" }],
-        properties: [
-          {
-            name: "parameters",
-            type: `paths['${path}']['${method}']['parameters']`
-          },
-          {
-            name: "requestBody",
-            type: `paths['${path}']['${method}']['requestBody']`
-          },
-          {
-            name: "req",
-            type: "Req"
-          },
-          {
-            name: "res",
-            type: "Res"
-          }
-        ]
+        properties: argProperties
       });
       const responseVariantInterfaceNames = [];
       for (const responseVariant in operation.responses) {

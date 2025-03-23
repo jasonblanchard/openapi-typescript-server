@@ -218,17 +218,23 @@ describe("content types", () => {
         {
           path: "/foo",
           method: "post",
-          handler: async ({ requestBody }) => {
+          handler: async ({ requestBody, contentType }) => {
+            let source = "";
+            const { greeting } = requestBody.content;
+
+            if (contentType === "application/x-www-form-urlencoded") {
+              source = `${greeting} from urlencoded`;
+            }
+
+            if (contentType === "application/json") {
+              source = `${greeting} from json`;
+            }
+
             return {
               content: {
                 200: {
                   "application/json": {
-                    inputs: {
-                      json: requestBody.content["application/json"]?.status,
-                      urlencoded:
-                        requestBody.content["application/x-www-form-urlencoded"]
-                          ?.status,
-                    },
+                    source,
                   },
                 },
               },
@@ -244,10 +250,10 @@ describe("content types", () => {
     const response = await request(app)
       .post("/foo")
       .set("Accept", "application/json")
-      .send({ status: "ok" });
+      .send({ greeting: "hello" });
     assert.strictEqual(response.status, 200);
     assert.deepEqual(response.body, {
-      inputs: { json: "ok" },
+      source: "hello from json",
     });
   });
 
@@ -256,10 +262,10 @@ describe("content types", () => {
       .post("/foo")
       .set("Accept", "application/json")
       .type("application/x-www-form-urlencoded")
-      .send("status=ok");
+      .send("greeting=hello");
     assert.strictEqual(response.status, 200);
     assert.deepEqual(response.body, {
-      inputs: { urlencoded: "ok" },
+      source: "hello from urlencoded",
     });
   });
 });

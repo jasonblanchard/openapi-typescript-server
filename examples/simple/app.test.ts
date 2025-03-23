@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert";
 import makeApp from "./app.ts";
 import request from "supertest";
+import { json2xml } from "xml-js";
 
 const app = makeApp();
 
@@ -44,6 +45,67 @@ describe("updatePetWithForm", async () => {
       pet: {
         id: 123,
         name: "cat",
+        status: "sold",
+      },
+    });
+  });
+
+  it("accepts xml input", async () => {
+    const xmlData = json2xml(JSON.stringify({ status: "sold" }), {
+      compact: true,
+      ignoreComment: true,
+      spaces: 4,
+    });
+
+    const response = await request(app)
+      .post("/api/v3/pet/123?name=cat")
+      .set("Content-Type", "application/xml")
+      .send(xmlData);
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(response.body, {
+      pet: {
+        id: 123,
+        name: "cat",
+        status: "sold",
+      },
+    });
+  });
+});
+
+describe("mixed content types with different structures", async () => {
+  it("handles json by default", async () => {
+    const response = await request(app)
+      .post("/api/v3/pet/123/mixed-content-types")
+      .send({ jsonstatus: "sold" });
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(response.body, {
+      pet: {
+        id: 123,
+        name: "dog",
+        status: "sold",
+      },
+    });
+  });
+
+  it("handles xml", async () => {
+    const xmlData = json2xml(JSON.stringify({ xmlstatus: "sold" }), {
+      compact: true,
+      ignoreComment: true,
+      spaces: 4,
+    });
+
+    const response = await request(app)
+      .post("/api/v3/pet/123/mixed-content-types")
+      .set("Content-Type", "application/xml")
+      .send(xmlData);
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(response.body, {
+      pet: {
+        id: 123,
+        name: "dog",
         status: "sold",
       },
     });

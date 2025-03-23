@@ -12,7 +12,6 @@ export default function registerRoutes(routes: Route[], app: Application) {
     app[route.method](
       openAPIPathToExpress(route.path),
       async (req: Request, res: Response, next: NextFunction) => {
-        
         try {
           const contentType = req.headers["content-type"] || "application/json";
 
@@ -24,10 +23,10 @@ export default function registerRoutes(routes: Route[], app: Application) {
               cookie: req.cookies,
             },
             requestBody: {
-              content: {
-                [contentType]: req.body,
-              },
+              mediaType: contentType,
+              content: req.body,
             },
+            contentType,
             req,
             res,
           });

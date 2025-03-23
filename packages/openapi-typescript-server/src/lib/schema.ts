@@ -41,6 +41,7 @@ export const OpenAPISpec = z.object({
         requestBody: z
           .object({
             description: z.string().optional(),
+            required: z.boolean().optional(),
             content: z.record(
               z.object({
                 schema: Schema,
