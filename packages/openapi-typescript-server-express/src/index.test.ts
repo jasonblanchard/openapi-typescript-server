@@ -371,13 +371,10 @@ describe("accepts", () => {
 
       app.use(
         (err: Error, _req: Request, res: Response, _next: NextFunction) => {
-          if (err instanceof NoAcceptableContentType) {
-            res.status(406).json({
-              message: err.message,
-            });
-          }
-
-          if (err instanceof MissingResponseSerializer) {
+          if (
+            err instanceof NoAcceptableContentType ||
+            err instanceof MissingResponseSerializer
+          ) {
             res.status(406).json({
               message: err.message,
             });
