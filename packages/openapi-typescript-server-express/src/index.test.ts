@@ -1,9 +1,15 @@
 import { describe, it, beforeEach, before } from "node:test";
 import assert from "node:assert";
 import express from "express";
+import type { NextFunction, Request, Response } from "express";
 import type { Application } from "express";
 import request from "supertest";
 import registerRoutes from "./index.ts";
+import { json2xml } from "xml-js";
+import {
+  NoAcceptableContentType,
+  MissingResponseSerializer,
+} from "./errors.ts";
 
 let app: Application;
 
@@ -266,6 +272,140 @@ describe("content types", () => {
     assert.strictEqual(response.status, 200);
     assert.deepEqual(response.body, {
       source: "hello from urlencoded",
+    });
+  });
+});
+
+describe("accepts", () => {
+  describe("happy paths", () => {
+    beforeEach(() => {
+      registerRoutes(
+        [
+          {
+            path: "/foo",
+            method: "post",
+            handler: async () => {
+              return {
+                content: {
+                  200: {
+                    "application/json": {
+                      data: "json",
+                    },
+                    "application/xml": {
+                      data: "xml",
+                    },
+                  },
+                },
+              };
+            },
+          },
+        ],
+        app,
+        {
+          serializers: {
+            "application/xml": (content) => {
+              const serialized = json2xml(JSON.stringify(content), {
+                compact: true,
+              });
+              return serialized;
+            },
+          },
+        },
+      );
+    });
+
+    it("returns json by default", async () => {
+      const response = await request(app)
+        .post("/foo")
+        .send({ greeting: "hello" });
+      assert.strictEqual(response.status, 200);
+      assert.deepEqual(response.body, {
+        data: "json",
+      });
+      assert.match(response.headers["content-type"] || "", /application\/json/);
+    });
+
+    it("returns xml", (_, done) => {
+      request(app)
+        .post("/foo")
+        .send({ greeting: "hello" })
+        .set("Accept", "application/xml")
+        .buffer()
+        .end(function (_, response) {
+          assert.strictEqual(response.status, 200);
+          assert.equal(response.text, "<data>xml</data>");
+          assert.match(
+            response.headers["content-type"] || "",
+            /application\/xml/,
+          );
+          done();
+        });
+    });
+  });
+
+  describe("errors", () => {
+    beforeEach(() => {
+      registerRoutes(
+        [
+          {
+            path: "/foo",
+            method: "post",
+            handler: async () => {
+              return {
+                content: {
+                  200: {
+                    "application/json": {
+                      data: "json",
+                    },
+                    "application/xml": {
+                      data: "xml",
+                    },
+                  },
+                },
+              };
+            },
+          },
+        ],
+        app,
+      );
+
+      app.use(
+        (err: Error, _req: Request, res: Response, _next: NextFunction) => {
+          if (err instanceof NoAcceptableContentType) {
+            res.status(406).json({
+              message: err.message,
+            });
+          }
+
+          if (err instanceof MissingResponseSerializer) {
+            res.status(406).json({
+              message: err.message,
+            });
+          }
+
+          res.status(500).send();
+        },
+      );
+    });
+
+    it("returns error if no acceptable content type", async () => {
+      const response = await request(app)
+        .post("/foo")
+        .set("Accept", "application/asdf");
+      assert.strictEqual(response.status, 406);
+      assert.deepEqual(response.body, {
+        message: "No acceptable content type for Accept: application/asdf",
+      });
+    });
+
+    it("returns error if no serializer", async () => {
+      const response = await request(app)
+        .post("/foo")
+        .set("Accept", "application/xml");
+      assert.strictEqual(response.status, 406);
+      assert.deepEqual(response.body, {
+        message: "Missing serializer for application/xml",
+      });
     });
   });
 });

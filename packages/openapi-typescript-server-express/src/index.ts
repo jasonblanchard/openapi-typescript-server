@@ -1,13 +1,27 @@
 import {
-  response,
   type Application,
   type NextFunction,
   type Request,
   type Response,
 } from "express";
 import type { Route } from "openapi-typescript-server";
+import {
+  NoAcceptableContentType,
+  MissingResponseSerializer,
+} from "./errors.ts";
 
-export default function registerRoutes(routes: Route[], app: Application) {
+interface Options {
+  serializers?: Record<
+    string,
+    (content: any, req: Request, res: Response) => string
+  >;
+}
+
+export default function registerRoutes(
+  routes: Route[],
+  app: Application,
+  options: Options = {},
+) {
   for (const route of routes) {
     app[route.method](
       openAPIPathToExpress(route.path),
@@ -50,13 +64,26 @@ export default function registerRoutes(routes: Route[], app: Application) {
             res.status(Number(responseVariant));
           }
 
-          // TODO: Handle other content types
-          if (content?.["application/json"]) {
+          const responseContentType = req.accepts(Object.keys(content));
+
+          if (!responseContentType) {
+            throw new NoAcceptableContentType(req.headers.accept || "");
+          }
+
+          if (responseContentType === "application/json") {
             res.json(content["application/json"]);
             return;
           }
 
-          res.end();
+          const serializer = options.serializers?.[responseContentType];
+
+          if (!serializer) {
+            throw new MissingResponseSerializer(responseContentType);
+          }
+
+          res.type(responseContentType);
+          const body = serializer(content[responseContentType], req, res);
+          res.send(Buffer.from(body));
           return;
         } catch (err) {
           next(err);
