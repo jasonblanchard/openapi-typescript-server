@@ -10,7 +10,8 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "devDependencies": {
-    "tsup": "^8.4.0"
+    "tsup": "^8.4.0",
+    "xml-js": "^1.6.11"
   },
   "peerDependencies": {
     "express": "^4.21.2",
