@@ -5,15 +5,12 @@ import {
   type Response,
 } from "express";
 import type { Route } from "openapi-typescript-server";
-import {
-  NoAcceptableContentType,
-  MissingResponseSerializer,
-} from "./errors.ts";
+import { NoAcceptableContentType } from "./errors.ts";
 
 interface Options {
   serializers?: Record<
     string,
-    (content: any, req: Request, res: Response) => string
+    (content: any, req: Request, res: Response) => any
   >;
 }
 
@@ -75,15 +72,17 @@ export default function registerRoutes(
             return;
           }
 
+          res.type(responseContentType);
+
           const serializer = options.serializers?.[responseContentType];
 
-          if (!serializer) {
-            throw new MissingResponseSerializer(responseContentType);
+          if (serializer) {
+            const body = serializer(content[responseContentType], req, res);
+            res.send(body);
+            return;
           }
 
-          res.type(responseContentType);
-          const body = serializer(content[responseContentType], req, res);
-          res.send(Buffer.from(body));
+          res.send(content[responseContentType]);
           return;
         } catch (err) {
           next(err);

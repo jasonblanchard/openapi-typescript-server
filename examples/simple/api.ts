@@ -1,9 +1,15 @@
 import type * as ServerTypes from "./gen/server.ts";
 import * as server from "./gen/server.ts";
 import type { Request, Response } from "express";
+import { promises as fs } from "fs";
+import { join } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = join(__filename, "..");
 
 const API: ServerTypes.Server<Request, Response> = {
-  getPetById: async ({ parameters }): ServerTypes.GetPetByIdResult => {
+  getPetById: async ({ parameters, req }): ServerTypes.GetPetByIdResult => {
     if (parameters.path.petId === 42) {
       return {
         content: {
@@ -55,7 +61,7 @@ const API: ServerTypes.Server<Request, Response> = {
     parameters,
     requestBody,
     contentType,
-  }): ServerTypes.UpdatePetWithFormResult => {
+  }): ServerTypes.MixedContentTypesResult => {
     const { petId } = parameters.path;
     let status: "available" | "pending" | "sold" | undefined;
 
@@ -88,6 +94,31 @@ const API: ServerTypes.Server<Request, Response> = {
   },
 
   listPets: server.listPetsUnimplemented,
+
+  getPetImage: async (): ServerTypes.GetPetImageResult => {
+    const image = await fs.readFile(join(__dirname, `./cat.jpeg`), {
+      encoding: "base64",
+    });
+
+    return {
+      content: {
+        200: {
+          "image/jpeg": image,
+        },
+      },
+    };
+  },
+
+  getPetWebpage: async ({ parameters }): ServerTypes.GetPetWebpageResult => {
+    const { petId } = parameters.path;
+    return {
+      content: {
+        200: {
+          "text/html": `<html><body><h1>Hello, pet ${petId}!</h1></body></html>`,
+        },
+      },
+    };
+  },
 };
 
 export default API;

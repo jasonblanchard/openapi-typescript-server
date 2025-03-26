@@ -121,6 +121,42 @@ export async function mixedContentTypesUnimplemented(): MixedContentTypesResult 
   throw new NotImplementedError()
 }
 
+export interface GetPetImageArgs<Req, Res> {
+  parameters: paths['/pet/{petId}/image']['get']['parameters'];
+  contentType: string;
+  req: Req;
+  res: Res;
+}
+
+interface GetPetImageResult200 {
+  content: { 200: paths['/pet/{petId}/image']['get']['responses']['200']['content'] };
+  headers?: { [name: string]: any };
+}
+
+export type GetPetImageResult = Promise<GetPetImageResult200>;
+
+export async function getPetImageUnimplemented(): GetPetImageResult {
+  throw new NotImplementedError()
+}
+
+export interface GetPetWebpageArgs<Req, Res> {
+  parameters: paths['/pet/{petId}/webpage']['get']['parameters'];
+  contentType: string;
+  req: Req;
+  res: Res;
+}
+
+interface GetPetWebpageResult200 {
+  content: { 200: paths['/pet/{petId}/webpage']['get']['responses']['200']['content'] };
+  headers?: { [name: string]: any };
+}
+
+export type GetPetWebpageResult = Promise<GetPetWebpageResult200>;
+
+export async function getPetWebpageUnimplemented(): GetPetWebpageResult {
+  throw new NotImplementedError()
+}
+
 export interface Server<Req = unknown, Res = unknown> {
   listPets: (
     args: ListPetsArgs<Req, Res>
@@ -134,6 +170,12 @@ export interface Server<Req = unknown, Res = unknown> {
   mixedContentTypes: (
     args: MixedContentTypesArgs<Req, Res>
   ) => MixedContentTypesResult;
+  getPetImage: (
+    args: GetPetImageArgs<Req, Res>
+  ) => GetPetImageResult;
+  getPetWebpage: (
+    args: GetPetWebpageArgs<Req, Res>
+  ) => GetPetWebpageResult;
 }
 
 export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route[] {
@@ -157,6 +199,16 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
       method: "post",
       path: "/pet/{petId}/mixed-content-types",
       handler: server.mixedContentTypes,
+    },
+    {
+      method: "get",
+      path: "/pet/{petId}/image",
+      handler: server.getPetImage,
+    },
+    {
+      method: "get",
+      path: "/pet/{petId}/webpage",
+      handler: server.getPetWebpage,
     },
   ]
 }

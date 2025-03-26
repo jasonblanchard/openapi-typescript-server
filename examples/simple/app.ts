@@ -25,7 +25,13 @@ export default function makeApp() {
       validateResponses: false,
     }),
   );
-  registerRoutes(registerRouteHandlers(API), apiRouter);
+  registerRoutes(registerRouteHandlers(API), apiRouter, {
+    serializers: {
+      "image/jpeg": (content) => {
+        return Buffer.from(content, "base64");
+      },
+    },
+  });
 
   app.use("/api/v3", apiRouter);
 
@@ -35,6 +41,8 @@ export default function makeApp() {
   }
 
   app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+    console.error(err);
+
     const validationError = err as ValidationError;
     if (validationError.status && validationError.errors) {
       res.status(validationError.status || 500).json({
