@@ -121,4 +121,30 @@ describe("listPets", async () => {
     assert.equal(response.status, 501);
     assert.equal(response.body.message, "Not Implemented");
   });
+
+  describe("getPetImage", async () => {
+    it("returns 200", async () => {
+      const response = await request(app)
+        .get("/api/v3/pet/123/image")
+        .set("Accept", "image/jpeg");
+
+      assert.equal(response.status, 200);
+      assert(response.body);
+      assert.equal(response.headers["content-type"], "image/jpeg");
+    });
+  });
+
+  describe("getPetWebpage", async () => {
+    it("returns 200", async () => {
+      const response = await request(app)
+        .get("/api/v3/pet/123/webpage")
+        .set("Accept", "text/html");
+
+      assert.equal(response.status, 200);
+      assert.equal(
+        response.text,
+        "<html><body><h1>Hello, pet 123!</h1></body></html>",
+      );
+    });
+  });
 });
