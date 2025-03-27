@@ -21,7 +21,7 @@ export default function makeApp() {
 
   apiRouter.use(
     OpenApiValidator.middleware({
-      apiSpec: "./examples/simple/spec.yaml",
+      apiSpec: "./examples/kitchensink/spec.yaml",
       validateResponses: false,
     }),
   );
