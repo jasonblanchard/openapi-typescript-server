@@ -71,6 +71,22 @@ describe("updatePetWithForm", async () => {
       },
     });
   });
+
+  it("accepts form-urlencoded input", async () => {
+    const response = await request(app)
+      .post("/api/v3/pet/123?name=cat")
+      .set("Content-Type", "application/x-www-form-urlencoded")
+      .send("status=sold");
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(response.body, {
+      pet: {
+        id: 123,
+        name: "cat",
+        status: "sold",
+      },
+    });
+  });
 });
 
 describe("mixed content types with different structures", async () => {

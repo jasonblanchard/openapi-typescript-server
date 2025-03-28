@@ -16,6 +16,7 @@ export default function makeApp() {
 
   app.use(express.json());
   app.use(xmlparser());
+  app.use(express.urlencoded({ extended: true }));
 
   const apiRouter = express();
 
@@ -41,7 +42,7 @@ export default function makeApp() {
   }
 
   app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
-    console.error(err);
+    console.error("+++", err);
 
     const validationError = err as ValidationError;
     if (validationError.status && validationError.errors) {

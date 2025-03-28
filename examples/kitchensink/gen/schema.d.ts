@@ -114,6 +114,10 @@ export interface components {
             id?: number;
             name?: string;
         };
+        UpdatePetInput: {
+            /** @enum {string} */
+            status: "available" | "pending" | "sold";
+        };
     };
     responses: never;
     parameters: never;
@@ -203,14 +207,9 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": {
-                    /** @enum {string} */
-                    status: "available" | "pending" | "sold";
-                };
-                "application/xml": {
-                    /** @enum {string} */
-                    status: "available" | "pending" | "sold";
-                };
+                "application/json": components["schemas"]["UpdatePetInput"];
+                "application/xml": components["schemas"]["UpdatePetInput"];
+                "application/x-www-form-urlencoded": components["schemas"]["UpdatePetInput"];
             };
         };
         responses: {

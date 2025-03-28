@@ -68,6 +68,10 @@ export interface UpdatePetWithFormArgs<Req, Res> {
     mediaType: "application/xml";
     content: paths['/pet/{petId}']['post']['requestBody']['content']['application/xml']
   }
+  | {
+    mediaType: "application/x-www-form-urlencoded";
+    content: paths['/pet/{petId}']['post']['requestBody']['content']['application/x-www-form-urlencoded']
+  }
   ;
 }
 

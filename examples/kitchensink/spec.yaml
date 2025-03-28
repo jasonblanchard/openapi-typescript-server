@@ -72,28 +72,13 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                  enum:
-                    - available
-                    - pending
-                    - sold
-              required:
-                - status
+              $ref: "#/components/schemas/UpdatePetInput"
           application/xml:
             schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                  enum:
-                    - available
-                    - pending
-                    - sold
-              required:
-                - status
+              $ref: "#/components/schemas/UpdatePetInput"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UpdatePetInput"
       responses:
         "200":
           description: successful operation
@@ -251,3 +236,14 @@ components:
           format: int64
         name:
           type: string
+    UpdatePetInput:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - available
+            - pending
+            - sold
+      required:
+        - status
