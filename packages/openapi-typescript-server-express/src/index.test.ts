@@ -406,3 +406,39 @@ describe("accepts", () => {
     });
   });
 });
+
+describe("empty response body", () => {
+  it("returns empty response body", async () => {
+    registerRoutes(
+      [
+        {
+          path: "/foo",
+          method: "post",
+          handler: async () => {
+            return {
+              content: {
+                204: undefined,
+              },
+            };
+          },
+        },
+      ],
+      app,
+    );
+
+    app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+      console.error(err);
+      if (err instanceof NoAcceptableContentType) {
+        res.status(406).json({
+          message: err.message,
+        });
+      }
+
+      res.status(500).send();
+    });
+
+    const response = await request(app).post("/foo");
+    assert.strictEqual(response.status, 204);
+    assert.deepEqual(response.body, {});
+  });
+});

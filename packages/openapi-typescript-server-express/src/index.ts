@@ -61,6 +61,11 @@ export default function registerRoutes(
             res.status(Number(responseVariant));
           }
 
+          if (!content) {
+            res.send();
+            return;
+          }
+
           const responseContentType = req.accepts(Object.keys(content));
 
           if (!responseContentType) {
