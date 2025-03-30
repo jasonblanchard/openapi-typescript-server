@@ -24,4 +24,4 @@ jobs:
         run: |
           npm --workspace openapi-typescript-server version patch --force
           npm --workspace openapi-typescript-server-express version patch
-          git diff
+          git --no-pager diff
