@@ -1,6 +1,14 @@
 {
   "name": "openapi-typescript-server-express",
   "version": "0.0.1",
+  "description": "Express adapter for openapi-typescript-server",
+  "author": "jasonblanchard",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jasonblanchard/openapi-typescript-server.git",
+    "directory": "packages/openapi-typescript-server-express"
+  },
   "type": "module",
   "exports": {
     "import": "./dist/index.js",
@@ -19,8 +27,5 @@
   },
   "scripts": {
     "build": "tsup src/index.ts --dts --format cjs,esm --clean"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  }
 }

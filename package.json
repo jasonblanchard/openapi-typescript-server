@@ -1,6 +1,12 @@
 {
   "name": "openapi-typescript-server-monorepo",
-  "version": "0.0.1",
+  "private": true,
+  "author": "jasonblanchard",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jasonblanchard/openapi-typescript-server.git"
+  },
   "type": "module",
   "scripts": {
     "test": "node --test",
@@ -16,9 +22,6 @@
   "engines": {
     "node": ">=23.6.0"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "workspaces": [
     "packages/*",
     "openapi-typesript-server-express"

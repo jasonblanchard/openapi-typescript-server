@@ -1,6 +1,14 @@
 {
   "name": "openapi-typescript-server",
   "version": "0.0.1",
+  "description": "Codegenerator for OpenAPI server stubs in TypeScript",
+  "author": "jasonblanchard",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jasonblanchard/openapi-typescript-server.git",
+    "directory": "packages/openapi-typescript-server"
+  },
   "type": "module",
   "bin": "./bin/index.cjs",
   "exports": {
@@ -16,9 +24,6 @@
     "build:cli": "tsup src/cli/index.ts --format cjs --out-dir bin --clean",
     "build": "npm run build:lib && npm run build:cli"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "commander": "^13.1.0",
     "js-yaml": "^4.1.0",
