@@ -23,7 +23,7 @@
   },
   "peerDependencies": {
     "express": "^4.21.2",
-    "openapi-typescript-server": "^0.0.1"
+    "openapi-typescript-server": "^0.0"
   },
   "scripts": {
     "build": "tsup src/index.ts --dts --format cjs,esm --clean"
