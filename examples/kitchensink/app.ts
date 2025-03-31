@@ -22,7 +22,7 @@ export default function makeApp() {
 
   apiRouter.use(
     OpenApiValidator.middleware({
-      apiSpec: "./examples/kitchensink/spec.yaml",
+      apiSpec: "./spec.yaml",
       validateResponses: false,
     }),
   );

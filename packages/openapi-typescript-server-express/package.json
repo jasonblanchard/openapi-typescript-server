@@ -26,6 +26,7 @@
     "openapi-typescript-server": "^0.0"
   },
   "scripts": {
+    "test": "node --test",
     "build": "tsup src/index.ts --dts --format cjs,esm --clean"
   }
 }
