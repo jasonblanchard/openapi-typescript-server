@@ -3,6 +3,9 @@ name: Version
 on:
   workflow_dispatch: # Allows manual triggering of the workflow
 
+env:
+  ACTIONS_STEP_DEBUG: true
+
 jobs:
   version:
     runs-on: ubuntu-latest
