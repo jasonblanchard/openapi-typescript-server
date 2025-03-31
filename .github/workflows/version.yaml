@@ -28,6 +28,11 @@ jobs:
       - name: Extract Version from package.json
         run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Commit changes
         run: git commit -am "v$PACKAGE_VERSION"
 
