@@ -1,7 +1,12 @@
 name: Version
 
 on:
-  workflow_dispatch: # Allows manual triggering of the workflow
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run in dry-run mode (no changes will be committed)"
+        required: false
+        default: "false"
 
 jobs:
   version:
@@ -21,12 +26,11 @@ jobs:
         run: npm install
 
       - name: Version packages
-        run: |
-          npm --workspaces --include-workspace-root --no-git-tag-version version patch
-          git --no-pager diff
+        run: npm --workspaces --include-workspace-root --no-git-tag-version version patch
 
-      - name: Extract Version from package.json
-        run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+      - run: git --no-pager diff
+
+      - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
       - name: Configure Git
         run: |
@@ -39,7 +43,9 @@ jobs:
       - name: Create tag
         run: git tag "v$PACKAGE_VERSION"
 
-      - run: |
+      - name: Log changes to be pushed
+        if: github.event.inputs.dry_run == 'true'
+        run: |
           git status
           git --no-pager log
           git tag
