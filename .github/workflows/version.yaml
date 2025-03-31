@@ -3,9 +3,6 @@ name: Version
 on:
   workflow_dispatch: # Allows manual triggering of the workflow
 
-env:
-  ACTIONS_STEP_DEBUG: true
-
 jobs:
   version:
     runs-on: ubuntu-latest
@@ -31,4 +28,13 @@ jobs:
       - name: Extract Version from package.json
         run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      - run: echo "Package version is $PACKAGE_VERSION"
+      - name: Commit changes
+        run: git commit -am "v$PACKAGE_VERSION"
+
+      - name: Create tag
+        run: git tag "v$PACKAGE_VERSION"
+
+      - run: |
+          git status
+          git --no-pager log
+          git tag
