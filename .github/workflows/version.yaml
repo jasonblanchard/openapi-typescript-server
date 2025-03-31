@@ -24,3 +24,8 @@ jobs:
         run: |
           npm --workspaces --include-workspace-root --no-git-tag-version version patch
           git --no-pager diff
+
+      - name: Extract Version from package.json
+        run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      - run: echo "Package version is $PACKAGE_VERSION"
