@@ -4,8 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "Run in dry-run mode (no changes will be committed)"
-        required: false
+        description: "Select whether to run in dry-run mode"
+        required: true
+        type: choice
+        options:
+          - "true"
+          - "false"
         default: "false"
 
 jobs:
