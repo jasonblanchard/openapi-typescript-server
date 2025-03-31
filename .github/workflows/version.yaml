@@ -22,6 +22,5 @@ jobs:
 
       - name: Version packages
         run: |
-          npm --workspace openapi-typescript-server version patch
-          npm --workspace openapi-typescript-server-express version patch
+          npm --workspaces --include-workspace-root --no-git-tag-version version patch
           git --no-pager diff
