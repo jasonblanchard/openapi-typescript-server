@@ -1,7 +1,25 @@
 name: Version
 
 on:
-  workflow_dispatch: # Allows manual triggering of the workflow
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: "Version type"
+        required: true
+        type: choice
+        options:
+          - "major"
+          - "minor"
+          - "patch"
+        default: "patch"
+      dry_run:
+        description: "Dry run?"
+        required: true
+        type: choice
+        options:
+          - "true"
+          - "false"
+        default: "false"
 
 jobs:
   version:
@@ -21,6 +39,26 @@ jobs:
         run: npm install
 
       - name: Version packages
+        run: npm --workspaces --include-workspace-root --no-git-tag-version version ${{ github.event.inputs.version_type }}
+
+      - run: git --no-pager diff
+
+      - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      - name: Configure Git
         run: |
-          npm --workspaces --include-workspace-root --no-git-tag-version version patch
-          git --no-pager diff
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit changes
+        run: git commit -am "v$PACKAGE_VERSION"
+
+      - name: Create tag
+        run: git tag "v$PACKAGE_VERSION"
+
+      - name: Log changes to be pushed
+        if: github.event.inputs.dry_run == 'true'
+        run: |
+          git status
+          git --no-pager log
+          git tag
