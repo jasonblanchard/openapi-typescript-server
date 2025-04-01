@@ -3,8 +3,17 @@ name: Version
 on:
   workflow_dispatch:
     inputs:
+      version_type:
+        description: "Version type"
+        required: true
+        type: choice
+        options:
+          - "major"
+          - "minor"
+          - "patch"
+        default: "patch"
       dry_run:
-        description: "Select whether to run in dry-run mode"
+        description: "Dry run?"
         required: true
         type: choice
         options:
@@ -30,7 +39,7 @@ jobs:
         run: npm install
 
       - name: Version packages
-        run: npm --workspaces --include-workspace-root --no-git-tag-version version patch
+        run: npm --workspaces --include-workspace-root --no-git-tag-version version ${{ github.event.inputs.version_type }}
 
       - run: git --no-pager diff
 
