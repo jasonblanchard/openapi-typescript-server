@@ -23,7 +23,11 @@ on:
         default: "false"
 
 jobs:
+  test:
+    uses: ./.github/workflows/shared-test.yaml
+
   version:
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -35,9 +39,6 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
-
-      - name: "Build & Test"
-        uses: ./workflows/shared-test.yaml
 
       - name: Version packages
         run: npm --workspaces --include-workspace-root --no-git-tag-version version ${{ github.event.inputs.version_type }}
