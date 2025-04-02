@@ -8,5 +8,3 @@ on: [push]
 jobs:
   test:
     uses: ./.github/workflows/shared-test.yaml
-
-
