@@ -15,6 +15,6 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
-      - name: "Build & Test"
-        uses: ./.github/workflows/shared-test.yaml
+      - uses: ./.github/workflows/shared-test.yaml # Correctly reference the reusable workflow
+
 
