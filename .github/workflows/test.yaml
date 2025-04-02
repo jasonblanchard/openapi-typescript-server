@@ -15,10 +15,6 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm run build:packages
-      - run: npm run gen:examples
-      - run: git diff --exit-code
-      - run: npm run typecheck
-      - run: npm test
+      - name: "Build & Test"
+        uses: ./.github/workflows/shared-test.yaml
+

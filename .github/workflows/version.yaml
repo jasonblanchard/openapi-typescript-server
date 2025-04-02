@@ -1,4 +1,5 @@
 name: Version
+description: Updates verion on all package.json files, commits the changes and creates a tag.
 
 on:
   workflow_dispatch:
@@ -27,16 +28,16 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
 
-      - name: Install dependencies
-        run: npm install
+      - name: "Build & Test"
+        uses: ./.github/workflows/shared-test.yaml
 
       - name: Version packages
         run: npm --workspaces --include-workspace-root --no-git-tag-version version ${{ github.event.inputs.version_type }}
