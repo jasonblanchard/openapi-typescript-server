@@ -24,7 +24,7 @@ on:
 
 jobs:
   test:
-    uses: ./.github/workflows/shared-test.yaml
+    uses: ./.github/workflows/test.yaml
 
   version:
     needs: test
