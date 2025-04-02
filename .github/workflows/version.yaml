@@ -12,7 +12,8 @@ on:
           - "major"
           - "minor"
           - "patch"
-        default: "patch"
+          - "prerelease"
+        default: "prerelease"
       dry_run:
         description: "Dry run?"
         required: true
