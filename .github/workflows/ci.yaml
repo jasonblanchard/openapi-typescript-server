@@ -3,5 +3,5 @@ name: CI
 on: [push]
 
 jobs:
-  test:
+  validate:
     uses: ./.github/workflows/test.yaml

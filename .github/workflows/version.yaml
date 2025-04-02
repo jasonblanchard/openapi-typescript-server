@@ -23,11 +23,11 @@ on:
         default: "false"
 
 jobs:
-  test:
+  validate:
     uses: ./.github/workflows/test.yaml
 
   version:
-    needs: test
+    needs: validate
     runs-on: ubuntu-latest
 
     steps:
