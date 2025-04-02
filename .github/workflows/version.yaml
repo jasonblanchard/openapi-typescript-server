@@ -37,7 +37,7 @@ jobs:
           cache: "npm"
 
       - name: "Build & Test"
-        uses: ./.github/workflows/shared-test.yaml
+        uses: ./workflows/shared-test.yaml
 
       - name: Version packages
         run: npm --workspaces --include-workspace-root --no-git-tag-version version ${{ github.event.inputs.version_type }}
