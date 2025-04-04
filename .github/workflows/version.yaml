@@ -42,10 +42,6 @@ jobs:
           cache: "npm"
 
       - name: Version packages
-        if: github.event.inputs.version_type != 'prerelease'
-        run: npm --workspaces --include-workspace-root --no-git-tag-version version ${{ github.event.inputs.version_type }}
-
-      - name: Version packages
         # Run with --legacy-peer-deps to avoid ordering dependency between peer dep version and the version being available.
         run: npm --workspaces --include-workspace-root --no-git-tag-version --legacy-peer-deps version ${{ github.event.inputs.version_type }}
 
