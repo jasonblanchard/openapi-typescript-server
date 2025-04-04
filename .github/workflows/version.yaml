@@ -59,6 +59,9 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Log the changes
+        run: git --no-pager diff
+
       - name: Commit changes
         run: git commit -am "v$PACKAGE_VERSION"
 
