@@ -3,7 +3,7 @@ name: Publish npm Package
 on:
   push:
     tags:
-      - "v*.*.*-*"
+      - v*
 
 jobs:
   validate:
@@ -36,7 +36,12 @@ jobs:
         run: npm run build:packages
 
       - name: Publish to NPM
-        run: npm publish --workspaces packages/** --access public --provenace
+        run: |
+          for d in packages/*; do
+            if [ -d "$d" ]; then
+              npm publish "$d" --access public --provenance
+            fi
+          done
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
