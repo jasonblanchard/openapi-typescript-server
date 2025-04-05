@@ -34,7 +34,7 @@ jobs:
 
       - name: Build packages
         run: npm run build:packages
-        
+
       - name: Store version
         run: |
           VERSION=$(jq -r .version package.json)
