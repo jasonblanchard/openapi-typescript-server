@@ -42,13 +42,13 @@ jobs:
 
       - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      - name: Create GitHub release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ env.PACKAGE_VERSION }}
-          release_name: v${{ env.PACKAGE_VERSION }}
-          commitish: ${{ github.ref }}
-          draft: false
-          prerelease: false
+      # - name: Create GitHub release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: v${{ env.PACKAGE_VERSION }}
+      #     release_name: v${{ env.PACKAGE_VERSION }}
+      #     commitish: ${{ github.ref }}
+      #     draft: false
+      #     prerelease: false
