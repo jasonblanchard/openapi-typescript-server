@@ -23,9 +23,6 @@ on:
           - "false"
         default: "false"
 
-permissions:
-  contents: write
-
 jobs:
   validate:
     uses: ./.github/workflows/test.yaml
@@ -37,6 +34,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -69,8 +68,6 @@ jobs:
 
       - name: Push changes
         if: github.event.inputs.dry_run == 'false'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git push origin main
           git push origin --tags
