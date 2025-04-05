@@ -11,7 +11,7 @@ const program = new Command();
 program
   .name("openapi-typescript-server")
   .description("CLI to generate Open API server stub")
-  .version("0.0.1") // TODO: How to align this with the package.json version?
+  .version(process.env.npm_package_version || "unknown")
   .argument("<spec>", "Path to Open API spec file")
   .description("Output generated code")
   .option(
