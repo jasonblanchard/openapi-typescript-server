@@ -23,6 +23,9 @@ on:
           - "false"
         default: "false"
 
+permissions:
+  contents: write
+
 jobs:
   validate:
     uses: ./.github/workflows/test.yaml
@@ -66,6 +69,8 @@ jobs:
 
       - name: Push changes
         if: github.event.inputs.dry_run == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git push origin main
           git push origin --tags
