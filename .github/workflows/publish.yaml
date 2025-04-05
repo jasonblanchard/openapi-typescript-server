@@ -36,7 +36,7 @@ jobs:
         run: npm run build:packages
 
       - name: Publish to NPM
-        run: npm publish --workspaces packages/** --access public --provenance
+        run: npm publish --workspaces --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
