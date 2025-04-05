@@ -64,7 +64,13 @@ jobs:
       - name: Create tag
         run: git tag "v$PACKAGE_VERSION"
 
-      - name: Log changes to be pushed
+      - name: Push changes
+        if: github.event.inputs.dry_run == 'false'
+        run: |
+          git push origin main
+          git push origin --tags
+
+      - name: Log changes to be pushed (dry run only)
         if: github.event.inputs.dry_run == 'true'
         run: |
           git status
