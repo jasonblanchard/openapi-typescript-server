@@ -1,6 +1,6 @@
 {
   "name": "openapi-typescript-server-express",
-  "version": "0.0.2-4",
+  "version": "0.0.2-5",
   "description": "Express adapter for openapi-typescript-server",
   "author": "jasonblanchard",
   "license": "MIT",
@@ -23,7 +23,7 @@
   },
   "peerDependencies": {
     "express": "^4.21.2",
-    "openapi-typescript-server": "^0.0.2-4"
+    "openapi-typescript-server": "^0.0.2-5"
   },
   "scripts": {
     "test": "node --test",
