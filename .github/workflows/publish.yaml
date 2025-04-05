@@ -3,8 +3,7 @@ name: Publish npm Package
 on:
   push:
     tags:
-      - "v*"
-      - "v*-*"
+      - 'v*.*.*-*'
 
 jobs:
   validate:
