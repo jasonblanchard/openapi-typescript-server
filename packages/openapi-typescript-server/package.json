@@ -10,7 +10,7 @@
     "directory": "packages/openapi-typescript-server"
   },
   "type": "module",
-  "bin": "./bin/index.cjs",
+  "bin": "./bin/cli/index.cjs",
   "exports": {
     "import": "./dist/index.js",
     "require": "./dist/index.cjs"
@@ -21,7 +21,7 @@
   "scripts": {
     "test": "node --test",
     "build:lib": "tsup src/lib/index.ts --dts --format cjs,esm --clean",
-    "build:cli": "tsup src/cli/index.ts --format cjs --out-dir bin --clean",
+    "build:cli": "tsup src/cli/index.ts --format cjs --out-dir bin/cli --clean",
     "build": "npm run build:lib && npm run build:cli"
   },
   "dependencies": {
