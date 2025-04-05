@@ -1,7 +1,7 @@
 {
   "name": "kitchensink-example",
   "private": true,
-  "version": "0.0.2-5",
+  "version": "0.0.2-6",
   "type": "module",
   "scripts": {
     "test": "node --test",
