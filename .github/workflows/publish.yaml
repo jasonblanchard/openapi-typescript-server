@@ -1,0 +1,54 @@
+name: Publish npm Package
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  validate:
+    uses: ./.github/workflows/test.yaml
+
+  publish:
+    needs: validate
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build packages
+        run: npm run build:packages
+
+      - name: Publish to NPM
+        run: npm publish --workspaces packages/** --access public --provenace
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      # - name: Create GitHub release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: v${{ env.PACKAGE_VERSION }}
+      #     release_name: v${{ env.PACKAGE_VERSION }}
+      #     commitish: ${{ github.ref }}
+      #     draft: false
+      #     prerelease: false
