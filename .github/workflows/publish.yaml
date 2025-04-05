@@ -34,13 +34,28 @@ jobs:
 
       - name: Build packages
         run: npm run build:packages
+        
+      - name: Store version
+        run: |
+          VERSION=$(jq -r .version package.json)
+          echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
+          if [[ "$VERSION" == *-* ]]; then
+            echo "IS_PRERELEASE=true" >> $GITHUB_ENV
+          else
+            echo "IS_PRERELEASE=false" >> $GITHUB_ENV
+          fi
 
-      - name: Publish to NPM
+      - name: Publish 'latest' to NPM
+        if: env.IS_PRERELEASE == 'false'
         run: npm publish --workspaces --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+      - name: Publish 'next' to NPM
+        if: env.IS_PRERELEASE == 'true'
+        run: npm publish --workspaces --access public --tag next --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # - name: Create GitHub release
       #   uses: actions/create-release@v1
