@@ -36,12 +36,7 @@ jobs:
         run: npm run build:packages
 
       - name: Publish to NPM
-        run: |
-          for d in packages/*; do
-            if [ -d "$d" ]; then
-              npm publish "$d" --access public --provenance
-            fi
-          done
+        run: npm publish --workspaces packages/** --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
