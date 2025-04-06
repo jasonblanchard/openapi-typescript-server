@@ -44,7 +44,7 @@ const spec = {
   },
 };
 
-const sourceFile = generate(spec, "./schema.d.ts", "outdir");
+const sourceFile = generate(spec, "./schema.d.ts", "outdir.ts");
 
 it("writes imports", () => {
   const operationsImport = sourceFile.getImportDeclaration("./schema.d.ts");
