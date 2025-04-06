@@ -4,7 +4,7 @@
   "version": "0.0.3",
   "type": "module",
   "scripts": {
-    "gen": "openapi-typescript ./spec.yaml --output ./gen/schema.d.ts && openapi-typescript-server ./spec.yaml -t ./schema.d.ts -o ./gen "
+    "gen": "openapi-typescript ./spec.yaml --output ./gen/schema.d.ts && openapi-typescript-server ./spec.yaml -t ./schema.d.ts -o ./gen/server.ts "
   },
   "dependencies": {
     "openapi-typescript": "^7.6.1",

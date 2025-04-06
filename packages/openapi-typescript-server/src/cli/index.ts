@@ -5,8 +5,14 @@ import fs from "fs";
 import { OpenAPISpec } from "../lib/schema.ts";
 import yaml from "js-yaml";
 import generate from "./generate.ts";
+import c from "ansi-colors";
+import supportsColor from "supports-color";
 
 const program = new Command();
+
+if (!supportsColor.stdout || supportsColor.stdout.hasBasic === false) {
+  c.enabled = false;
+}
 
 program
   .name("openapi-typescript-server")
@@ -44,6 +50,9 @@ program
     );
 
     if (options.output) {
+      console.log(
+        `🤖 ${c.bold("openapi-typescript-server")} ${c.dim(process.env.npm_package_version || "unknown")} ${c.green(spec)} → ${c.green(c.bold(options.output))}`,
+      );
       sourceFile.saveSync();
       return;
     }

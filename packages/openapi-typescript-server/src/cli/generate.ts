@@ -4,11 +4,11 @@ import { Project } from "ts-morph";
 export default function generate(
   spec: OpenAPISpec,
   types: string,
-  outdir: string,
+  outpath: string,
 ) {
   const project = new Project();
 
-  const sourceFile = project.createSourceFile(`${outdir}/server.ts`, "", {
+  const sourceFile = project.createSourceFile(outpath, "", {
     overwrite: true,
   });
 
