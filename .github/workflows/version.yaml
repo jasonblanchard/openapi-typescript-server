@@ -44,13 +44,12 @@ jobs:
           cache: "npm"
 
       - name: Version packages
-        # Run with --legacy-peer-deps to avoid ordering dependency between peer dep version and the version being available.
-        run: npm --workspaces --include-workspace-root --no-git-tag-version --legacy-peer-deps version ${{ github.event.inputs.version_type }}
+        run: npm --workspaces --include-workspace-root --no-git-tag-version version ${{ github.event.inputs.version_type }}
 
       - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      - name: "Align peer dependencies with version"
-        run: npm install --workspace openapi-typescript-server-express --peer openapi-typescript-server@${{ env.PACKAGE_VERSION }}
+      # - name: "Align peer dependencies with version"
+      #   run: npm install --workspace openapi-typescript-server-express --peer openapi-typescript-server@${{ env.PACKAGE_VERSION }}
 
       - name: Configure Git
         run: |

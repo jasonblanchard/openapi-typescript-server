@@ -4,7 +4,7 @@ import {
   type Request,
   type Response,
 } from "express";
-import type { Route } from "openapi-typescript-server";
+import type { Route } from "openapi-typescript-server-runtime";
 import { NoAcceptableContentType } from "./errors.ts";
 
 interface Options {

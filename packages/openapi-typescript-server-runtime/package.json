@@ -1,13 +1,13 @@
 {
-  "name": "openapi-typescript-server-express",
+  "name": "openapi-typescript-server-runtime",
   "version": "0.0.3",
-  "description": "Express adapter for openapi-typescript-server",
+  "description": "Shared runtime dependencies for openapi-typescript-server",
   "author": "jasonblanchard",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/jasonblanchard/openapi-typescript-server.git",
-    "directory": "packages/openapi-typescript-server-express"
+    "directory": "packages/openapi-typescript-server-runtime"
   },
   "type": "module",
   "exports": {
@@ -17,18 +17,11 @@
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "devDependencies": {
-    "tsup": "^8.4.0",
-    "xml-js": "^1.6.11"
-  },
-  "peerDependencies": {
-    "express": "^4.21.2"
-  },
   "scripts": {
     "test": "node --test",
     "build": "tsup src/index.ts --dts --format cjs,esm --clean"
   },
   "dependencies": {
-    "openapi-typescript-server-runtime": "^0.0.3"
+    "zod": "^3.24.2"
   }
 }

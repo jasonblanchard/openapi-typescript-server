@@ -1,4 +1,4 @@
-import type { OpenAPISpec } from "../lib/schema";
+import type { OpenAPISpec } from "openapi-typescript-server-runtime";
 import { Project } from "ts-morph";
 
 export default function generate(
