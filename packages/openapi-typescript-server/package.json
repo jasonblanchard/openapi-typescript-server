@@ -20,7 +20,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "node --test",
-    "build": "tsup src/cli/index.ts --format cjs --out-dir bin/cli --clean"
+    "build:lib": "tsup src/lib/index.ts --dts --format cjs,esm --clean",
+    "build:cli": "tsup src/cli/index.ts --format cjs --out-dir bin/cli --clean",
+    "build": "npm run build:lib && npm run build:cli"
   },
   "dependencies": {
     "commander": "^13.1.0",
