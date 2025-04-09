@@ -13,7 +13,7 @@
     "test": "npm test --workspaces --if-present",
     "typecheck": "tsc --noEmit",
     "gen:examples": "npm run gen --workspaces --if-present",
-    "build:packages": "npm run build --workspaces packages/** --if-present",
+    "build:packages": "npm run build --workspace openapi-typescript-server-runtime && npm run build --workspaces packages/** --if-present",
     "pack": "npm run build:packages && npm pack --workspaces packages/** --pack-destination /tmp",
     "format:check": "npx prettier . --check",
     "format": "npx prettier . --write"
