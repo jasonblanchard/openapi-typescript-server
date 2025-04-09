@@ -48,8 +48,12 @@ jobs:
 
       - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      # - name: "Align peer dependencies with version"
-      #   run: npm install --workspace openapi-typescript-server-express --peer openapi-typescript-server@${{ env.PACKAGE_VERSION }}
+      - name: "Align dependencies with version"
+        run: |
+          npm install --workspace openapi-typescript-server openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}  
+          npm install --workspace openapi-typescript-server-express openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
+          npm install --workspace kitchensink-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
+          npm install --workspace petstore-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
 
       - name: Configure Git
         run: |
