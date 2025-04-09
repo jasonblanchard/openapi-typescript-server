@@ -29,6 +29,6 @@
     "build": "tsup src/index.ts --dts --format cjs,esm --clean"
   },
   "dependencies": {
-    "openapi-typescript-server-runtime": "^0.0.3"
+    "openapi-typescript-server-runtime": "0.0.3"
   }
 }
