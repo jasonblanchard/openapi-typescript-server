@@ -50,10 +50,10 @@ jobs:
 
       - name: "Align dependencies with version"
         run: |
-          npm install --workspace openapi-typescript-server openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}  
-          npm install --workspace openapi-typescript-server-express openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
-          npm install --workspace kitchensink-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
-          npm install --workspace petstore-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
+          npm install --save --workspace openapi-typescript-server openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}  
+          npm install --save --workspace openapi-typescript-server-express openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
+          npm install --save --workspace kitchensink-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
+          npm install --save --workspace petstore-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
 
       - name: Configure Git
         run: |
