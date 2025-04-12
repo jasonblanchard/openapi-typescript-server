@@ -51,7 +51,7 @@ it("writes imports", () => {
   assert.equal(operationsImport?.getNamedImports()[0]?.getName(), ["paths"]);
 
   const serverImport = sourceFile.getImportDeclaration(
-    "openapi-typescript-server",
+    "openapi-typescript-server-runtime",
   );
   assert.equal(serverImport?.getNamedImports()[0]?.getName(), ["Route"]);
 });

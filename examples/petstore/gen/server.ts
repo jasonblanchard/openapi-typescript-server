@@ -4,8 +4,8 @@
  */
 
 import type { paths } from "./schema.d.ts";
-import type { Route } from "openapi-typescript-server";
-import { NotImplementedError } from "openapi-typescript-server";
+import type { Route } from "openapi-typescript-server-runtime";
+import { NotImplementedError } from "openapi-typescript-server-runtime";
 
 export interface UpdatePetArgs<Req, Res> {
   parameters: paths['/pet']['put']['parameters'];
