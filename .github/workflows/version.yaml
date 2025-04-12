@@ -49,6 +49,7 @@ jobs:
       - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
       - name: "Align dependencies with version"
+        # For some reason, these need to be run twice to write the version to package.json
         run: |
           npm install --save-exact --workspace openapi-typescript-server openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
           npm install --save-exact --workspace openapi-typescript-server openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
