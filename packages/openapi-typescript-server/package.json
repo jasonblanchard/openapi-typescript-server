@@ -1,6 +1,6 @@
 {
   "name": "openapi-typescript-server",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Codegenerator for OpenAPI server stubs in TypeScript",
   "author": "jasonblanchard",
   "license": "MIT",
@@ -25,7 +25,7 @@
   "dependencies": {
     "commander": "^13.1.0",
     "js-yaml": "^4.1.0",
-    "openapi-typescript-server-runtime": "0.0.3",
+    "openapi-typescript-server-runtime": "0.0.4",
     "ts-morph": "^25.0.1",
     "zod": "^3.24.2"
   },
