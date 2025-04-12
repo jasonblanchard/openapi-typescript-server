@@ -4,7 +4,7 @@ import { registerRouteHandlers } from "./gen/server.ts";
 import registerRoutes from "openapi-typescript-server-express";
 import API from "./api.ts";
 import OpenApiValidator from "express-openapi-validator";
-import { NotImplementedError } from "openapi-typescript-server";
+import { NotImplementedError } from "openapi-typescript-server-runtime";
 import xmlparser from "express-xml-bodyparser";
 
 export default function makeApp() {

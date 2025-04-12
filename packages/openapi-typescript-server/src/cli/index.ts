@@ -2,7 +2,7 @@
 
 import { Command } from "commander";
 import fs from "fs";
-import { OpenAPISpec } from "../lib/schema.ts";
+import { OpenAPISpec } from "openapi-typescript-server-runtime";
 import yaml from "js-yaml";
 import generate from "./generate.ts";
 import c from "ansi-colors";

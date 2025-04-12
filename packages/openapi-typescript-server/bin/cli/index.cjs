@@ -294,64 +294,7 @@ var require_ansi_colors = __commonJS({
 // src/cli/index.ts
 var import_commander = require("commander");
 var import_fs = __toESM(require("fs"), 1);
-
-// src/lib/schema.ts
-var import_zod = __toESM(require("zod"), 1);
-var bastSchema = import_zod.default.object({
-  $ref: import_zod.default.string().optional(),
-  type: import_zod.default.string().optional(),
-  // Actually a set of known literals. Can probably do a discriminated union instead of making the types optional
-  required: import_zod.default.array(import_zod.default.string()).optional()
-});
-var Schema = bastSchema.extend({
-  properties: import_zod.default.lazy(() => import_zod.default.record(Schema).optional())
-});
-var OpenAPISpec = import_zod.default.object({
-  openapi: import_zod.default.string(),
-  info: import_zod.default.object({
-    title: import_zod.default.string().optional(),
-    version: import_zod.default.string().optional()
-  }),
-  paths: import_zod.default.record(
-    import_zod.default.record(
-      import_zod.default.object({
-        summary: import_zod.default.string().optional(),
-        operationId: import_zod.default.string().optional(),
-        parameters: import_zod.default.array(
-          import_zod.default.object({
-            name: import_zod.default.string(),
-            in: import_zod.default.string(),
-            required: import_zod.default.boolean().optional(),
-            schema: import_zod.default.object({
-              type: import_zod.default.string()
-            })
-          })
-        ).optional(),
-        requestBody: import_zod.default.object({
-          description: import_zod.default.string().optional(),
-          required: import_zod.default.boolean().optional(),
-          content: import_zod.default.record(
-            import_zod.default.object({
-              schema: Schema
-            })
-          )
-        }).optional(),
-        responses: import_zod.default.record(
-          import_zod.default.object({
-            description: import_zod.default.string().optional(),
-            content: import_zod.default.record(
-              import_zod.default.object({
-                schema: Schema
-              })
-            ).optional()
-          })
-        )
-      })
-    )
-  )
-});
-
-// src/cli/index.ts
+var import_openapi_typescript_server_runtime = require("openapi-typescript-server-runtime");
 var import_js_yaml = __toESM(require("js-yaml"), 1);
 
 // src/cli/generate.ts
@@ -368,12 +311,12 @@ function generate(spec, types, outpath) {
   });
   sourceFile.addImportDeclaration({
     namedImports: ["Route"],
-    moduleSpecifier: "openapi-typescript-server",
+    moduleSpecifier: "openapi-typescript-server-runtime",
     isTypeOnly: true
   });
   sourceFile.addImportDeclaration({
     namedImports: ["NotImplementedError"],
-    moduleSpecifier: "openapi-typescript-server"
+    moduleSpecifier: "openapi-typescript-server-runtime"
   });
   const operationsById = {};
   for (const path in spec.paths) {
@@ -707,7 +650,7 @@ program.name("openapi-typescript-server").description("CLI to generate Open API 
     process.exit(1);
   }
   const specPojo = import_js_yaml.default.load(specS);
-  const validateSpecResponse = OpenAPISpec.safeParse(specPojo);
+  const validateSpecResponse = import_openapi_typescript_server_runtime.OpenAPISpec.safeParse(specPojo);
   if (!validateSpecResponse.success) {
     console.error(validateSpecResponse.error.errors);
     return;

@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, before } from "node:test";
+import { describe, it, beforeEach } from "node:test";
 import assert from "node:assert";
 import express from "express";
 import type { NextFunction, Request, Response } from "express";

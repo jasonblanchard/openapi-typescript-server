@@ -1,4 +1,4 @@
-import type { OpenAPISpec } from "../lib/schema";
+import type { OpenAPISpec } from "openapi-typescript-server-runtime";
 import { Project } from "ts-morph";
 
 export default function generate(
@@ -20,13 +20,13 @@ export default function generate(
 
   sourceFile.addImportDeclaration({
     namedImports: ["Route"],
-    moduleSpecifier: "openapi-typescript-server",
+    moduleSpecifier: "openapi-typescript-server-runtime",
     isTypeOnly: true,
   });
 
   sourceFile.addImportDeclaration({
     namedImports: ["NotImplementedError"],
-    moduleSpecifier: "openapi-typescript-server",
+    moduleSpecifier: "openapi-typescript-server-runtime",
   });
 
   const operationsById: Record<
