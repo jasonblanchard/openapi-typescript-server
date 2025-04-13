@@ -26,7 +26,13 @@ type HandlerInput = {
 
 type HandlerResponse = {
   content?: {
-    [key: string]: unknown;
+    // Response variant
+    [key: string]:
+      | {
+          // Content type
+          [key: string]: unknown;
+        }
+      | undefined;
   };
   headers?: {
     [name: string]: string | number | readonly string[] | undefined;
