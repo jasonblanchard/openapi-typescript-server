@@ -10,26 +10,26 @@ type Method =
 
 type HandlerInput = {
   parameters: {
-    query: any;
-    header: any;
-    path: any;
-    cookie: any;
+    query: unknown;
+    header: unknown;
+    path: unknown;
+    cookie: unknown;
   };
   requestBody: {
-    mediaType: any;
-    content: any;
+    mediaType: unknown;
+    content: unknown;
   };
   contentType: string;
-  req: any;
-  res: any;
+  req: unknown;
+  res: unknown;
 };
 
 type HandlerResponse = {
   content?: {
-    [key: string]: any;
+    [key: string]: unknown;
   };
   headers?: {
-    [name: string]: any;
+    [name: string]: string | number | readonly string[] | undefined;
   };
   status?: number;
 };

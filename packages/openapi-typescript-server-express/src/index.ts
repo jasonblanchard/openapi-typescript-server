@@ -43,7 +43,9 @@ export default function registerRoutes(
           });
 
           for (const headerName in result.headers) {
-            res.setHeader(headerName, result.headers[headerName]);
+            if (result.headers[headerName] !== undefined) {
+              res.setHeader(headerName, result.headers[headerName]);
+            }
           }
 
           const entry = Object.entries(result.content || {})[0];
@@ -73,6 +75,7 @@ export default function registerRoutes(
           }
 
           if (responseContentType === "application/json") {
+            // @ts-expect-error fix
             res.json(content["application/json"]);
             return;
           }
@@ -82,11 +85,13 @@ export default function registerRoutes(
           const serializer = options.serializers?.[responseContentType];
 
           if (serializer) {
+            // @ts-expect-error fix
             const body = serializer(content[responseContentType], req, res);
             res.send(body);
             return;
           }
 
+          // @ts-expect-error fix
           res.send(content[responseContentType]);
           return;
         } catch (err) {

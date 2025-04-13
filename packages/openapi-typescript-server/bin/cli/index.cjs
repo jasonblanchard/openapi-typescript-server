@@ -459,7 +459,9 @@ function generate(spec, types, outpath) {
           writer.writeLine("{");
           writer.writeLine(`method: "${method}",`);
           writer.writeLine(`path: "${path}",`);
-          writer.writeLine(`handler: server.${operationId},`);
+          writer.writeLine(
+            `handler: server.${operationId} as Route["handler"],`
+          );
           writer.writeLine("},");
         }
       );
