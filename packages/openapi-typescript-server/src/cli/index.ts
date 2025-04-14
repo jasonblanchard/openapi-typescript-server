@@ -47,6 +47,7 @@ program
       validateSpecResponse.data,
       options.types,
       options.output,
+      process.env.npm_package_version,
     );
 
     if (options.output) {
