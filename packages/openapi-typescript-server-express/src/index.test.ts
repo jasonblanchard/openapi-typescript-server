@@ -223,7 +223,7 @@ describe("content types", () => {
           method: "post",
           handler: async ({ requestBody, contentType }) => {
             let source = "";
-            const { greeting } = requestBody.content;
+            const { greeting } = requestBody.content as { greeting: string };
 
             if (contentType === "application/x-www-form-urlencoded") {
               source = `${greeting} from urlencoded`;

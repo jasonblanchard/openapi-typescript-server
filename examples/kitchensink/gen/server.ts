@@ -187,32 +187,32 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
     {
       method: "get",
       path: "/pets",
-      handler: server.listPets,
+      handler: server.listPets as Route["handler"],
     },
     {
       method: "get",
       path: "/pet/{petId}",
-      handler: server.getPetById,
+      handler: server.getPetById as Route["handler"],
     },
     {
       method: "post",
       path: "/pet/{petId}",
-      handler: server.updatePetWithForm,
+      handler: server.updatePetWithForm as Route["handler"],
     },
     {
       method: "post",
       path: "/pet/{petId}/mixed-content-types",
-      handler: server.mixedContentTypes,
+      handler: server.mixedContentTypes as Route["handler"],
     },
     {
       method: "get",
       path: "/pet/{petId}/image",
-      handler: server.getPetImage,
+      handler: server.getPetImage as Route["handler"],
     },
     {
       method: "get",
       path: "/pet/{petId}/webpage",
-      handler: server.getPetWebpage,
+      handler: server.getPetWebpage as Route["handler"],
     },
   ]
 }

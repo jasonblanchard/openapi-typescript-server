@@ -43,7 +43,9 @@ export default function registerRoutes(
           });
 
           for (const headerName in result.headers) {
-            res.setHeader(headerName, result.headers[headerName]);
+            if (result.headers[headerName] !== undefined) {
+              res.setHeader(headerName, result.headers[headerName]);
+            }
           }
 
           const entry = Object.entries(result.content || {})[0];
