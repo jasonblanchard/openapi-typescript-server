@@ -111,7 +111,7 @@ it("writes Server interface", () => {
 
   const jsdocText = operation.getJsDocs()[0]?.getText() || "";
   assert.match(jsdocText, /An operation that gets something/);
-  assert.match(jsdocText, /More info about the operation/);
+  assert.match(jsdocText, /@description More info about the operation/);
 });
 
 it("writes register handler", () => {
