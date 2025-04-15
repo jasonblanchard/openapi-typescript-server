@@ -183,9 +183,18 @@ export default function generate(
           ) => ${result}`,
       });
 
-      if (description) {
+      if (summary || description) {
+        let buffer = summary || "";
+
+        if (summary && description) {
+          buffer += "\n\n";
+        }
+        if (description) {
+          buffer += `@description ${description}`;
+        }
+
         p.addJsDoc({
-          description: [summary, description].filter(Boolean).join("\n\n"),
+          description: buffer,
         });
       }
     },
