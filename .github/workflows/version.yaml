@@ -65,7 +65,7 @@ jobs:
 
       - name: Codegen examples with latest version
         run: npm run gen:examples
-      
+
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
