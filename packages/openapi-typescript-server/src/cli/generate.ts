@@ -32,7 +32,14 @@ export default function generate(
 
   const operationsById: Record<
     string,
-    { path: string; method: string; args: string; result: string }
+    {
+      path: string;
+      method: string;
+      args: string;
+      result: string;
+      summary?: string;
+      description?: string;
+    }
   > = {};
 
   for (const path in spec.paths) {
@@ -142,6 +149,8 @@ export default function generate(
         method: method,
         args: argsInterface.getName(),
         result: resultType.getName(),
+        summary: operation.summary,
+        description: operation.description,
       };
 
       sourceFile.addFunction({
@@ -156,17 +165,6 @@ export default function generate(
     }
   }
 
-  const serverInferfaceProperties = Object.entries(operationsById).map(
-    ([operationId, { args, result }]) => {
-      return {
-        name: operationId,
-        type: `(
-          args: ${args}<Req, Res>
-          ) => ${result}`,
-      };
-    },
-  );
-
   const serverInterface = sourceFile.addInterface({
     name: "Server",
     isExported: true,
@@ -174,8 +172,33 @@ export default function generate(
       { name: "Req", default: "unknown" },
       { name: "Res", default: "unknown" },
     ],
-    properties: serverInferfaceProperties,
   });
+
+  Object.entries(operationsById).forEach(
+    ([operationId, { args, result, summary, description }]) => {
+      const p = serverInterface.addProperty({
+        name: operationId,
+        type: `(
+          args: ${args}<Req, Res>
+          ) => ${result}`,
+      });
+
+      if (summary || description) {
+        let buffer = summary || "";
+
+        if (summary && description) {
+          buffer += "\n\n";
+        }
+        if (description) {
+          buffer += `@description ${description}`;
+        }
+
+        p.addJsDoc({
+          description: buffer,
+        });
+      }
+    },
+  );
 
   sourceFile.addFunction({
     name: "registerRouteHandlers",

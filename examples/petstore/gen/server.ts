@@ -514,60 +514,131 @@ export async function deleteUserUnimplemented(): DeleteUserResult {
 }
 
 export interface Server<Req = unknown, Res = unknown> {
+  /**
+   * Update an existing pet
+   *
+   * @description Update an existing pet by Id
+   */
   updatePet: (
     args: UpdatePetArgs<Req, Res>
   ) => UpdatePetResult;
+  /**
+   * Add a new pet to the store
+   *
+   * @description Add a new pet to the store
+   */
   addPet: (
     args: AddPetArgs<Req, Res>
   ) => AddPetResult;
+  /**
+   * Finds Pets by status
+   *
+   * @description Multiple status values can be provided with comma separated strings
+   */
   findPetsByStatus: (
     args: FindPetsByStatusArgs<Req, Res>
   ) => FindPetsByStatusResult;
+  /**
+   * Finds Pets by tags
+   *
+   * @description Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
+   */
   findPetsByTags: (
     args: FindPetsByTagsArgs<Req, Res>
   ) => FindPetsByTagsResult;
+  /**
+   * Find pet by ID
+   *
+   * @description Returns a single pet
+   */
   getPetById: (
     args: GetPetByIdArgs<Req, Res>
   ) => GetPetByIdResult;
+  /** Updates a pet in the store with form data */
   updatePetWithForm: (
     args: UpdatePetWithFormArgs<Req, Res>
   ) => UpdatePetWithFormResult;
+  /** Deletes a pet */
   deletePet: (
     args: DeletePetArgs<Req, Res>
   ) => DeletePetResult;
+  /** uploads an image */
   uploadFile: (
     args: UploadFileArgs<Req, Res>
   ) => UploadFileResult;
+  /**
+   * Returns pet inventories by status
+   *
+   * @description Returns a map of status codes to quantities
+   */
   getInventory: (
     args: GetInventoryArgs<Req, Res>
   ) => GetInventoryResult;
+  /**
+   * Place an order for a pet
+   *
+   * @description Place a new order in the store
+   */
   placeOrder: (
     args: PlaceOrderArgs<Req, Res>
   ) => PlaceOrderResult;
+  /**
+   * Find purchase order by ID
+   *
+   * @description For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.
+   */
   getOrderById: (
     args: GetOrderByIdArgs<Req, Res>
   ) => GetOrderByIdResult;
+  /**
+   * Delete purchase order by ID
+   *
+   * @description For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+   */
   deleteOrder: (
     args: DeleteOrderArgs<Req, Res>
   ) => DeleteOrderResult;
+  /**
+   * Create user
+   *
+   * @description This can only be done by the logged in user.
+   */
   createUser: (
     args: CreateUserArgs<Req, Res>
   ) => CreateUserResult;
+  /**
+   * Creates list of users with given input array
+   *
+   * @description Creates list of users with given input array
+   */
   createUsersWithListInput: (
     args: CreateUsersWithListInputArgs<Req, Res>
   ) => CreateUsersWithListInputResult;
+  /** Logs user into the system */
   loginUser: (
     args: LoginUserArgs<Req, Res>
   ) => LoginUserResult;
+  /** Logs out current logged in user session */
   logoutUser: (
     args: LogoutUserArgs<Req, Res>
   ) => LogoutUserResult;
+  /** Get user by user name */
   getUserByName: (
     args: GetUserByNameArgs<Req, Res>
   ) => GetUserByNameResult;
+  /**
+   * Update user
+   *
+   * @description This can only be done by the logged in user.
+   */
   updateUser: (
     args: UpdateUserArgs<Req, Res>
   ) => UpdateUserResult;
+  /**
+   * Delete user
+   *
+   * @description This can only be done by the logged in user.
+   */
   deleteUser: (
     args: DeleteUserArgs<Req, Res>
   ) => DeleteUserResult;

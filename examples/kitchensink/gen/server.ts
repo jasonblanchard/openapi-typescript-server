@@ -162,6 +162,7 @@ export async function getPetWebpageUnimplemented(): GetPetWebpageResult {
 }
 
 export interface Server<Req = unknown, Res = unknown> {
+  /** Returns all pets from the system that the user has access to */
   listPets: (
     args: ListPetsArgs<Req, Res>
   ) => ListPetsResult;
