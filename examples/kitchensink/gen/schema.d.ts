@@ -11,6 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** @description Returns all pets from the system that the user has access to */
         get: operations["listPets"];
         put?: never;
         post?: never;

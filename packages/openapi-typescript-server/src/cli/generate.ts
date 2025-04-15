@@ -32,7 +32,13 @@ export default function generate(
 
   const operationsById: Record<
     string,
-    { path: string; method: string; args: string; result: string }
+    {
+      path: string;
+      method: string;
+      args: string;
+      result: string;
+      description?: string;
+    }
   > = {};
 
   for (const path in spec.paths) {
@@ -142,6 +148,7 @@ export default function generate(
         method: method,
         args: argsInterface.getName(),
         result: resultType.getName(),
+        description: operation.description,
       };
 
       sourceFile.addFunction({
@@ -156,17 +163,6 @@ export default function generate(
     }
   }
 
-  const serverInferfaceProperties = Object.entries(operationsById).map(
-    ([operationId, { args, result }]) => {
-      return {
-        name: operationId,
-        type: `(
-          args: ${args}<Req, Res>
-          ) => ${result}`,
-      };
-    },
-  );
-
   const serverInterface = sourceFile.addInterface({
     name: "Server",
     isExported: true,
@@ -174,8 +170,24 @@ export default function generate(
       { name: "Req", default: "unknown" },
       { name: "Res", default: "unknown" },
     ],
-    properties: serverInferfaceProperties,
   });
+
+  Object.entries(operationsById).forEach(
+    ([operationId, { args, result, description }]) => {
+      const p = serverInterface.addProperty({
+        name: operationId,
+        type: `(
+          args: ${args}<Req, Res>
+          ) => ${result}`,
+      });
+
+      if (description) {
+        p.addJsDoc({
+          description,
+        });
+      }
+    },
+  );
 
   sourceFile.addFunction({
     name: "registerRouteHandlers",

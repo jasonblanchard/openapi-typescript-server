@@ -412,7 +412,8 @@ function generate(spec, types, outpath, version) {
         path,
         method,
         args: argsInterface.getName(),
-        result: resultType.getName()
+        result: resultType.getName(),
+        description: operation.description
       };
       sourceFile.addFunction({
         name: `${operationId}Unimplemented`,
@@ -425,25 +426,29 @@ function generate(spec, types, outpath, version) {
       });
     }
   }
-  const serverInferfaceProperties = Object.entries(operationsById).map(
-    ([operationId, { args, result }]) => {
-      return {
-        name: operationId,
-        type: `(
-          args: ${args}<Req, Res>
-          ) => ${result}`
-      };
-    }
-  );
   const serverInterface = sourceFile.addInterface({
     name: "Server",
     isExported: true,
     typeParameters: [
       { name: "Req", default: "unknown" },
       { name: "Res", default: "unknown" }
-    ],
-    properties: serverInferfaceProperties
+    ]
   });
+  Object.entries(operationsById).forEach(
+    ([operationId, { args, result, description }]) => {
+      const p = serverInterface.addProperty({
+        name: operationId,
+        type: `(
+          args: ${args}<Req, Res>
+          ) => ${result}`
+      });
+      if (description) {
+        p.addJsDoc({
+          description
+        });
+      }
+    }
+  );
   sourceFile.addFunction({
     name: "registerRouteHandlers",
     isExported: true,
