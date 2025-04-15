@@ -25,8 +25,8 @@ export const OpenAPISpec = z.object({
     z.record(
       z.object({
         summary: z.string().optional(),
-        operationId: z.string().optional(),
         description: z.string().optional(),
+        operationId: z.string().optional(),
         parameters: z
           .array(
             z.object({

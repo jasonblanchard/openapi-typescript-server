@@ -413,6 +413,7 @@ function generate(spec, types, outpath, version) {
         method,
         args: argsInterface.getName(),
         result: resultType.getName(),
+        summary: operation.summary,
         description: operation.description
       };
       sourceFile.addFunction({
@@ -435,7 +436,7 @@ function generate(spec, types, outpath, version) {
     ]
   });
   Object.entries(operationsById).forEach(
-    ([operationId, { args, result, description }]) => {
+    ([operationId, { args, result, summary, description }]) => {
       const p = serverInterface.addProperty({
         name: operationId,
         type: `(
@@ -444,7 +445,7 @@ function generate(spec, types, outpath, version) {
       });
       if (description) {
         p.addJsDoc({
-          description
+          description: [summary, description].filter(Boolean).join("\n\n")
         });
       }
     }

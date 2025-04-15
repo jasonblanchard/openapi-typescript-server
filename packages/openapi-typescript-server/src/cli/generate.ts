@@ -37,6 +37,7 @@ export default function generate(
       method: string;
       args: string;
       result: string;
+      summary?: string;
       description?: string;
     }
   > = {};
@@ -148,6 +149,7 @@ export default function generate(
         method: method,
         args: argsInterface.getName(),
         result: resultType.getName(),
+        summary: operation.summary,
         description: operation.description,
       };
 
@@ -173,7 +175,7 @@ export default function generate(
   });
 
   Object.entries(operationsById).forEach(
-    ([operationId, { args, result, description }]) => {
+    ([operationId, { args, result, summary, description }]) => {
       const p = serverInterface.addProperty({
         name: operationId,
         type: `(
@@ -183,7 +185,7 @@ export default function generate(
 
       if (description) {
         p.addJsDoc({
-          description,
+          description: [summary, description].filter(Boolean).join("\n\n"),
         });
       }
     },

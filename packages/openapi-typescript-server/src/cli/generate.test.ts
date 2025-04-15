@@ -9,7 +9,8 @@ const spec = {
     "/path": {
       get: {
         operationId: "getOperation",
-        description: "An operation that gets something",
+        summary: "An operation that gets something",
+        description: "More info about the operation",
         responses: {
           200: {
             content: {
@@ -109,7 +110,7 @@ it("writes Server interface", () => {
   assert.match(operation.getType().getText(), /GetOperationResult/);
   assert.match(
     operation.getJsDocs()[0]?.getCommentText() || "",
-    /An operation that gets something/,
+    /An operation that gets something\n\nMore info about the operation/,
   );
 });
 
