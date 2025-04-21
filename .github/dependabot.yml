@@ -9,6 +9,6 @@ updates:
     directories:
       - "/"
       - "packages/**"
-      - "examples/**
+      - "examples/**"
     schedule:
       interval: "monthly"
