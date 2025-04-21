@@ -5,9 +5,10 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
+  - package-ecosystem: "npm"
     directories:
       - "/"
       - "packages/**"
+      - "examples/**
     schedule:
       interval: "monthly"
