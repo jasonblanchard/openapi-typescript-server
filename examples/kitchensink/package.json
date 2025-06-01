@@ -18,7 +18,7 @@
     "openapi-typescript": "^7.6.1",
     "openapi-typescript-server": "0.0.5",
     "openapi-typescript-server-express": "0.0.5",
-    "supertest": "^7.1.0",
+    "supertest": "^7.1.1",
     "xml-js": "^1.6.11"
   }
 }
