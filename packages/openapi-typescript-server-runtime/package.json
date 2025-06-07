@@ -1,6 +1,6 @@
 {
   "name": "openapi-typescript-server-runtime",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Shared runtime dependencies for openapi-typescript-server",
   "author": "jasonblanchard",
   "license": "MIT",
