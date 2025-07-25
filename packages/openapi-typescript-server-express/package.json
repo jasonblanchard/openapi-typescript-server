@@ -22,7 +22,7 @@
     "xml-js": "^1.6.11"
   },
   "peerDependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2 || ^5.0.0"
   },
   "scripts": {
     "test": "node --test",
