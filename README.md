@@ -315,7 +315,6 @@ components:
       properties:
         message:
           type: string
-
 ```
 
 ```typescript
