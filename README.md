@@ -104,6 +104,7 @@ npx openapi-typescript-server ./spec.yaml --types ./schema.d.ts --output ./gen/s
 Implement your API handlers
 
 `api.ts`
+
 ```typescript
 import type * as ServerTypes from "./gen/server.ts";
 import type { Request, Response } from "express";
@@ -132,6 +133,7 @@ export default API;
 Set up your Express server
 
 `app.ts`
+
 ```typescript
 import express from "express";
 import type { Request, Response, NextFunction } from "express";
@@ -187,8 +189,9 @@ curl localhost:8080/api/v3/speak/123 \
 ```
 
 Response:
+
 ```json
-{"greeting":"Pet 123 says \"grrrr\""}
+{ "greeting": "Pet 123 says \"grrrr\"" }
 ```
 
 ### How does this work?
@@ -233,6 +236,7 @@ These are generic arguments you can access in your handler implementation:
 TODO: Example
 
 #### Route paths
+
 The Express middleware will mount paths based on the exact paths in your OpenAPI spec ignoring any base paths in `servers`. You'll need to mount the routes returned from `registerRoutes` to the right base path in your server setup.
 
 #### Error handling
