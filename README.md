@@ -10,7 +10,7 @@ At runtime, your implementation is handed off to adapters that convert it into H
 
 ## Stability
 
-⚠️ This package is in very early development. Breaking changes may be introduced as the design and implementation takes shape towards a stable release.
+⚠️ This package is in very early development. Breaking changes may be introduced as the design and implementation takes shape towards a stable release. ⚠️
 
 For now, proceed with caution!
 
@@ -39,6 +39,8 @@ npm install express-openapi-validator
 ### Basic Example
 
 Given an OpenAPI spec like this:
+
+`spec.yaml`
 
 ```yaml
 openapi: 3.0.2
@@ -194,11 +196,15 @@ Response:
 { "greeting": "Pet 123 says \"grrrr\"" }
 ```
 
+### Making a change
+
+TODO: Example, show how it forces you to conform to the new spec
+
 ### How does this work?
 
 #### Route handling
 
-The return value of your route handlers roughly matches the structure of the OpenAPI V3 spec path response content:
+The return value of your route handlers closely matches the structure of the OpenAPI V3 spec path response content:
 
 ```
 - content:
@@ -225,7 +231,22 @@ For Express, request bodies can be deserialized to JavaScript objects by middlew
 
 For response body serialization, `application/json` is built in and happens automatically. Other content types can be handled by supplying a `serializers` option to the `registerRoutes` function with custom serialization functions keyed by content type.
 
-TODO: Example
+```typescript
+import { json2xml } from "xml-js";
+
+...
+
+registerRoutes(routeHandlers, apiRouter, {
+  serializers: {
+    "application/xml": (content) => {
+      const serialized = json2xml(JSON.stringify(content), {
+        compact: true,
+      });
+      return serialized;
+    },
+  },
+});
+```
 
 ### Accessing the underlying request and response objects
 
@@ -233,7 +254,33 @@ In some cases, you may need to access the `request` or `response` objects from t
 
 These are generic arguments you can access in your handler implementation:
 
-TODO: Example
+```typescript
+import type * as ServerTypes from "./gen/server.ts";
+import type { Request, Response } from "express";
+
+type DecoratedRequest = Request & {
+  userId: string;
+};
+
+const API: ServerTypes.Server<DecoratedRequest, Response> = {
+  makePetSpeak: async ({ parameters, requestBody, req }) => {
+    const petId = parameters.path.petId;
+    const sound = requestBody.content.sound;
+
+    console.log(`The userId is: ${req.userId}`);
+
+    return {
+      content: {
+        200: {
+          "application/json": {
+            greeting: `Pet ${petId} says "${sound}"`,
+          },
+        },
+      },
+    };
+  },
+};
+```
 
 #### Route paths
 
@@ -243,7 +290,59 @@ The Express middleware will mount paths based on the exact paths in your OpenAPI
 
 Errors can be handled directly in your route handlers by defining a "default" schema for all errors. In the route handler, return the "default" response variant and include a `status` code.
 
-TODO: Example
+```yaml
+openapi: 3.0.2
+info:
+  title: Simple Petstore
+  version: 0.0.1
+servers:
+  - url: /api/v3
+paths:
+  /uhoh:
+    get:
+      operationId: uhoh
+      responses:
+        "default":
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+```
+
+```typescript
+import type * as ServerTypes from "./gen/server.ts";
+import type { Request, Response } from "express";
+
+type DecoratedRequest = Request & {
+  userId: string;
+};
+
+const API: ServerTypes.Server<DecoratedRequest, Response> = {
+  uhoh: async () => {
+    return {
+      content: {
+        default: {
+          "application/json": {
+            message: "This is what it looks like when something goes wrong",
+          },
+        },
+      },
+      status: 418,
+    };
+  },
+};
+
+export default API;
+```
 
 Otherwise, thrown errors will propagate up the call stack to your global error handler. You can check for `err instanceof NotImplementedError` if you want to handle those with a `501 Not Implemented` status code.
 
