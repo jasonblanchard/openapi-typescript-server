@@ -79,7 +79,7 @@ export interface operations {
                 content: {
                     "application/json": {
                         /** @description The greeting from the pet */
-                        greeting?: string;
+                        greeting: string;
                     };
                 };
             };
