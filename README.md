@@ -18,62 +18,181 @@ For now, proceed with caution!
 
 ### Installation
 
-First, install the build time packages as dev dependencies:
+Install the build-time packages as dev dependencies:
 
 ```bash
 npm install -D openapi-typescript openapi-typescript-server
 ```
 
-Then, install the adapter you need (the rest of this example will use Express):
+Install the runtime adapter (Express example):
 
 ```bash
 npm install openapi-typescript-server-express
 ```
 
-Not required but highly recommended, install middleware for runtime type validation and coercion:
+**Recommended**: Install middleware for runtime validation:
 
 ```bash
 npm install express-openapi-validator
 ```
 
-### Project setup
+### Basic Example
 
 Given an OpenAPI spec like this:
 
-TODO: Example spec
+```yaml
+openapi: 3.0.2
+info:
+  title: Simple Petstore
+  version: 0.0.1
+servers:
+  - url: /api/v3
+paths:
+  /speak/{petId}:
+    post:
+      operationId: makePetSpeak
+      parameters:
+        - name: petId
+          in: path
+          description: ID of pet that will speak
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sound:
+                  type: string
+                  description: The sound the pet will make
+              required:
+                - sound
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  greeting:
+                    type: string
+                    description: The greeting from the pet
+                required:
+                  - greeting
+```
 
 First, follow [recommended setup from openapi-typescript](https://openapi-ts.dev/introduction).
 
 Generate types from your OpenAPI spec:
 
 ```bash
-openapi-typescript ./spec.yaml --output ./gen/schema.d.ts
+npx openapi-typescript ./spec.yaml --output ./gen/schema.d.ts
 ```
 
-Generate the server interface from your OpenAPI spec and type definition:
+Generate the server interface
 
 ```bash
-openapi-typescript-server ./spec.yaml --types ./schema.d.ts --output ./gen/server.ts
+npx openapi-typescript-server ./spec.yaml --types ./schema.d.ts --output ./gen/server.ts
 ```
 
-> Note: the `--types` flag is relative to where the output is saved so that it knows where to import it from. In this case, `schema.d.ts` is in the same directory as `./gen/server.ts`
+> **Note**: The `--types` path is relative to the output directory so the generated code can import it correctly.
 
-Write route handlers by implementing the interface:
+Implement your API handlers
 
-TODO: Example implementation
+`api.ts`
 
-- Explicitly specifying the type rather than relying on structural typing, gives you type inference for handler arguments and faster feedback in the definition vs at the call site.
+```typescript
+import type * as ServerTypes from "./gen/server.ts";
+import type { Request, Response } from "express";
 
-Register your route handlers:
+// Explicitly specifying the type rather than relying on structural typing, gives you type inference for handler arguments and faster feedback in the definition vs at the call site.
+const API: ServerTypes.Server<Request, Response> = {
+  makePetSpeak: async ({ parameters, requestBody }) => {
+    const petId = parameters.path.petId;
+    const sound = requestBody.content.sound;
 
-TODO: express app setup
+    return {
+      content: {
+        200: {
+          "application/json": {
+            greeting: `Pet ${petId} says "${sound}"`,
+          },
+        },
+      },
+    };
+  },
+};
 
-- Optional validator middleware
-- Optional error handling
+export default API;
+```
 
-You can now make a request to your service:
+Set up your Express server
 
-TODO: Example
+`app.ts`
+
+```typescript
+import express from "express";
+import type { Request, Response, NextFunction } from "express";
+import { registerRouteHandlers } from "./gen/server.ts";
+import registerRoutes from "openapi-typescript-server-express";
+import API from "./api.ts";
+import OpenApiValidator from "express-openapi-validator";
+
+export default function makeApp() {
+  const app = express();
+
+  app.use(express.json());
+
+  const apiRouter = express();
+
+  // Runtime validation (recommended)
+  apiRouter.use(
+    OpenApiValidator.middleware({
+      apiSpec: "./spec.yaml",
+      validateResponses: false,
+    }),
+  );
+
+  // Register your typed route handlers
+  const routeHandlers = registerRouteHandlers(API);
+
+  // Make Express routes from your route handlers.
+  registerRoutes(routeHandlers, apiRouter);
+
+  // Mount to the correct base path
+  app.use("/api/v3", apiRouter);
+
+  // Global error handler
+  app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+    console.error(err);
+
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+    return;
+  });
+
+  return app;
+}
+```
+
+Test your API
+
+```bash
+curl localhost:8080/api/v3/speak/123 \
+  -d '{"sound":"grrrr"}' \
+  -H "Content-Type: application/json"
+```
+
+Response:
+
+```json
+{ "greeting": "Pet 123 says \"grrrr\"" }
+```
 
 ### How does this work?
 
@@ -102,7 +221,7 @@ Adapters supply a `registerRoutes` function which iterates through this data str
 
 Content type serialization and deserialization happens in the adapter layer.
 
-For Express, request bodies can be deserialized to JavaScript objects by middleware. The Express adapter assumes this has already happened and passes the deserialized (and presumably validated and coerced) JavaScript objects to your route handlers.
+For Express, request bodies can be deserialized to JavaScript objects by middleware. The Express adapter assumes this has already happened and passes the deserialized (and presumably validated and coerced) JavaScript objects to your route handlers. The content type is passed as an argument to your handler in case you need to return a different response shape per content type.
 
 For response body serialization, `application/json` is built in and happens automatically. Other content types can be handled by supplying a `serializers` option to the `registerRoutes` function with custom serialization functions keyed by content type.
 
@@ -116,6 +235,10 @@ These are generic arguments you can access in your handler implementation:
 
 TODO: Example
 
+#### Route paths
+
+The Express middleware will mount paths based on the exact paths in your OpenAPI spec ignoring any base paths in `servers`. You'll need to mount the routes returned from `registerRoutes` to the right base path in your server setup.
+
 #### Error handling
 
 Errors can be handled directly in your route handlers by defining a "default" schema for all errors. In the route handler, return the "default" response variant and include a `status` code.
@@ -126,7 +249,7 @@ Otherwise, thrown errors will propagate up the call stack to your global error h
 
 ## Design goals
 
-The main goal of this package is to ensure that the server implementation stays in sync with the API documentation by generating a typed inferface _from_ the OpenAPI spec.
+The main goal of this package is to ensure that the server implementation stays in sync with the API documentation by generating a typed interface _from_ the OpenAPI spec.
 
 This schema-first approach documents your system for humans or LLM coding agents, and helps you achieve type safety across the system.
 

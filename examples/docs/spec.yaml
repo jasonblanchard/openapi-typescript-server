@@ -1,0 +1,59 @@
+openapi: 3.0.2
+info:
+  title: Simple Petstore
+  version: 0.0.1
+servers:
+  - url: /api/v3
+paths:
+  /speak/{petId}:
+    post:
+      operationId: makePetSpeak
+      parameters:
+        - name: petId
+          in: path
+          description: ID of pet that will speak
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sound:
+                  type: string
+                  description: The sound the pet will make
+              required:
+                - sound
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  greeting:
+                    type: string
+                    description: The greeting from the pet
+                required:
+                  - greeting
+  /uhoh:
+    get:
+      operationId: uhoh
+      responses:
+        "default":
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string

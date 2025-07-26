@@ -63,6 +63,9 @@ jobs:
           npm install --save-exact --workspace petstore-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
           npm install --save-exact --workspace petstore-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
 
+          npm install --save-exact --workspace docs-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
+          npm install --save-exact --workspace docs-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
+
       - name: Build the packages
         run: npm run build:packages
 
