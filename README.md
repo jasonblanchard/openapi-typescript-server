@@ -198,7 +198,89 @@ Response:
 
 ### Making a change
 
-TODO: Example, show how it forces you to conform to the new spec
+Now, make a change to your OpenAPI spec:
+
+```diff
+ paths:
+   /speak/{petId}:
+     post:
+       operationId: makePetSpeak
+       parameters:
+         - name: petId
+           in: path
+           description: ID of pet that will speak
+           required: true
+           schema:
+             type: integer
+       requestBody:
+         required: true
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                 sound:
+                   type: string
+                   description: The sound the pet will make
+               required:
+                 - sound
+       responses:
+         "200":
+           description: successful operation
+           content:
+             application/json:
+               schema:
+                 type: object
+                 properties:
+                   greeting:
+                     type: string
+                     description: The greeting from the pet
++                  vibe:
++                    type: string
++                    enum: ["friendly", "fierce", "playful", "sleepy"]
++                    description: The pet's current mood/vibe
+                 required:
+                   - greeting
++                  - vibe
+```
+
+And re-generate the types and server interface:
+
+```bash
+openapi-typescript ./spec.yaml --output ./gen/schema.d.ts && openapi-typescript-server ./spec.yaml --types ./schema.d.ts --output ./gen/server.ts
+```
+
+You'll see that TypeScript will tell you exactly what needs to change in your code to conform to the new OpenAPI spec:
+
+```
+Property 'vibe' is missing in type '{ greeting: string; }' but required in type '{ greeting: string; vibe: "friendly" | "fierce" | "playful" | "sleepy"; }'.ts(2322)
+```
+
+> **Note**: You may need to restart the TS Server in VS Code to see the TypeScript error.
+
+Satisfy the compiler to get it working again:
+
+```diff
+ const API: ServerTypes.Server<Request, Response> = {
+   makePetSpeak: async ({ parameters, requestBody }) => {
+     const petId = parameters.path.petId;
+     const sound = requestBody.content.sound;
+
+     return {
+       content: {
+         200: {
+           "application/json": {
+             greeting: `Pet ${petId} says "${sound}"`,
++            vibe: "fierce",
+           },
+         },
+       },
+     };
+   },
+ };
+```
+
+This pattern also guides you when adding or removing routes.
 
 ### How does this work?
 
@@ -217,7 +299,7 @@ The route handler name uses the `operationId` if present. Otherwise it's generat
 
 The return value is enveloped in `content` so that you can provide `headers` and `status` at the same level. `status` is required when the response variant is "default".
 
-> NOTE: These return values are a bit verbose, but, since the HTTP handling is delegated to the adapters, they have the added benefit of being easily testable functions with data in and out.
+> **Note**: These return values are a bit verbose, but, since the HTTP handling is delegated to the adapters, they have the added benefit of being easily testable functions with data in and out.
 
 Your route handlers are packaged up into the generated `registerRouteHandlers` function. This returns a list of objects containing the route method, path, and handler function.
 
