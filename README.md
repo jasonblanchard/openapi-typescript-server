@@ -248,7 +248,7 @@ registerRoutes(routeHandlers, apiRouter, {
 });
 ```
 
-### Accessing the underlying request and response objects
+#### Accessing the underlying request and response objects
 
 In some cases, you may need to access the `request` or `response` objects from the underlying HTTP framework.
 
