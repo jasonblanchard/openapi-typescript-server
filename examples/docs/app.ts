@@ -23,7 +23,7 @@ export default function makeApp() {
   // Register your typed route handlers
   const routeHandlers = registerRouteHandlers(API);
 
-  // Make Express routes from your route handlers.
+  // Make Express routes from your route handlers
   registerRoutes(routeHandlers, apiRouter);
 
   // Mount to the correct base path

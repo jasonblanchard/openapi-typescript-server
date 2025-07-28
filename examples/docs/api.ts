@@ -1,7 +1,9 @@
 import type * as ServerTypes from "./gen/server.ts";
 import type { Request, Response } from "express";
 
-// Explicitly specifying the type rather than relying on structural typing, gives you type inference for handler arguments and faster feedback in the definition vs at the call site.
+// Explicitly specifying the type (rather than relying on structural typing)
+// gives you type inference for handler arguments and faster feedback in the
+// definition vs at the call site.
 const API: ServerTypes.Server<Request, Response> = {
   makePetSpeak: async ({ parameters, requestBody }) => {
     const petId = parameters.path.petId;

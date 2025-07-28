@@ -2,11 +2,11 @@
 
 `openapi-typescript-server` is a CLI and minimal runtime library that helps you implement type-safe APIs documented by OpenAPI.
 
-It works by generating a TypeScript server interface based on the operations defined in your OpenAPI spec using types from the [openapi-typescript](https://github.com/openapi-ts/openapi-typescript) package.
+It works by generating a TypeScript server interface based on your OpenAPI spec using types from [openapi-typescript](https://github.com/openapi-ts/openapi-typescript).
 
-You provide a concrete implementation that satisfies the interface.
+You provide a concrete implementation that satisfies the interface for each path operation.
 
-At runtime, your implementation is handed off to adapters that convert it into HTTP handlers for various frameworks like [Express](https://expressjs.com/).
+At runtime, your implementation is converted into HTTP handlers for various frameworks like [Express](./packages/openapi-typescript-server-express/README.md).
 
 ## Stability
 
@@ -18,13 +18,13 @@ For now, proceed with caution!
 
 ### Installation
 
-Install the build-time packages as dev dependencies:
+Install build-time packages as dev dependencies:
 
 ```bash
 npm install -D openapi-typescript openapi-typescript-server
 ```
 
-Install the runtime adapter (Express example):
+Install runtime adapter (Express example):
 
 ```bash
 npm install openapi-typescript-server-express
@@ -36,7 +36,7 @@ npm install openapi-typescript-server-express
 npm install express-openapi-validator
 ```
 
-### Basic Example
+### Quickstart
 
 Given an OpenAPI spec like this:
 
@@ -95,7 +95,7 @@ Generate types from your OpenAPI spec:
 npx openapi-typescript ./spec.yaml --output ./gen/schema.d.ts
 ```
 
-Generate the server interface
+Generate the server interface:
 
 ```bash
 npx openapi-typescript-server ./spec.yaml --types ./schema.d.ts --output ./gen/server.ts
@@ -103,7 +103,7 @@ npx openapi-typescript-server ./spec.yaml --types ./schema.d.ts --output ./gen/s
 
 > **Note**: The `--types` path is relative to the output directory so the generated code can import it correctly.
 
-Implement your API handlers
+Implement your API handlers:
 
 `api.ts`
 
@@ -111,7 +111,9 @@ Implement your API handlers
 import type * as ServerTypes from "./gen/server.ts";
 import type { Request, Response } from "express";
 
-// Explicitly specifying the type rather than relying on structural typing, gives you type inference for handler arguments and faster feedback in the definition vs at the call site.
+// Explicitly specifying the type (rather than relying on structural typing)
+// gives you type inference for handler arguments and faster feedback in the
+// definition vs at the call site.
 const API: ServerTypes.Server<Request, Response> = {
   makePetSpeak: async ({ parameters, requestBody }) => {
     const petId = parameters.path.petId;
@@ -162,7 +164,7 @@ export default function makeApp() {
   // Register your typed route handlers
   const routeHandlers = registerRouteHandlers(API);
 
-  // Make Express routes from your route handlers.
+  // Make Express routes from your route handlers
   registerRoutes(routeHandlers, apiRouter);
 
   // Mount to the correct base path
@@ -282,7 +284,35 @@ Satisfy the compiler to get it working again:
 
 This pattern also guides you when adding or removing routes.
 
-### How does this work?
+## Deeper dive
+
+### Design goals
+
+The main goal of this package is to ensure that the server implementation stays in sync with the API documentation by generating a typed interface _from_ the OpenAPI spec.
+
+This schema-first approach documents your system for humans or LLM coding agents, and helps you achieve type safety across the system.
+
+### In scope/goals
+
+- **Trade off build time complexity for runtime simplicity**. By using codegen as a build step, the surface area of what's executed on the server is reduced.
+- **Keep package footprint small**. Keep the solution space narrow by integrating with existing solutions.
+
+### Out of scope/non-goals
+
+- **Schema validation & type coercion**. This package assumes that all data inputs have been validated and coerced to the expected types by the time they get to your route handlers. Use other middleware like [express-openapi-validator](https://github.com/cdimascio/express-openapi-validator) to handle validation and coercion.
+- **Security & auth scopes**. This package does not handle any authentication nor authorization and ignores all security aspects of your OpenAPI schema.
+
+### Inspiration & prior art
+
+This package was heavily influenced by the [Go oapi-codegen](https://github.com/oapi-codegen/oapi-codegen) package and gRPC ergonomics.
+
+### Comparison to other solutions
+
+- [openapi-typescript](https://github.com/openapi-ts/openapi-typescript). This library only generates types from an OpenAPI spec, not operation interfaces. This is foundational to this library, but only part of the solution.
+- [openapi-ts-router](https://github.com/builder-group/community/tree/develop/packages/openapi-ts-router). This library works similarly, but requires that you bring your own path validators alongside the route handlers. It also doesn't ensure that you've implemented the entire spec.
+- [tRPC](https://trpc.io/). This library tightly couples frontend and backend code and only works for systems that are TypeScript on the frontend and backend. It also requires a decent amount of runtime complexity to tie clients and servers together.
+
+### How does it work?
 
 #### Route handling
 
@@ -301,15 +331,15 @@ The return value is enveloped in `content` so that you can provide `headers` and
 
 > **Note**: These return values are a bit verbose, but, since the HTTP handling is delegated to the adapters, they have the added benefit of being easily testable functions with data in and out.
 
-Your route handlers are packaged up into the generated `registerRouteHandlers` function. This returns a list of objects containing the route method, path, and handler function.
+Your route handlers are packaged up into the generated `registerRouteHandlers` function which returns a list of objects containing the route method, path, and handler function.
 
-Adapters supply a `registerRoutes` function which iterates through this data structure and uses the underlying framework (i.e. Express) to add each route, set headers, serialize response bodies, and terminate the response.
+Adapters supply a `registerRoutes` function. It iterates through this data structure and uses the underlying framework (i.e. Express) to add each route, set headers, serialize response bodies, and terminate the response.
 
 #### Content type serialization
 
 Content type serialization and deserialization happens in the adapter layer.
 
-For Express, request bodies can be deserialized to JavaScript objects by middleware. The Express adapter assumes this has already happened and passes the deserialized (and presumably validated and coerced) JavaScript objects to your route handlers. The content type is passed as an argument to your handler in case you need to return a different response shape per content type.
+For Express, request bodies can be deserialized to JavaScript objects by middleware. The Express adapter assumes this has already happened and passes the deserialized (and presumably validated and coerced) JavaScript objects to your route handlers. The content type is passed as an argument to your handler in case you need to return a different response shape per.
 
 For response body serialization, `application/json` is built in and happens automatically. Other content types can be handled by supplying a `serializers` option to the `registerRoutes` function with custom serialization functions keyed by content type.
 
@@ -426,29 +456,3 @@ export default API;
 ```
 
 Otherwise, thrown errors will propagate up the call stack to your global error handler. You can check for `err instanceof NotImplementedError` if you want to handle those with a `501 Not Implemented` status code.
-
-## Design goals
-
-The main goal of this package is to ensure that the server implementation stays in sync with the API documentation by generating a typed interface _from_ the OpenAPI spec.
-
-This schema-first approach documents your system for humans or LLM coding agents, and helps you achieve type safety across the system.
-
-### In scope/goals
-
-- **Trade off build time complexity for runtime simplicity**. By using codegen as a build step, the surface area of what's executed on the server is reduced.
-- **Keep package footprint small**. Keep the solution space narrow by integrating with existing solutions.
-
-### Out of scope/non-goals
-
-- **Schema validation & type coercion**. This package assumes that all data inputs have been validated and coerced to the expected types by the time they get to your route handlers. Use other middleware like [express-openapi-validator](https://github.com/cdimascio/express-openapi-validator) to handle validation and coercion.
-- **Security & auth scopes**. This package does not handle any authentication nor authorization and ignores all security aspects of your OpenAPI schema.
-
-### Inspiration & prior art
-
-This package was heavily influenced by the [Go oapi-codegen](https://github.com/oapi-codegen/oapi-codegen) package and gRPC ergonomics.
-
-### Comparison to other solutions
-
-- [openapi-typescript](https://github.com/openapi-ts/openapi-typescript). This library only generates types from an OpenAPI spec, not operation interfaces. This is foundational to this library, but only part of the solution.
-- [openapi-ts-router](https://github.com/builder-group/community/tree/develop/packages/openapi-ts-router). This library works similarly, but requires that you bring your own path validators alongside the route handlers. It also doesn't ensure that you've implemented the entire spec.
-- [tRPC](https://trpc.io/). This library tightly couples frontend and backend code and only works for systems that are TypeScript on the frontend and backend. It also requires a decent amount of runtime complexity to tie clients and servers together.
