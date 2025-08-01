@@ -29,7 +29,7 @@
   ],
   "devDependencies": {
     "prettier": "3.6.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "ansi-colors": "^4.1.3",
