@@ -12,7 +12,7 @@ export type Schema = z.infer<typeof bastSchema> & {
 };
 
 const Schema: z.ZodType<Schema> = bastSchema.extend({
-  properties: z.lazy(() => z.record(Schema).optional()),
+  properties: z.lazy(() => z.record(z.string(), Schema).optional()),
 });
 
 export const OpenAPISpec = z.object({
@@ -22,7 +22,9 @@ export const OpenAPISpec = z.object({
     version: z.string().optional(),
   }),
   paths: z.record(
+    z.string(),
     z.record(
+      z.string(),
       z.object({
         summary: z.string().optional(),
         description: z.string().optional(),
@@ -44,6 +46,7 @@ export const OpenAPISpec = z.object({
             description: z.string().optional(),
             required: z.boolean().optional(),
             content: z.record(
+              z.string(),
               z.object({
                 schema: Schema,
               }),
@@ -51,10 +54,12 @@ export const OpenAPISpec = z.object({
           })
           .optional(),
         responses: z.record(
+          z.string(),
           z.object({
             description: z.string().optional(),
             content: z
               .record(
+                z.string(),
                 z.object({
                   schema: Schema,
                 }),
