@@ -13,7 +13,7 @@
     "@types/express-xml-bodyparser": "^0.3.5",
     "@types/supertest": "^6.0.3",
     "express": "^4.21.2",
-    "express-openapi-validator": "^5.5.7",
+    "express-openapi-validator": "^5.5.8",
     "express-xml-bodyparser": "^0.3.0",
     "openapi-typescript": "^7.8.0",
     "openapi-typescript-server": "0.0.7",
