@@ -27,7 +27,7 @@
     "js-yaml": "^4.1.0",
     "openapi-typescript-server-runtime": "0.0.7",
     "ts-morph": "^26.0.0",
-    "zod": "^3.25.67"
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
