@@ -39,7 +39,7 @@ program
     const validateSpecResponse = OpenAPISpec.safeParse(specPojo);
 
     if (!validateSpecResponse.success) {
-      console.error(validateSpecResponse.error.errors);
+      console.error(validateSpecResponse.error.issues);
       return;
     }
 
