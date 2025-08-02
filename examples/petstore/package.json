@@ -1,14 +1,14 @@
 {
   "name": "petstore-example",
   "private": true,
-  "version": "0.0.8",
+  "version": "0.0.9",
   "type": "module",
   "scripts": {
     "gen": "openapi-typescript ./spec.yaml --output ./gen/schema.d.ts && openapi-typescript-server ./spec.yaml -t ./schema.d.ts -o ./gen/server.ts "
   },
   "dependencies": {
     "openapi-typescript": "^7.8.0",
-    "openapi-typescript-server": "0.0.8",
-    "openapi-typescript-server-express": "0.0.8"
+    "openapi-typescript-server": "0.0.9",
+    "openapi-typescript-server-express": "0.0.9"
   }
 }
