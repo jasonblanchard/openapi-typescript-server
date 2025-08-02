@@ -20,6 +20,6 @@ jobs:
       - name: Make sure all changes to the root README.md is copied to the main package before diff check
         run: cp README.md packages/openapi-typescript-server/README.md
       - name: "Make sure there's no uncommitted changes"
-        run: git diff --exit-code
+        run: git add -A && git diff --exit-code
       - run: npm run typecheck
       - run: npm test
