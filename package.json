@@ -16,7 +16,8 @@
     "build:packages": "npm run build --workspaces packages/** --if-present",
     "pack": "npm run build:packages && npm pack --workspaces packages/** --pack-destination /tmp",
     "format:check": "npx prettier . --check",
-    "format": "npx prettier . --write"
+    "format": "npx prettier . --write",
+    "propagate:readme": "cp README.md packages/openapi-typescript-server/README.md"
   },
   "engines": {
     "node": ">=23.6.0"
