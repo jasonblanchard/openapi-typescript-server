@@ -667,7 +667,7 @@ program.name("openapi-typescript-server").description("CLI to generate Open API 
   const specPojo = import_js_yaml.default.load(specS);
   const validateSpecResponse = import_openapi_typescript_server_runtime.OpenAPISpec.safeParse(specPojo);
   if (!validateSpecResponse.success) {
-    console.error(validateSpecResponse.error.errors);
+    console.error(validateSpecResponse.error.issues);
     return;
   }
   const sourceFile = generate(
