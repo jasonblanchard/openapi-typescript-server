@@ -6,7 +6,7 @@ It works by generating a TypeScript server interface based on your OpenAPI spec 
 
 You provide a concrete implementation that satisfies the interface for each path operation.
 
-At runtime, your implementation is converted into HTTP handlers for various frameworks like [Express](./packages/openapi-typescript-server-express/README.md).
+At runtime, your implementation is converted into HTTP handlers for various frameworks like [Express](https://github.com/jasonblanchard/openapi-typescript-server/tree/main/packages/openapi-typescript-server).
 
 ## Stability
 
