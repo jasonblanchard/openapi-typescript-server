@@ -4,7 +4,7 @@
 
 ## Key Features
 
-- ✅ Code gen server implementations of OpenAPI 3.0 and 3.1
+- ✅ Codegen server implementations from OpenAPI 3.0 and 3.1
 - ✅ Framework-agnostic core with Express adapter available
 - ✅ Minimal runtime footprint
 - ✅ Built on top of [openapi-typescript](https://github.com/openapi-ts/openapi-typescript)

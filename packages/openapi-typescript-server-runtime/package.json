@@ -9,6 +9,25 @@
     "url": "https://github.com/jasonblanchard/openapi-typescript-server.git",
     "directory": "packages/openapi-typescript-server-runtime"
   },
+  "keywords": [
+    "swagger",
+    "typescript",
+    "ts",
+    "dts",
+    "openapi",
+    "codegen",
+    "generation",
+    "openapi 3",
+    "node",
+    "express",
+    "web",
+    "http",
+    "rest",
+    "restful",
+    "router",
+    "app",
+    "api"
+  ],
   "type": "module",
   "exports": {
     "import": "./dist/index.js",
