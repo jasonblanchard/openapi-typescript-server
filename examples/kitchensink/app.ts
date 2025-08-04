@@ -22,7 +22,7 @@ export default function makeApp() {
 
   apiRouter.use(
     OpenApiValidator.middleware({
-      apiSpec: "./spec.yaml",
+      apiSpec: "./openapi.yaml",
       validateResponses: false,
     }),
   );

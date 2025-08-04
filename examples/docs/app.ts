@@ -15,7 +15,7 @@ export default function makeApp() {
   // Runtime validation (recommended)
   apiRouter.use(
     OpenApiValidator.middleware({
-      apiSpec: "./spec.yaml",
+      apiSpec: "./openapi.yaml",
       validateResponses: false,
     }),
   );
