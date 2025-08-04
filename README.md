@@ -2,7 +2,16 @@
 
 `openapi-typescript-server` is a CLI and minimal runtime library that helps you implement type-safe APIs documented by OpenAPI.
 
-It works by generating a TypeScript server interface based on your OpenAPI spec using types from [openapi-typescript](https://github.com/openapi-ts/openapi-typescript).
+## Key Features
+
+- ✅ Code gen server implementations of OpenAPI 3.0 and 3.1
+- ✅ Framework-agnostic core with Express adapter available
+- ✅ Minimal runtime footprint
+- ✅ Built on top of [openapi-typescript](https://github.com/openapi-ts/openapi-typescript)
+
+## Overview
+
+This library works by generating a TypeScript server interface based on your OpenAPI spec using types from [openapi-typescript](https://github.com/openapi-ts/openapi-typescript).
 
 You provide a concrete implementation that satisfies the interface for each path operation.
 
@@ -10,9 +19,7 @@ At runtime, your implementation is converted into HTTP handlers for various fram
 
 ## Stability
 
-⚠️ This package is in very early development. Breaking changes may be introduced as the design and implementation takes shape towards a stable release. ⚠️
-
-For now, proceed with caution!
+⚠️ This package is in very early development. Breaking changes may be introduced as the design and implementation takes shape towards a stable release. For now, proceed with caution! ⚠️
 
 ## Usage
 
@@ -40,7 +47,7 @@ npm install express-openapi-validator
 
 Given an OpenAPI spec like this:
 
-`spec.yaml`
+`openapi.yaml`
 
 ```yaml
 openapi: 3.0.2
@@ -92,13 +99,13 @@ First, follow [recommended setup from openapi-typescript](https://openapi-ts.dev
 Generate types from your OpenAPI spec:
 
 ```bash
-npx openapi-typescript ./spec.yaml --output ./gen/schema.d.ts
+npx openapi-typescript ./openapi.yaml --output ./gen/schema.d.ts
 ```
 
 Generate the server interface:
 
 ```bash
-npx openapi-typescript-server ./spec.yaml --types ./schema.d.ts --output ./gen/server.ts
+npx openapi-typescript-server ./openapi.yaml --types ./schema.d.ts --output ./gen/server.ts
 ```
 
 > **Note**: The `--types` path is relative to the output directory so the generated code can import it correctly.
@@ -134,7 +141,7 @@ const API: ServerTypes.Server<Request, Response> = {
 export default API;
 ```
 
-Set up your Express server
+Set up your Express server:
 
 `app.ts`
 
@@ -156,7 +163,7 @@ export default function makeApp() {
   // Runtime validation (recommended)
   apiRouter.use(
     OpenApiValidator.middleware({
-      apiSpec: "./spec.yaml",
+      apiSpec: "./openapi.yaml",
       validateResponses: false,
     }),
   );
@@ -167,7 +174,7 @@ export default function makeApp() {
   // Make Express routes from your route handlers
   registerRoutes(routeHandlers, apiRouter);
 
-  // Mount to the correct base path
+  // Mount to the base path
   app.use("/api/v3", apiRouter);
 
   // Global error handler
@@ -184,7 +191,7 @@ export default function makeApp() {
 }
 ```
 
-Test your API
+Run this server and test your API:
 
 ```bash
 curl localhost:8080/api/v3/speak/123 \
@@ -197,6 +204,8 @@ Response:
 ```json
 { "greeting": "Pet 123 says \"grrrr\"" }
 ```
+
+See `examples/docs` for a fully working example.
 
 ### Making a change
 
@@ -249,7 +258,7 @@ Now, make a change to your OpenAPI spec:
 And re-generate the types and server interface:
 
 ```bash
-openapi-typescript ./spec.yaml --output ./gen/schema.d.ts && openapi-typescript-server ./spec.yaml --types ./schema.d.ts --output ./gen/server.ts
+openapi-typescript ./openapi.yaml --output ./gen/schema.d.ts && openapi-typescript-server ./openapi.yaml --types ./schema.d.ts --output ./gen/server.ts
 ```
 
 You'll see that TypeScript will tell you exactly what needs to change in your code to conform to the new OpenAPI spec:
@@ -258,7 +267,7 @@ You'll see that TypeScript will tell you exactly what needs to change in your co
 Property 'vibe' is missing in type '{ greeting: string; }' but required in type '{ greeting: string; vibe: "friendly" | "fierce" | "playful" | "sleepy"; }'.ts(2322)
 ```
 
-> **Note**: You may need to restart the TS Server in VS Code to see the TypeScript error.
+> **Note**: You may need to restart the TS Server in VS Code to see the TypeScript error after re-generating the types and server interface.
 
 Satisfy the compiler to get it working again:
 
@@ -288,7 +297,7 @@ This pattern also guides you when adding or removing routes.
 
 ### Design goals
 
-The main goal of this package is to ensure that the server implementation stays in sync with the API documentation by generating a typed interface _from_ the OpenAPI spec.
+The main goal of this package is to ensure that your server implementation stays in sync with the API documentation by generating a typed interface _from_ the OpenAPI spec.
 
 This schema-first approach documents your system for humans or LLM coding agents, and helps you achieve type safety across the system.
 
@@ -329,17 +338,17 @@ The route handler name uses the `operationId` if present. Otherwise it's generat
 
 The return value is enveloped in `content` so that you can provide `headers` and `status` at the same level. `status` is required when the response variant is "default".
 
-> **Note**: These return values are a bit verbose, but, since the HTTP handling is delegated to the adapters, they have the added benefit of being easily testable functions with data in and out.
+> **Note**: These return values are a bit verbose, but, since the HTTP handling side effects are delegated to the adapters, they have the added benefit of being easily testable functions with data in and out.
 
-Your route handlers are packaged up into the generated `registerRouteHandlers` function which returns a list of objects containing the route method, path, and handler function.
+Your route handlers are packaged up in the generated `registerRouteHandlers` function which returns a list of objects containing route method, path, and handler function.
 
 Adapters supply a `registerRoutes` function. It iterates through this data structure and uses the underlying framework (i.e. Express) to add each route, set headers, serialize response bodies, and terminate the response.
 
 #### Content type serialization
 
-Content type serialization and deserialization happens in the adapter layer.
+Content type serialization and deserialization happens in or near the adapter layer.
 
-For Express, request bodies can be deserialized to JavaScript objects by middleware. The Express adapter assumes this has already happened and passes the deserialized (and presumably validated and coerced) JavaScript objects to your route handlers. The content type is passed as an argument to your handler in case you need to return a different response shape per.
+For Express, request bodies are deserialized into JavaScript objects prior to the Express adapter by Express middleware. The Express adapter assumes this has already happened, and passes the deserialized (and presumably validated and coerced) JavaScript objects to your route handlers. The content type is passed as an argument to your handler in case you need to return a different response shape per.
 
 For response body serialization, `application/json` is built in and happens automatically. Other content types can be handled by supplying a `serializers` option to the `registerRoutes` function with custom serialization functions keyed by content type.
 
@@ -433,13 +442,10 @@ components:
 import type * as ServerTypes from "./gen/server.ts";
 import type { Request, Response } from "express";
 
-type DecoratedRequest = Request & {
-  userId: string;
-};
-
 const API: ServerTypes.Server<DecoratedRequest, Response> = {
   uhoh: async () => {
     return {
+      status: 418,
       content: {
         default: {
           "application/json": {
@@ -447,7 +453,6 @@ const API: ServerTypes.Server<DecoratedRequest, Response> = {
           },
         },
       },
-      status: 418,
     };
   },
 };
@@ -456,3 +461,7 @@ export default API;
 ```
 
 Otherwise, thrown errors will propagate up the call stack to your global error handler. You can check for `err instanceof NotImplementedError` if you want to handle those with a `501 Not Implemented` status code.
+
+## Contributing
+
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute to this project.

@@ -22,6 +22,7 @@ const API: ServerTypes.Server<Request, Response> = {
 
   uhoh: async () => {
     return {
+      status: 418,
       content: {
         default: {
           "application/json": {
@@ -29,7 +30,6 @@ const API: ServerTypes.Server<Request, Response> = {
           },
         },
       },
-      status: 418,
     };
   },
 };

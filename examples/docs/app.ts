@@ -26,7 +26,7 @@ export default function makeApp() {
   // Make Express routes from your route handlers
   registerRoutes(routeHandlers, apiRouter);
 
-  // Mount to the correct base path
+  // Mount to the base path
   app.use("/api/v3", apiRouter);
 
   // Global error handler
