@@ -310,6 +310,7 @@ This schema-first approach documents your system for humans or LLM coding agents
 
 - **Schema validation & type coercion**. This package assumes that all data inputs have been validated and coerced to the expected types by the time they get to your route handlers. Use other middleware like [express-openapi-validator](https://github.com/cdimascio/express-openapi-validator) to handle validation and coercion.
 - **Security & auth scopes**. This package does not handle any authentication nor authorization and ignores all security aspects of your OpenAPI schema.
+- **Webhooks**. For now, this project focuses on HTTP ingress. Webhook support is an opportunity for future enhancement.
 
 ### Inspiration & prior art
 
