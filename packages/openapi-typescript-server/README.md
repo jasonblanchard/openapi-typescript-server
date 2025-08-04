@@ -15,7 +15,7 @@ This library works by generating a TypeScript server interface based on your Ope
 
 You provide a concrete implementation that satisfies the interface for each path operation.
 
-At runtime, your implementation is converted into HTTP handlers for various frameworks like [Express](https://github.com/jasonblanchard/openapi-typescript-server/tree/main/packages/openapi-typescript-server).
+At runtime, your implementation is converted into HTTP handlers for various frameworks like [Express](https://github.com/jasonblanchard/openapi-typescript-server/tree/main/packages/openapi-typescript-server-express).
 
 ## Stability
 
@@ -465,4 +465,4 @@ Otherwise, thrown errors will propagate up the call stack to your global error h
 
 ## Contributing
 
-Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute to this project.
+Please see [CONTRIBUTING.md](https://github.com/jasonblanchard/openapi-typescript-server/blob/main/CONTRIBUTING.md) for details on how to contribute to this project.
