@@ -7,6 +7,7 @@ import yaml from "js-yaml";
 import generate from "./generate.ts";
 import c from "ansi-colors";
 import supportsColor from "supports-color";
+import packageJson from "../../package.json" with { type: "json" };
 
 const program = new Command();
 
@@ -17,7 +18,7 @@ if (!supportsColor.stdout || supportsColor.stdout.hasBasic === false) {
 program
   .name("openapi-typescript-server")
   .description("CLI to generate Open API server stub")
-  .version(process.env.npm_package_version || "unknown")
+  .version(packageJson.version)
   .argument("<spec>", "Path to Open API spec file")
   .description("Output generated code")
   .option(
@@ -47,12 +48,12 @@ program
       validateSpecResponse.data,
       options.types,
       options.output,
-      process.env.npm_package_version,
+      packageJson.version,
     );
 
     if (options.output) {
       console.log(
-        `🤖 ${c.bold("openapi-typescript-server")} ${c.dim(process.env.npm_package_version || "unknown")} ${c.green(spec)} → ${c.green(c.bold(options.output))}`,
+        `🤖 ${c.bold("openapi-typescript-server")} ${c.dim(packageJson.version)} ${c.green(spec)} → ${c.green(c.bold(options.output))}`,
       );
       sourceFile.saveSync();
       return;
