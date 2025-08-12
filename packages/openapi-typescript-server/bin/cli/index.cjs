@@ -651,7 +651,7 @@ var supports_color_default = supportsColor;
 // package.json
 var package_default = {
   name: "openapi-typescript-server",
-  version: "0.0.10",
+  version: "0.0.11",
   description: "Codegenerator for OpenAPI server stubs in TypeScript",
   author: "jasonblanchard",
   license: "MIT",
@@ -695,7 +695,7 @@ var package_default = {
   dependencies: {
     commander: "^14.0.0",
     "js-yaml": "^4.1.0",
-    "openapi-typescript-server-runtime": "0.0.10",
+    "openapi-typescript-server-runtime": "0.0.11",
     "ts-morph": "^26.0.0",
     zod: "^4.0.14"
   },
