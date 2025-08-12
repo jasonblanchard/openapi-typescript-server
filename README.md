@@ -1,6 +1,9 @@
 # openapi-typescript-server
 
-`openapi-typescript-server` is a CLI and minimal runtime library that helps you implement type-safe APIs documented by OpenAPI.
+`openapi-typescript-server` is a CLI and minimal runtime library that helps you implement type-safe APIs documented by OpenAP
+
+[![Test Build](https://github.com/jasonblanchard/openapi-typescript-server/actions/workflows/test.yaml/badge.svg)](https://github.com/jasonblanchard/openapi-typescript-server/actions/workflows/test.yaml)
+[![npm version](https://badge.fury.io/js/openapi-typescript-server.svg)](https://badge.fury.io/js/openapi-typescript-server)
 
 ## Key Features
 
