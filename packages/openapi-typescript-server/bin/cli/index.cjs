@@ -702,7 +702,7 @@ var package_default = {
     commander: "^14.0.0",
     "js-yaml": "^4.1.0",
     "openapi-typescript-server-runtime": "0.0.11",
-    "ts-morph": "^26.0.0",
+    "ts-morph": "^27.0.0",
     zod: "^4.0.14"
   },
   devDependencies: {
