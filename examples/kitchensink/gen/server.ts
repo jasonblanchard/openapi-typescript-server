@@ -250,3 +250,58 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
     },
   ]
 }
+
+export type Tag = null;
+
+export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<Server<Req, Res>>): Route[] {
+  const routes: Route[] = [];
+
+  switch (tag) {
+    case null:
+      if (server.listPets) {
+        routes.push({
+          method: "get",
+          path: "/pets",
+          handler: server.listPets as Route["handler"],
+        });
+      }
+      if (server.getPetById) {
+        routes.push({
+          method: "get",
+          path: "/pet/{petId}",
+          handler: server.getPetById as Route["handler"],
+        });
+      }
+      if (server.updatePetWithForm) {
+        routes.push({
+          method: "post",
+          path: "/pet/{petId}",
+          handler: server.updatePetWithForm as Route["handler"],
+        });
+      }
+      if (server.mixedContentTypes) {
+        routes.push({
+          method: "post",
+          path: "/pet/{petId}/mixed-content-types",
+          handler: server.mixedContentTypes as Route["handler"],
+        });
+      }
+      if (server.getPetImage) {
+        routes.push({
+          method: "get",
+          path: "/pet/{petId}/image",
+          handler: server.getPetImage as Route["handler"],
+        });
+      }
+      if (server.getPetWebpage) {
+        routes.push({
+          method: "get",
+          path: "/pet/{petId}/webpage",
+          handler: server.getPetWebpage as Route["handler"],
+        });
+      }
+      break;
+  }
+
+  return routes;
+}

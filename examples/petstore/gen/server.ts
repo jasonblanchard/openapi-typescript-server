@@ -743,3 +743,153 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
     },
   ]
 }
+
+export type Tag = "pet" | "store" | "user";
+
+export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<Server<Req, Res>>): Route[] {
+  const routes: Route[] = [];
+
+  switch (tag) {
+    case "pet":
+      if (server.updatePet) {
+        routes.push({
+          method: "put",
+          path: "/pet",
+          handler: server.updatePet as Route["handler"],
+        });
+      }
+      if (server.addPet) {
+        routes.push({
+          method: "post",
+          path: "/pet",
+          handler: server.addPet as Route["handler"],
+        });
+      }
+      if (server.findPetsByStatus) {
+        routes.push({
+          method: "get",
+          path: "/pet/findByStatus",
+          handler: server.findPetsByStatus as Route["handler"],
+        });
+      }
+      if (server.findPetsByTags) {
+        routes.push({
+          method: "get",
+          path: "/pet/findByTags",
+          handler: server.findPetsByTags as Route["handler"],
+        });
+      }
+      if (server.getPetById) {
+        routes.push({
+          method: "get",
+          path: "/pet/{petId}",
+          handler: server.getPetById as Route["handler"],
+        });
+      }
+      if (server.updatePetWithForm) {
+        routes.push({
+          method: "post",
+          path: "/pet/{petId}",
+          handler: server.updatePetWithForm as Route["handler"],
+        });
+      }
+      if (server.deletePet) {
+        routes.push({
+          method: "delete",
+          path: "/pet/{petId}",
+          handler: server.deletePet as Route["handler"],
+        });
+      }
+      if (server.uploadFile) {
+        routes.push({
+          method: "post",
+          path: "/pet/{petId}/uploadImage",
+          handler: server.uploadFile as Route["handler"],
+        });
+      }
+      break;
+    case "store":
+      if (server.getInventory) {
+        routes.push({
+          method: "get",
+          path: "/store/inventory",
+          handler: server.getInventory as Route["handler"],
+        });
+      }
+      if (server.placeOrder) {
+        routes.push({
+          method: "post",
+          path: "/store/order",
+          handler: server.placeOrder as Route["handler"],
+        });
+      }
+      if (server.getOrderById) {
+        routes.push({
+          method: "get",
+          path: "/store/order/{orderId}",
+          handler: server.getOrderById as Route["handler"],
+        });
+      }
+      if (server.deleteOrder) {
+        routes.push({
+          method: "delete",
+          path: "/store/order/{orderId}",
+          handler: server.deleteOrder as Route["handler"],
+        });
+      }
+      break;
+    case "user":
+      if (server.createUser) {
+        routes.push({
+          method: "post",
+          path: "/user",
+          handler: server.createUser as Route["handler"],
+        });
+      }
+      if (server.createUsersWithListInput) {
+        routes.push({
+          method: "post",
+          path: "/user/createWithList",
+          handler: server.createUsersWithListInput as Route["handler"],
+        });
+      }
+      if (server.loginUser) {
+        routes.push({
+          method: "get",
+          path: "/user/login",
+          handler: server.loginUser as Route["handler"],
+        });
+      }
+      if (server.logoutUser) {
+        routes.push({
+          method: "get",
+          path: "/user/logout",
+          handler: server.logoutUser as Route["handler"],
+        });
+      }
+      if (server.getUserByName) {
+        routes.push({
+          method: "get",
+          path: "/user/{username}",
+          handler: server.getUserByName as Route["handler"],
+        });
+      }
+      if (server.updateUser) {
+        routes.push({
+          method: "put",
+          path: "/user/{username}",
+          handler: server.updateUser as Route["handler"],
+        });
+      }
+      if (server.deleteUser) {
+        routes.push({
+          method: "delete",
+          path: "/user/{username}",
+          handler: server.deleteUser as Route["handler"],
+        });
+      }
+      break;
+  }
+
+  return routes;
+}

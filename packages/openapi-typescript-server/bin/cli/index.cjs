@@ -319,6 +319,7 @@ function generate(spec, types, outpath, version) {
     moduleSpecifier: "openapi-typescript-server-runtime"
   });
   const operationsById = {};
+  const allTags = /* @__PURE__ */ new Set();
   for (const path in spec.paths) {
     const pathSpec = spec.paths[path];
     for (const method in pathSpec) {
@@ -408,13 +409,16 @@ function generate(spec, types, outpath, version) {
         isExported: true,
         type: `Promise<${responseVariantInterfaceNames.join(" | ")}>`
       });
+      const operationTags = operation.tags || [];
+      operationTags.forEach((tag) => allTags.add(tag));
       operationsById[operationId] = {
         path,
         method,
         args: argsInterface.getName(),
         result: resultType.getName(),
         summary: operation.summary,
-        description: operation.description
+        description: operation.description,
+        tags: operationTags
       };
       sourceFile.addFunction({
         name: `${operationId}Unimplemented`,
@@ -479,6 +483,75 @@ function generate(spec, types, outpath, version) {
         }
       );
       writer.writeLine("]");
+    }
+  });
+  const tagValues = Array.from(allTags).map((tag) => `"${tag}"`);
+  const hasUntaggedOperations = Object.values(operationsById).some(
+    (op) => !op.tags || op.tags.length === 0
+  );
+  if (hasUntaggedOperations) {
+    tagValues.push("null");
+  }
+  if (tagValues.length > 0) {
+    sourceFile.addTypeAlias({
+      name: "Tag",
+      isExported: true,
+      type: tagValues.join(" | ")
+    });
+  }
+  const tagToOperations = {};
+  Object.entries(operationsById).forEach(([operationId, { tags }]) => {
+    if (!tags || tags.length === 0) {
+      if (!tagToOperations["null"]) {
+        tagToOperations["null"] = [];
+      }
+      tagToOperations["null"].push(operationId);
+    } else {
+      tags.forEach((tag) => {
+        if (!tagToOperations[tag]) {
+          tagToOperations[tag] = [];
+        }
+        tagToOperations[tag].push(operationId);
+      });
+    }
+  });
+  sourceFile.addFunction({
+    name: "registerRouteHandlersByTag",
+    isExported: true,
+    parameters: [
+      { name: "tag", type: "Tag" },
+      { name: "server", type: "Partial<Server<Req, Res>>" }
+    ],
+    typeParameters: [{ name: "Req" }, { name: "Res" }],
+    returnType: "Route[]",
+    statements: (writer) => {
+      writer.writeLine("const routes: Route[] = [];");
+      writer.writeLine("");
+      if (Object.keys(tagToOperations).length > 0) {
+        writer.writeLine("switch (tag) {");
+        Object.entries(tagToOperations).forEach(([tag, operations]) => {
+          const caseValue = tag === "null" ? "null" : `"${tag}"`;
+          writer.writeLine(`case ${caseValue}:`);
+          operations.forEach((operationId) => {
+            const op = operationsById[operationId];
+            if (op) {
+              writer.writeLine(`if (server.${operationId}) {`);
+              writer.writeLine("routes.push({");
+              writer.writeLine(`method: "${op.method}",`);
+              writer.writeLine(`path: "${op.path}",`);
+              writer.writeLine(
+                `handler: server.${operationId} as Route["handler"],`
+              );
+              writer.writeLine("});");
+              writer.writeLine("}");
+            }
+          });
+          writer.writeLine("break;");
+        });
+        writer.writeLine("}");
+      }
+      writer.writeLine("");
+      writer.writeLine("return routes;");
     }
   });
   sourceFile.insertText(
