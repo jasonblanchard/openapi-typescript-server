@@ -746,6 +746,37 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
 
 export type Tag = "pet" | "store" | "user";
 
+export interface ServerForPet<Req = unknown, Res = unknown> {
+  updatePet?: (args: UpdatePetArgs<Req, Res>) => UpdatePetResult;
+  addPet?: (args: AddPetArgs<Req, Res>) => AddPetResult;
+  findPetsByStatus?: (args: FindPetsByStatusArgs<Req, Res>) => FindPetsByStatusResult;
+  findPetsByTags?: (args: FindPetsByTagsArgs<Req, Res>) => FindPetsByTagsResult;
+  getPetById?: (args: GetPetByIdArgs<Req, Res>) => GetPetByIdResult;
+  updatePetWithForm?: (args: UpdatePetWithFormArgs<Req, Res>) => UpdatePetWithFormResult;
+  deletePet?: (args: DeletePetArgs<Req, Res>) => DeletePetResult;
+  uploadFile?: (args: UploadFileArgs<Req, Res>) => UploadFileResult;
+}
+
+export interface ServerForStore<Req = unknown, Res = unknown> {
+  getInventory?: (args: GetInventoryArgs<Req, Res>) => GetInventoryResult;
+  placeOrder?: (args: PlaceOrderArgs<Req, Res>) => PlaceOrderResult;
+  getOrderById?: (args: GetOrderByIdArgs<Req, Res>) => GetOrderByIdResult;
+  deleteOrder?: (args: DeleteOrderArgs<Req, Res>) => DeleteOrderResult;
+}
+
+export interface ServerForUser<Req = unknown, Res = unknown> {
+  createUser?: (args: CreateUserArgs<Req, Res>) => CreateUserResult;
+  createUsersWithListInput?: (args: CreateUsersWithListInputArgs<Req, Res>) => CreateUsersWithListInputResult;
+  loginUser?: (args: LoginUserArgs<Req, Res>) => LoginUserResult;
+  logoutUser?: (args: LogoutUserArgs<Req, Res>) => LogoutUserResult;
+  getUserByName?: (args: GetUserByNameArgs<Req, Res>) => GetUserByNameResult;
+  updateUser?: (args: UpdateUserArgs<Req, Res>) => UpdateUserResult;
+  deleteUser?: (args: DeleteUserArgs<Req, Res>) => DeleteUserResult;
+}
+
+export function registerRouteHandlersByTag<Req, Res>(tag: "pet", server: Partial<ServerForPet<Req, Res>>): Route[];
+export function registerRouteHandlersByTag<Req, Res>(tag: "store", server: Partial<ServerForStore<Req, Res>>): Route[];
+export function registerRouteHandlersByTag<Req, Res>(tag: "user", server: Partial<ServerForUser<Req, Res>>): Route[];
 export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<Server<Req, Res>>): Route[] {
   const routes: Route[] = [];
 

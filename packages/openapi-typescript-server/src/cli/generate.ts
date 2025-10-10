@@ -275,8 +275,34 @@ export default function generate(
     }
   });
 
-  // Generate registerRouteHandlersByTag function
-  sourceFile.addFunction({
+  // Generate a ServerForTag interface for each tag
+  Object.entries(tagToOperations).forEach(([tag, operations]) => {
+    const interfaceName =
+      tag === "null" ? "ServerForUntagged" : `ServerFor${capitalize(tag)}`;
+    const tagInterface = sourceFile.addInterface({
+      name: interfaceName,
+      isExported: true,
+      typeParameters: [
+        { name: "Req", default: "unknown" },
+        { name: "Res", default: "unknown" },
+      ],
+    });
+
+    // Add only operations associated with this tag
+    operations.forEach((operationId) => {
+      const op = operationsById[operationId];
+      if (op) {
+        tagInterface.addProperty({
+          name: operationId,
+          type: `(args: ${op.args}<Req, Res>) => ${op.result}`,
+          hasQuestionToken: true, // Make it optional since it's a partial implementation
+        });
+      }
+    });
+  });
+
+  // Generate registerRouteHandlersByTag function with overloads
+  const registerByTagFunc = sourceFile.addFunction({
     name: "registerRouteHandlersByTag",
     isExported: true,
     parameters: [
@@ -321,6 +347,22 @@ export default function generate(
       writer.writeLine("");
       writer.writeLine("return routes;");
     },
+  });
+
+  // Add overload signatures for each tag
+  Object.entries(tagToOperations).forEach(([tag, _operations]) => {
+    const tagValue = tag === "null" ? "null" : `"${tag}"`;
+    const interfaceName =
+      tag === "null" ? "ServerForUntagged" : `ServerFor${capitalize(tag)}`;
+
+    registerByTagFunc.addOverload({
+      parameters: [
+        { name: "tag", type: tagValue },
+        { name: "server", type: `Partial<${interfaceName}<Req, Res>>` },
+      ],
+      typeParameters: [{ name: "Req" }, { name: "Res" }],
+      returnType: "Route[]",
+    });
   });
 
   sourceFile.insertText(

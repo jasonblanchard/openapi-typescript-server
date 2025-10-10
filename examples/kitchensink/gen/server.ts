@@ -253,6 +253,16 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
 
 export type Tag = null;
 
+export interface ServerForUntagged<Req = unknown, Res = unknown> {
+  listPets?: (args: ListPetsArgs<Req, Res>) => ListPetsResult;
+  getPetById?: (args: GetPetByIdArgs<Req, Res>) => GetPetByIdResult;
+  updatePetWithForm?: (args: UpdatePetWithFormArgs<Req, Res>) => UpdatePetWithFormResult;
+  mixedContentTypes?: (args: MixedContentTypesArgs<Req, Res>) => MixedContentTypesResult;
+  getPetImage?: (args: GetPetImageArgs<Req, Res>) => GetPetImageResult;
+  getPetWebpage?: (args: GetPetWebpageArgs<Req, Res>) => GetPetWebpageResult;
+}
+
+export function registerRouteHandlersByTag<Req, Res>(tag: null, server: Partial<ServerForUntagged<Req, Res>>): Route[];
 export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<Server<Req, Res>>): Route[] {
   const routes: Route[] = [];
 
