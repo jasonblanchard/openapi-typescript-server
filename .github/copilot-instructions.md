@@ -1,233 +1,242 @@
 # OpenAPI TypeScript Server
 
-OpenAPI TypeScript Server is a CLI and minimal runtime library that helps you implement type-safe APIs documented by OpenAPI. This is a monorepo with framework-agnostic core functionality and Express adapter.
+OpenAPI TypeScript Server is a CLI and runtime library for building type-safe APIs from OpenAPI specs. This monorepo contains framework-agnostic core functionality, an Express adapter, and runtime utilities.
 
-Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
+## Core Architecture
 
-## Working Effectively
+### Three-Layer System
 
-### Node.js Version Requirement - CRITICAL
+1. **Code Generation Layer** (`packages/openapi-typescript-server`): CLI using `ts-morph` to generate TypeScript interfaces from OpenAPI specs
+2. **Runtime Layer** (`packages/openapi-typescript-server-runtime`): Minimal shared types (`Route`, `HandlerInput`, `HandlerResponse`) and errors
+3. **Adapter Layer** (`packages/openapi-typescript-server-express`): Framework bindings that convert typed handlers to HTTP routes
 
-- **REQUIRED**: Node.js >= 23.6.0 (specified in .nvmrc and package.json)
-- Current examples and tests use TypeScript files directly which requires Node.js 23+ experimental TypeScript support
-- If you have an older Node.js version, you MUST upgrade first or many commands will fail
+### Data Flow Pattern
 
-### Bootstrap and Build Process
+```
+OpenAPI Spec → [CLI] → Generated Server Interface → [Your API Implementation] → [registerRouteHandlers] → Route[] → [Adapter] → Express Routes
+```
 
-- Install dependencies: `npm ci` -- takes 30 seconds. NEVER CANCEL. Set timeout to 60+ minutes.
-- Check code formatting: `npm run format:check` -- takes 2 seconds
-- Build all packages: `npm run build:packages` -- takes 5 seconds
-- Generate examples: `npm run gen:examples` -- takes 5 seconds
-- TypeScript type checking: `npm run typecheck` -- takes 3 seconds
-- Run tests: `npm test` -- takes 1 second (requires Node.js 23+)
+Key insight: Your handler return values mirror OpenAPI response structure:
+```typescript
+return {
+  content: {
+    [statusCode]: {  // e.g., 200, "default", "5XX"
+      [contentType]: responseData  // e.g., "application/json"
+    }
+  },
+  headers?: {},
+  status?: number  // Required for "default" and wildcard responses
+}
+```
 
-### Complete Development Setup Sequence
+### Generated Code Pattern
 
+CLI generates per-operation:
+- `<OperationId>Args<Req, Res>` interface with typed parameters, requestBody, and framework objects
+- `<OperationId>Result` type union of all response variants
+- `<OperationId>Unimplemented()` stub throwing `NotImplementedError`
+- `Server<Req, Res>` interface requiring all operations
+- `registerRouteHandlers()` function converting implementations to `Route[]`
+
+**Critical**: `operationId` determines handler names. Without it, name is `${method}${PathParts}` (e.g., `postSpeakPetId`).
+
+## Node.js Version Requirement - CRITICAL
+
+- **REQUIRED**: Node.js >= 23.6.0 (`.nvmrc`, `package.json` engines)
+- Uses experimental TypeScript support via `node --watch` and direct `.ts` execution
+- Error `TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts"` means wrong Node version
+
+## Development Workflow
+
+### Initial Setup (Required Order)
 ```bash
-# 1. Ensure Node.js version (CRITICAL)
-node --version  # Must be >= 23.6.0
+node --version              # Must be >= 23.6.0
+npm ci                      # 30 seconds - NEVER CANCEL
+npm run build:packages      # 5 seconds - builds .cjs files
+npm run gen:examples        # 5 seconds - validates CLI works
+npm run format:check        # 2 seconds
+npm run typecheck           # 3 seconds  
+npm test                    # 1 second
+```
 
-# 2. Install dependencies
-npm ci  # NEVER CANCEL: Takes 30 seconds
+**NEVER** run `npm ci` with short timeout. Set to 60+ minutes or it will fail.
 
-# 3. Build packages
-npm run build:packages  # Takes 5 seconds
+### After Code Changes (Validation Sequence)
+```bash
+npm run format              # Auto-fix formatting (required before commit)
+npm run build:packages      # Re-build if CLI or adapters changed
+npm run gen:examples        # Re-generate if CLI changed (checks for uncommitted diffs in CI)
+npm run typecheck           # Must pass (no errors)
+npm test                    # All tests must pass
+```
 
-# 4. Generate examples (validates CLI tools work)
-npm run gen:examples  # Takes 5 seconds
+### Testing Generated Code Locally
+```bash
+cd examples/docs
+npm run start               # Runs: node --watch cmd/index.ts (port 8080)
 
-# 5. Validate everything
-npm run format:check  # Takes 2 seconds
-npm run typecheck     # Takes 3 seconds
-npm test             # Takes 1 second (requires Node.js 23+)
+# In another terminal:
+curl -X POST http://localhost:8080/api/v3/speak/123 \
+  -H "Content-Type: application/json" \
+  -d '{"sound":"test"}'
+# Expected: {"greeting":"Pet 123 says \"test\""}
+```
+
+### Regenerating After OpenAPI Changes
+```bash
+# In example directory or your project:
+openapi-typescript ./openapi.yaml --output ./gen/schema.d.ts
+openapi-typescript-server ./openapi.yaml --types ./schema.d.ts --output ./gen/server.ts
+
+# TypeScript will immediately show errors for missing/changed properties
+# Restart TS Server in VS Code if errors don't appear
+```
+
+## Express Adapter Patterns
+
+### Request Processing (`packages/openapi-typescript-server-express/src/index.ts`)
+
+1. **Path conversion**: `{petId}` → `:petId` via `openAPIPathToExpress()`
+2. **Parameter extraction**: Assumes Express middleware already parsed/validated body
+   ```typescript
+   parameters: {
+     query: req.query,
+     header: req.headers,
+     path: req.params,
+     cookie: req.cookies
+   }
+   ```
+3. **Content negotiation**: Uses `req.accepts()` to match against response content types
+4. **Serialization**:
+   - `application/json`: Built-in via `res.json()`
+   - Other types: Supply `serializers` option to `registerRoutes()`
+   ```typescript
+   registerRoutes(routes, app, {
+     serializers: {
+       "application/xml": (content) => json2xml(JSON.stringify(content))
+     }
+   })
+   ```
+
+### Error Handling Patterns
+
+1. **Inline errors**: Return `{ status: 418, content: { default: {...} } }` from handler
+2. **Thrown errors**: Propagate to Express global error handler
+3. **NoAcceptableContentType**: Thrown when client Accept header doesn't match response content types
+4. **NotImplementedError**: Check `err instanceof NotImplementedError` for 501 responses
+
+See `examples/docs/api.ts` for error pattern with `"default"` response variant.
+
+## Testing Conventions
+
+- Framework: Node.js native `node:test` and `node:assert`
+- Pattern: `describe()` + `it()` with `beforeEach()` for setup
+- HTTP testing: `supertest` library for request/response assertions
+- Location: Co-located `.test.ts` files (e.g., `index.ts` → `index.test.ts`)
+- Run: `npm test` at root (runs across all workspaces) or per-package
+
+Example pattern (`examples/docs/app.test.ts`):
+```typescript
+import { describe, it } from "node:test";
+import assert from "node:assert";
+import request from "supertest";
+
+const app = makeApp();
+
+describe("operation", async () => {
+  it("returns expected status", async () => {
+    const response = await request(app)
+      .post("/api/v3/path")
+      .send({ data: "value" });
+    assert.equal(response.status, 200);
+    assert.deepEqual(response.body, { expected: "value" });
+  });
+});
 ```
 
 ## Repository Structure
 
-### Core Packages
+```
+packages/
+  openapi-typescript-server/          # CLI (commander, ts-morph, yaml)
+    src/cli/
+      index.ts                         # Entry point, arg parsing
+      generate.ts                      # Core codegen logic (creates Server interface)
+    bin/cli/index.cjs                  # Built binary (created by build:packages)
+  
+  openapi-typescript-server-runtime/  # Shared types (Route, errors)
+    src/
+      route.ts                         # Route, HandlerInput, HandlerResponse types
+      errors.ts                        # NotImplementedError
+  
+  openapi-typescript-server-express/  # Express adapter
+    src/
+      index.ts                         # registerRoutes() function
+      errors.ts                        # NoAcceptableContentType
+      index.test.ts                    # Adapter integration tests
 
-- `packages/openapi-typescript-server`: Core CLI and type generation
-- `packages/openapi-typescript-server-express`: Express framework adapter
-- `packages/openapi-typescript-server-runtime`: Shared runtime utilities
-
-### Examples
-
-- `examples/docs`: Basic petstore API example with full server setup
-- `examples/kitchensink`: More complex API demonstrating various features
-- `examples/petstore`: Standard petstore example
-
-### Key Files
-
-- `.nvmrc`: Specifies required Node.js version (v23.6.0)
-- `package.json`: Workspace configuration and scripts
-- `tsconfig.json`: TypeScript configuration for entire monorepo
-
-## CLI Tools and Code Generation
-
-### OpenAPI TypeScript Type Generation
-
-```bash
-# Generate TypeScript types from OpenAPI spec
-npx openapi-typescript ./openapi.yaml --output ./gen/schema.d.ts
+examples/
+  docs/                                # Reference implementation
+    openapi.yaml                       # Source of truth
+    gen/
+      schema.d.ts                      # From openapi-typescript
+      server.ts                        # Generated by this CLI
+    api.ts                             # Handler implementations (Server interface)
+    app.ts                             # Express setup (middleware + registerRoutes)
+    cmd/index.ts                       # Server entry point (starts listening)
 ```
 
-### Server Interface Generation
+## Key Workflows for Common Tasks
 
-```bash
-# Generate server interface from OpenAPI spec
-npx openapi-typescript-server ./openapi.yaml --types ./schema.d.ts --output ./gen/server.ts
-```
+### Adding Support for New Response Pattern
+1. Update `packages/openapi-typescript-server/src/cli/generate.ts` response variant logic
+2. Update `packages/openapi-typescript-server-express/src/index.ts` to handle new variant
+3. Add test case to `packages/openapi-typescript-server-express/src/index.test.ts`
+4. Run `npm run build:packages && npm run gen:examples && npm test`
 
-### Complete Workflow Example
+### Adding New Framework Adapter
+1. Create `packages/openapi-typescript-server-<framework>/`
+2. Implement `registerRoutes(routes: Route[], app: FrameworkApp)` 
+3. Handle parameter extraction, content negotiation, serialization per framework conventions
+4. Reference `openapi-typescript-server-express` as template
+5. Add integration tests using framework's test utilities
 
-```bash
-# In any example directory (e.g., examples/docs):
-openapi-typescript ./openapi.yaml --output ./gen/schema.d.ts
-openapi-typescript-server ./openapi.yaml --types ./schema.d.ts --output ./gen/server.ts
-```
+### Debugging Type Errors After Regeneration
+1. Check OpenAPI spec changed: Compare old/new `openapi.yaml`
+2. Check generated types: `git diff gen/schema.d.ts gen/server.ts`
+3. Restart TS Server: VS Code may cache old types
+4. Read error location: Generated interfaces have JSDoc with descriptions
+5. Fix implementation to match new types (TypeScript guides you)
 
-## Running and Testing
+## CI/CD Pipeline (`.github/workflows/test.yaml`)
 
-### Run Example Applications
-
-**IMPORTANT**: Requires Node.js >= 23.6.0
-
-```bash
-# Navigate to an example
-cd examples/docs
-
-# Start the server (with hot reload)
-npm run start  # Runs: node --watch cmd/index.ts
-
-# Server will be available at http://localhost:8080
-```
-
-### Test API Endpoints
-
-```bash
-# Test the petstore API
-curl -X POST http://localhost:8080/api/v3/speak/123 \
-  -H "Content-Type: application/json" \
-  -d '{"sound":"grrrr"}'
-
-# Expected response:
-# {"greeting":"Pet 123 says \"grrrr\""}
-```
-
-### Run Tests
-
-**NOTE**: Tests require Node.js >= 23.6.0 to run TypeScript files directly
-
-```bash
-# Run all tests across workspace
-npm test
-
-# Run tests for specific package
-cd packages/openapi-typescript-server-express
+Runs on every commit:
+```yaml
+npm ci
+npm run format:check       # Fails if code not formatted
+npm run build:packages
+npm run gen:examples
+git diff --exit-code        # Fails if generated code differs (means you didn't commit regenerated examples)
+npm run typecheck
 npm test
 ```
 
-## Validation Scenarios
+**Before pushing**: Always run `npm run format` + validation sequence or CI fails.
 
-### CRITICAL: Always Run These After Changes
+## Design Decisions to Remember
 
-1. **Build Validation**: `npm run build:packages` - Must complete successfully
-2. **Format Check**: `npm run format:check` - Must pass for CI
-3. **Type Checking**: `npm run typecheck` - Must pass with no errors
-4. **Code Generation**: `npm run gen:examples` - Must regenerate without errors
-5. **Test Suite**: `npm test` - Must pass (requires Node.js 23+)
+1. **Schema-first**: OpenAPI spec is single source of truth (not code annotations)
+2. **Build-time codegen over runtime reflection**: Minimal runtime footprint, static typing
+3. **Validation delegated to middleware**: Use `express-openapi-validator`, not built-in
+4. **Framework-agnostic core**: Runtime types have no framework dependencies
+5. **Generic request/response access**: `Server<Req, Res>` lets you access underlying framework objects
+6. **Verbose return structure**: Mirrors OpenAPI structure exactly, making handlers pure functions (easy to test)
 
-### Manual Validation After Server Changes
+## Common Mistakes
 
-1. Start an example server: `cd examples/docs && npm run start`
-2. Test API endpoint: `curl -X POST http://localhost:8080/api/v3/speak/123 -H "Content-Type: application/json" -d '{"sound":"test"}'`
-3. Verify JSON response: `{"greeting":"Pet 123 says \"test\""}`
-4. Test error endpoint: `curl http://localhost:8080/api/v3/uhoh`
-5. Verify error response with status 418
-
-### Before Committing
-
-- ALWAYS run `npm run format` to auto-fix formatting issues
-- ALWAYS run the complete validation sequence above
-- The CI pipeline (.github/workflows/test.yaml) will fail if formatting or builds fail
-
-## Common Issues and Solutions
-
-### Node.js Version Mismatch
-
-**Problem**: `TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts"`
-**Solution**: Upgrade to Node.js >= 23.6.0. The project uses experimental TypeScript support.
-
-### Build Failures
-
-**Problem**: `npm run build:packages` fails
-**Solution**:
-
-1. Run `npm ci` to ensure dependencies are properly installed
-2. Check TypeScript compilation with `npm run typecheck`
-3. Verify all workspace packages have built correctly
-
-### Test Failures
-
-**Problem**: Tests not running or failing unexpectedly
-**Solution**:
-
-1. Ensure Node.js >= 23.6.0
-2. Run `npm run build:packages` first
-3. Check individual test files in packages/_/src/_.test.ts
-
-## Development Tips
-
-### Working with OpenAPI Specs
-
-- Always validate your OpenAPI spec before generation
-- Use `--types ./schema.d.ts` path relative to output directory
-- Re-run generation after any spec changes: `npm run gen:examples`
-
-### Monorepo Navigation
-
-- Use `npm run <script> --workspaces` to run scripts across all packages
-- Build packages before working on examples: `npm run build:packages`
-- Each package has its own package.json with specific scripts
-
-### Code Quality
-
-- Format code: `npm run format`
-- Check formatting: `npm run format:check`
-- Type check: `npm run typecheck`
-- All of these must pass for CI to succeed
-
-## Time Expectations - NEVER CANCEL Commands
-
-- `npm ci`: 30 seconds - NEVER CANCEL, set timeout to 60+ minutes
-- `npm run build:packages`: 5 seconds
-- `npm run gen:examples`: 5 seconds
-- `npm run typecheck`: 3 seconds
-- `npm run format:check`: 2 seconds
-- `npm test`: 1 second (when Node.js version is correct)
-
-## Files You'll Frequently Need
-
-### Package Manifests
-
-```
-ls -la [repo-root]
-.github/
-.nvmrc
-package.json              # Root workspace config
-packages/                 # Core packages
-├── openapi-typescript-server/
-├── openapi-typescript-server-express/
-└── openapi-typescript-server-runtime/
-examples/                 # Example applications
-├── docs/
-├── kitchensink/
-└── petstore/
-```
-
-### Key Package Files
-
-- `packages/openapi-typescript-server/src/cli/index.ts`: Main CLI entry point
-- `packages/openapi-typescript-server-express/src/index.ts`: Express adapter
-- `examples/docs/app.ts`: Complete Express server setup example
-- `examples/docs/api.ts`: API handler implementation example
+- ❌ Forgetting to run `npm run build:packages` after CLI changes (tests import stale code)
+- ❌ Not regenerating examples after CLI changes (CI will fail on diff check)  
+- ❌ Using structural typing instead of explicit `Server<Req, Res>` type (loses inference)
+- ❌ Mounting routes without base path (OpenAPI `servers.url` ignored by adapter)
+- ❌ Returning `"default"` response without `status` field (throws error at runtime)
+- ❌ Expecting validation/coercion (must use middleware like `express-openapi-validator`)
