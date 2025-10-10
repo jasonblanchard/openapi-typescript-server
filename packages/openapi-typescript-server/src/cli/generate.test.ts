@@ -212,6 +212,295 @@ describe("wihout operationId", () => {
   });
 });
 
+describe("tags", () => {
+  it("generates Tag type with all tags from spec", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: {},
+      paths: {
+        "/pets": {
+          get: {
+            operationId: "listPets",
+            tags: ["pet"],
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+        },
+        "/users": {
+          get: {
+            operationId: "listUsers",
+            tags: ["user"],
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const sourceFile = generate(spec, "./schema.d.ts", "outdir.ts");
+    const tagType = sourceFile.getTypeAlias("Tag");
+    assert(tagType);
+    assert(tagType.isExported());
+    const tagTypeText = tagType.getType().getText();
+    assert.match(tagTypeText, /"pet"/);
+    assert.match(tagTypeText, /"user"/);
+  });
+
+  it("generates Tag type with null for untagged operations", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: {},
+      paths: {
+        "/pets": {
+          get: {
+            operationId: "listPets",
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const sourceFile = generate(spec, "./schema.d.ts", "outdir.ts");
+    const tagType = sourceFile.getTypeAlias("Tag");
+    assert(tagType);
+    assert(tagType.isExported());
+    const tagTypeText = tagType.getType().getText();
+    assert.equal(tagTypeText, "null");
+  });
+
+  it("generates Tag type with both tags and null for mixed operations", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: {},
+      paths: {
+        "/pets": {
+          get: {
+            operationId: "listPets",
+            tags: ["pet"],
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+        },
+        "/status": {
+          get: {
+            operationId: "getStatus",
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const sourceFile = generate(spec, "./schema.d.ts", "outdir.ts");
+    const tagType = sourceFile.getTypeAlias("Tag");
+    assert(tagType);
+    const tagTypeText = tagType.getType().getText();
+    assert.match(tagTypeText, /"pet"/);
+    assert.match(tagTypeText, /null/);
+  });
+});
+
+describe("registerRouteHandlersByTag", () => {
+  it("generates function with correct signature", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: {},
+      paths: {
+        "/pets": {
+          get: {
+            operationId: "listPets",
+            tags: ["pet"],
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const sourceFile = generate(spec, "./schema.d.ts", "outdir.ts");
+    const func = sourceFile.getFunction("registerRouteHandlersByTag");
+    assert(func);
+    assert(func.isExported());
+    assert.equal(func.getTypeParameters().length, 2);
+    assert.equal(func.getParameters().length, 2);
+
+    const tagParam = func.getParameters()[0];
+    assert(tagParam);
+    assert.equal(tagParam.getName(), "tag");
+    assert.equal(tagParam.getType().getText(), '"pet"');
+
+    const serverParam = func.getParameters()[1];
+    assert(serverParam);
+    assert.equal(serverParam.getName(), "server");
+    assert.match(serverParam.getType().getText(), /Partial<Server<Req, Res>>/);
+
+    assert.match(func.getReturnType().getText(), /Route\[\]/);
+  });
+
+  it("generates switch statement for each tag", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: {},
+      paths: {
+        "/pets": {
+          get: {
+            operationId: "listPets",
+            tags: ["pet"],
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+        },
+        "/users": {
+          get: {
+            operationId: "listUsers",
+            tags: ["user"],
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const sourceFile = generate(spec, "./schema.d.ts", "outdir.ts");
+    const func = sourceFile.getFunction("registerRouteHandlersByTag");
+    const bodyText = func?.getBodyText() || "";
+
+    assert.match(bodyText, /switch \(tag\)/);
+    assert.match(bodyText, /case "pet":/);
+    assert.match(bodyText, /case "user":/);
+    assert.match(bodyText, /if \(server\.listPets\)/);
+    assert.match(bodyText, /if \(server\.listUsers\)/);
+  });
+
+  it("groups operations by tag correctly", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: {},
+      paths: {
+        "/pets": {
+          get: {
+            operationId: "listPets",
+            tags: ["pet"],
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+          post: {
+            operationId: "createPet",
+            tags: ["pet"],
+            responses: {
+              201: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const sourceFile = generate(spec, "./schema.d.ts", "outdir.ts");
+    const func = sourceFile.getFunction("registerRouteHandlersByTag");
+    const bodyText = func?.getBodyText() || "";
+
+    // Both operations should be in the same case block
+    const petCaseMatch = bodyText.match(/case "pet":[\s\S]*?break;/);
+    assert(petCaseMatch);
+    const petCaseBlock = petCaseMatch[0];
+    assert.match(petCaseBlock, /if \(server\.listPets\)/);
+    assert.match(petCaseBlock, /if \(server\.createPet\)/);
+  });
+
+  it("handles untagged operations with null case", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: {},
+      paths: {
+        "/status": {
+          get: {
+            operationId: "getStatus",
+            responses: {
+              200: {
+                content: {
+                  "application/json": {
+                    schema: { type: "object" },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const sourceFile = generate(spec, "./schema.d.ts", "outdir.ts");
+    const func = sourceFile.getFunction("registerRouteHandlersByTag");
+    const bodyText = func?.getBodyText() || "";
+
+    assert.match(bodyText, /case null:/);
+    assert.match(bodyText, /if \(server\.getStatus\)/);
+  });
+});
+
 describe("request body", () => {
   it("writes required request body", () => {
     const spec = {
