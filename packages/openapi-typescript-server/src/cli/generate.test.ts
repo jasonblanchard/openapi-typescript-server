@@ -254,7 +254,7 @@ describe("tags", () => {
     const tagType = sourceFile.getTypeAlias("Tag");
     assert(tagType);
     assert(tagType.isExported());
-    const tagTypeText = tagType.getType().getText();
+    const tagTypeText = tagType.getTypeNode()?.getText() || "";
     assert.match(tagTypeText, /"pet"/);
     assert.match(tagTypeText, /"user"/);
   });
@@ -284,7 +284,7 @@ describe("tags", () => {
     const tagType = sourceFile.getTypeAlias("Tag");
     assert(tagType);
     assert(tagType.isExported());
-    const tagTypeText = tagType.getType().getText();
+    const tagTypeText = tagType.getTypeNode()?.getText() || "";
     assert.equal(tagTypeText, "null");
   });
 
@@ -327,7 +327,7 @@ describe("tags", () => {
     const sourceFile = generate(spec, "./schema.d.ts", "outdir.ts");
     const tagType = sourceFile.getTypeAlias("Tag");
     assert(tagType);
-    const tagTypeText = tagType.getType().getText();
+    const tagTypeText = tagType.getTypeNode()?.getText() || "";
     assert.match(tagTypeText, /"pet"/);
     assert.match(tagTypeText, /null/);
   });
@@ -371,9 +371,11 @@ describe("registerRouteHandlersByTag", () => {
     const serverParam = func.getParameters()[1];
     assert(serverParam);
     assert.equal(serverParam.getName(), "server");
-    assert.match(serverParam.getType().getText(), /Partial<Server<Req, Res>>/);
+    const serverTypeText = serverParam.getTypeNode()?.getText() || "";
+    assert.match(serverTypeText, /Partial<Server<Req, Res>>/);
 
-    assert.match(func.getReturnType().getText(), /Route\[\]/);
+    const returnTypeText = func.getReturnTypeNode()?.getText() || "";
+    assert.match(returnTypeText, /Route\[\]/);
   });
 
   it("generates switch statement for each tag", () => {
@@ -420,8 +422,8 @@ describe("registerRouteHandlersByTag", () => {
     assert.match(bodyText, /switch \(tag\)/);
     assert.match(bodyText, /case "pet":/);
     assert.match(bodyText, /case "user":/);
-    assert.match(bodyText, /if \(server\.listPets\)/);
-    assert.match(bodyText, /if \(server\.listUsers\)/);
+    assert.match(bodyText, /handler: server\.listPets/);
+    assert.match(bodyText, /handler: server\.listUsers/);
   });
 
   it("groups operations by tag correctly", () => {
@@ -467,8 +469,8 @@ describe("registerRouteHandlersByTag", () => {
     const petCaseMatch = bodyText.match(/case "pet":[\s\S]*?break;/);
     assert(petCaseMatch);
     const petCaseBlock = petCaseMatch[0];
-    assert.match(petCaseBlock, /if \(server\.listPets\)/);
-    assert.match(petCaseBlock, /if \(server\.createPet\)/);
+    assert.match(petCaseBlock, /handler: server\.listPets/);
+    assert.match(petCaseBlock, /handler: server\.createPet/);
   });
 
   it("handles untagged operations with null case", () => {
@@ -497,7 +499,7 @@ describe("registerRouteHandlersByTag", () => {
     const bodyText = func?.getBodyText() || "";
 
     assert.match(bodyText, /case null:/);
-    assert.match(bodyText, /if \(server\.getStatus\)/);
+    assert.match(bodyText, /handler: server\.getStatus/);
   });
 });
 
