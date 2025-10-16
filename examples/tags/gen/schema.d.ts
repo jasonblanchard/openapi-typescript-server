@@ -53,14 +53,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/pet/{petId}/image": {
+    "/store/inventory": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getPetImage"];
+        get: operations["getInventory"];
         put?: never;
         post?: never;
         delete?: never;
@@ -69,16 +69,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/pet/{petId}/webpage": {
+    "/store/order": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getPetWebpage"];
+        get?: never;
         put?: never;
-        post?: never;
+        post: operations["placeOrder"];
         delete?: never;
         options?: never;
         head?: never;
@@ -118,6 +118,19 @@ export interface components {
         UpdatePetInput: {
             /** @enum {string} */
             status: "available" | "pending" | "sold";
+        };
+        Order: {
+            /** Format: int64 */
+            id: number;
+            /** Format: int64 */
+            petId: number;
+            /** Format: int32 */
+            quantity: number;
+            /**
+             * @description Order Status
+             * @enum {string}
+             */
+            status?: "placed" | "approved" | "delivered";
         };
     };
     responses: never;
@@ -281,14 +294,11 @@ export interface operations {
             };
         };
     };
-    getPetImage: {
+    getInventory: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                /** @description ID of pet to return */
-                petId: number;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
@@ -299,22 +309,41 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "image/jpeg": string;
+                    "application/json": {
+                        inventory?: {
+                            [key: string]: number;
+                        };
+                    };
+                };
+            };
+            /** @description unexpected error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };
     };
-    getPetWebpage: {
+    placeOrder: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                /** @description ID of pet to return */
-                petId: number;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: int64 */
+                    petId: number;
+                    /** Format: int32 */
+                    quantity: number;
+                };
+            };
+        };
         responses: {
             /** @description successful operation */
             200: {
@@ -322,7 +351,18 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "text/html": string;
+                    "application/json": {
+                        order?: components["schemas"]["Order"];
+                    };
+                };
+            };
+            /** @description unexpected error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };

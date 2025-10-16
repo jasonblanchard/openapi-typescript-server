@@ -1,11 +1,5 @@
 import type * as ServerTypes from "./gen/server.ts";
 import type { Request, Response } from "express";
-import { promises as fs } from "fs";
-import { join } from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = join(__filename, "..");
 
 // Service implementation for "pets" tag
 export const petsService: ServerTypes.ServerForPets<Request, Response> = {
@@ -73,28 +67,38 @@ export const petsService: ServerTypes.ServerForPets<Request, Response> = {
   },
 };
 
-// Service implementation for "media" tag
-export const mediaService: ServerTypes.ServerForMedia<Request, Response> = {
-  getPetImage: async (): ServerTypes.GetPetImageResult => {
-    const image = await fs.readFile(join(__dirname, `./cat.jpeg`), {
-      encoding: "base64",
-    });
-
+// Service implementation for "store" tag
+export const storeService: ServerTypes.ServerForStore<Request, Response> = {
+  getInventory: async (): ServerTypes.GetInventoryResult => {
     return {
       content: {
         200: {
-          "image/jpeg": image,
+          "application/json": {
+            inventory: {
+              available: 10,
+              pending: 5,
+              sold: 3,
+            },
+          },
         },
       },
     };
   },
 
-  getPetWebpage: async ({ parameters }): ServerTypes.GetPetWebpageResult => {
-    const { petId } = parameters.path;
+  placeOrder: async ({ requestBody }): ServerTypes.PlaceOrderResult => {
+    const { petId, quantity } = requestBody.content;
+
     return {
       content: {
         200: {
-          "text/html": `<html><body><h1>Hello, pet ${petId}!</h1></body></html>`,
+          "application/json": {
+            order: {
+              id: Math.floor(Math.random() * 1000),
+              petId,
+              quantity,
+              status: "placed",
+            },
+          },
         },
       },
     };

@@ -144,28 +144,35 @@ describe("listPets", async () => {
   });
 });
 
-describe("getPetImage", async () => {
+describe("getInventory", async () => {
   it("returns 200", async () => {
     const response = await request(app)
-      .get("/api/v3/pet/123/image")
-      .set("Accept", "image/jpeg");
+      .get("/api/v3/store/inventory")
+      .set("Accept", "application/json");
 
     assert.equal(response.status, 200);
-    assert(response.body);
-    assert.equal(response.headers["content-type"], "image/jpeg");
+    assert.deepEqual(response.body, {
+      inventory: {
+        available: 10,
+        pending: 5,
+        sold: 3,
+      },
+    });
   });
 });
 
-describe("getPetWebpage", async () => {
+describe("placeOrder", async () => {
   it("returns 200", async () => {
     const response = await request(app)
-      .get("/api/v3/pet/123/webpage")
-      .set("Accept", "text/html");
+      .post("/api/v3/store/order")
+      .set("Accept", "application/json")
+      .send({ petId: 123, quantity: 2 });
 
     assert.equal(response.status, 200);
-    assert.equal(
-      response.text,
-      "<html><body><h1>Hello, pet 123!</h1></body></html>",
-    );
+    assert(response.body.order);
+    assert.equal(response.body.order.petId, 123);
+    assert.equal(response.body.order.quantity, 2);
+    assert.equal(response.body.order.status, "placed");
+    assert(typeof response.body.order.id === "number");
   });
 });

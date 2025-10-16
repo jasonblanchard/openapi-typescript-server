@@ -2,7 +2,7 @@ import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import { registerRouteHandlersByTag } from "./gen/server.ts";
 import registerRoutes from "openapi-typescript-server-express";
-import { petsService, mediaService, untaggedService } from "./api.ts";
+import { petsService, storeService, untaggedService } from "./api.ts";
 import OpenApiValidator from "express-openapi-validator";
 import { NotImplementedError } from "openapi-typescript-server-runtime";
 import xmlparser from "express-xml-bodyparser";
@@ -29,20 +29,10 @@ export default function makeApp() {
 
   // Register routes by tag using registerRouteHandlersByTag
   const petsRoutes = registerRouteHandlersByTag("pets", petsService);
-  const mediaRoutes = registerRouteHandlersByTag("media", mediaService);
+  const storeRoutes = registerRouteHandlersByTag("store", storeService);
   const untaggedRoutes = registerRouteHandlersByTag(null, untaggedService);
 
-  registerRoutes(
-    [...petsRoutes, ...mediaRoutes, ...untaggedRoutes],
-    apiRouter,
-    {
-      serializers: {
-        "image/jpeg": (content) => {
-          return Buffer.from(content, "base64");
-        },
-      },
-    },
-  );
+  registerRoutes([...petsRoutes, ...storeRoutes, ...untaggedRoutes], apiRouter);
 
   app.use("/api/v3", apiRouter);
 

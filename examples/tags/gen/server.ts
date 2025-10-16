@@ -125,39 +125,56 @@ export async function mixedContentTypesUnimplemented(): MixedContentTypesResult 
   throw new NotImplementedError()
 }
 
-export interface GetPetImageArgs<Req, Res> {
-  parameters: paths['/pet/{petId}/image']['get']['parameters'];
+export interface GetInventoryArgs<Req, Res> {
+  parameters: paths['/store/inventory']['get']['parameters'];
   contentType: string;
   req: Req;
   res: Res;
 }
 
-interface GetPetImageResult200 {
-  content: { 200: paths['/pet/{petId}/image']['get']['responses']['200']['content'] };
+interface GetInventoryResult200 {
+  content: { 200: paths['/store/inventory']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type GetPetImageResult = Promise<GetPetImageResult200>;
+interface GetInventoryResultDefault {
+  content: { default: paths['/store/inventory']['get']['responses']['default']['content'] };
+  headers?: { [name: string]: any };
+  status: number;
+}
 
-export async function getPetImageUnimplemented(): GetPetImageResult {
+export type GetInventoryResult = Promise<GetInventoryResult200 | GetInventoryResultDefault>;
+
+export async function getInventoryUnimplemented(): GetInventoryResult {
   throw new NotImplementedError()
 }
 
-export interface GetPetWebpageArgs<Req, Res> {
-  parameters: paths['/pet/{petId}/webpage']['get']['parameters'];
+export interface PlaceOrderArgs<Req, Res> {
+  parameters: paths['/store/order']['post']['parameters'];
   contentType: string;
   req: Req;
   res: Res;
+  requestBody: {
+    mediaType: "application/json";
+    content: paths['/store/order']['post']['requestBody']['content']['application/json']
+  }
+  ;
 }
 
-interface GetPetWebpageResult200 {
-  content: { 200: paths['/pet/{petId}/webpage']['get']['responses']['200']['content'] };
+interface PlaceOrderResult200 {
+  content: { 200: paths['/store/order']['post']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-export type GetPetWebpageResult = Promise<GetPetWebpageResult200>;
+interface PlaceOrderResultDefault {
+  content: { default: paths['/store/order']['post']['responses']['default']['content'] };
+  headers?: { [name: string]: any };
+  status: number;
+}
 
-export async function getPetWebpageUnimplemented(): GetPetWebpageResult {
+export type PlaceOrderResult = Promise<PlaceOrderResult200 | PlaceOrderResultDefault>;
+
+export async function placeOrderUnimplemented(): PlaceOrderResult {
   throw new NotImplementedError()
 }
 
@@ -175,12 +192,12 @@ export interface Server<Req = unknown, Res = unknown> {
   mixedContentTypes: (
     args: MixedContentTypesArgs<Req, Res>
   ) => MixedContentTypesResult;
-  getPetImage: (
-    args: GetPetImageArgs<Req, Res>
-  ) => GetPetImageResult;
-  getPetWebpage: (
-    args: GetPetWebpageArgs<Req, Res>
-  ) => GetPetWebpageResult;
+  getInventory: (
+    args: GetInventoryArgs<Req, Res>
+  ) => GetInventoryResult;
+  placeOrder: (
+    args: PlaceOrderArgs<Req, Res>
+  ) => PlaceOrderResult;
 }
 
 export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route[] {
@@ -207,18 +224,18 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
     },
     {
       method: "get",
-      path: "/pet/{petId}/image",
-      handler: server.getPetImage as Route["handler"],
+      path: "/store/inventory",
+      handler: server.getInventory as Route["handler"],
     },
     {
-      method: "get",
-      path: "/pet/{petId}/webpage",
-      handler: server.getPetWebpage as Route["handler"],
+      method: "post",
+      path: "/store/order",
+      handler: server.placeOrder as Route["handler"],
     },
   ]
 }
 
-export type Tag = "pets" | "media" | null;
+export type Tag = "pets" | "store" | null;
 
 export interface ServerForPets<Req = unknown, Res = unknown> {
   listPets: (args: ListPetsArgs<Req, Res>) => ListPetsResult;
@@ -230,14 +247,14 @@ export interface ServerForUntagged<Req = unknown, Res = unknown> {
   mixedContentTypes: (args: MixedContentTypesArgs<Req, Res>) => MixedContentTypesResult;
 }
 
-export interface ServerForMedia<Req = unknown, Res = unknown> {
-  getPetImage: (args: GetPetImageArgs<Req, Res>) => GetPetImageResult;
-  getPetWebpage: (args: GetPetWebpageArgs<Req, Res>) => GetPetWebpageResult;
+export interface ServerForStore<Req = unknown, Res = unknown> {
+  getInventory: (args: GetInventoryArgs<Req, Res>) => GetInventoryResult;
+  placeOrder: (args: PlaceOrderArgs<Req, Res>) => PlaceOrderResult;
 }
 
 export function registerRouteHandlersByTag<Req, Res>(tag: "pets", server: ServerForPets<Req, Res>): Route[];
 export function registerRouteHandlersByTag<Req, Res>(tag: null, server: ServerForUntagged<Req, Res>): Route[];
-export function registerRouteHandlersByTag<Req, Res>(tag: "media", server: ServerForMedia<Req, Res>): Route[];
+export function registerRouteHandlersByTag<Req, Res>(tag: "store", server: ServerForStore<Req, Res>): Route[];
 export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<Server<Req, Res>>): Route[] {
   const routes: Route[] = [];
 
@@ -266,16 +283,16 @@ export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<S
         handler: server.mixedContentTypes as Route["handler"],
       });
       break;
-    case "media":
+    case "store":
       routes.push({
         method: "get",
-        path: "/pet/{petId}/image",
-        handler: server.getPetImage as Route["handler"],
+        path: "/store/inventory",
+        handler: server.getInventory as Route["handler"],
       });
       routes.push({
-        method: "get",
-        path: "/pet/{petId}/webpage",
-        handler: server.getPetWebpage as Route["handler"],
+        method: "post",
+        path: "/store/order",
+        handler: server.placeOrder as Route["handler"],
       });
       break;
   }
