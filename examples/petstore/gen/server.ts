@@ -747,178 +747,140 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
 export type Tag = "pet" | "store" | "user";
 
 export interface ServerForPet<Req = unknown, Res = unknown> {
-  updatePet?: (args: UpdatePetArgs<Req, Res>) => UpdatePetResult;
-  addPet?: (args: AddPetArgs<Req, Res>) => AddPetResult;
-  findPetsByStatus?: (args: FindPetsByStatusArgs<Req, Res>) => FindPetsByStatusResult;
-  findPetsByTags?: (args: FindPetsByTagsArgs<Req, Res>) => FindPetsByTagsResult;
-  getPetById?: (args: GetPetByIdArgs<Req, Res>) => GetPetByIdResult;
-  updatePetWithForm?: (args: UpdatePetWithFormArgs<Req, Res>) => UpdatePetWithFormResult;
-  deletePet?: (args: DeletePetArgs<Req, Res>) => DeletePetResult;
-  uploadFile?: (args: UploadFileArgs<Req, Res>) => UploadFileResult;
+  updatePet: (args: UpdatePetArgs<Req, Res>) => UpdatePetResult;
+  addPet: (args: AddPetArgs<Req, Res>) => AddPetResult;
+  findPetsByStatus: (args: FindPetsByStatusArgs<Req, Res>) => FindPetsByStatusResult;
+  findPetsByTags: (args: FindPetsByTagsArgs<Req, Res>) => FindPetsByTagsResult;
+  getPetById: (args: GetPetByIdArgs<Req, Res>) => GetPetByIdResult;
+  updatePetWithForm: (args: UpdatePetWithFormArgs<Req, Res>) => UpdatePetWithFormResult;
+  deletePet: (args: DeletePetArgs<Req, Res>) => DeletePetResult;
+  uploadFile: (args: UploadFileArgs<Req, Res>) => UploadFileResult;
 }
 
 export interface ServerForStore<Req = unknown, Res = unknown> {
-  getInventory?: (args: GetInventoryArgs<Req, Res>) => GetInventoryResult;
-  placeOrder?: (args: PlaceOrderArgs<Req, Res>) => PlaceOrderResult;
-  getOrderById?: (args: GetOrderByIdArgs<Req, Res>) => GetOrderByIdResult;
-  deleteOrder?: (args: DeleteOrderArgs<Req, Res>) => DeleteOrderResult;
+  getInventory: (args: GetInventoryArgs<Req, Res>) => GetInventoryResult;
+  placeOrder: (args: PlaceOrderArgs<Req, Res>) => PlaceOrderResult;
+  getOrderById: (args: GetOrderByIdArgs<Req, Res>) => GetOrderByIdResult;
+  deleteOrder: (args: DeleteOrderArgs<Req, Res>) => DeleteOrderResult;
 }
 
 export interface ServerForUser<Req = unknown, Res = unknown> {
-  createUser?: (args: CreateUserArgs<Req, Res>) => CreateUserResult;
-  createUsersWithListInput?: (args: CreateUsersWithListInputArgs<Req, Res>) => CreateUsersWithListInputResult;
-  loginUser?: (args: LoginUserArgs<Req, Res>) => LoginUserResult;
-  logoutUser?: (args: LogoutUserArgs<Req, Res>) => LogoutUserResult;
-  getUserByName?: (args: GetUserByNameArgs<Req, Res>) => GetUserByNameResult;
-  updateUser?: (args: UpdateUserArgs<Req, Res>) => UpdateUserResult;
-  deleteUser?: (args: DeleteUserArgs<Req, Res>) => DeleteUserResult;
+  createUser: (args: CreateUserArgs<Req, Res>) => CreateUserResult;
+  createUsersWithListInput: (args: CreateUsersWithListInputArgs<Req, Res>) => CreateUsersWithListInputResult;
+  loginUser: (args: LoginUserArgs<Req, Res>) => LoginUserResult;
+  logoutUser: (args: LogoutUserArgs<Req, Res>) => LogoutUserResult;
+  getUserByName: (args: GetUserByNameArgs<Req, Res>) => GetUserByNameResult;
+  updateUser: (args: UpdateUserArgs<Req, Res>) => UpdateUserResult;
+  deleteUser: (args: DeleteUserArgs<Req, Res>) => DeleteUserResult;
 }
 
-export function registerRouteHandlersByTag<Req, Res>(tag: "pet", server: Partial<ServerForPet<Req, Res>>): Route[];
-export function registerRouteHandlersByTag<Req, Res>(tag: "store", server: Partial<ServerForStore<Req, Res>>): Route[];
-export function registerRouteHandlersByTag<Req, Res>(tag: "user", server: Partial<ServerForUser<Req, Res>>): Route[];
+export function registerRouteHandlersByTag<Req, Res>(tag: "pet", server: ServerForPet<Req, Res>): Route[];
+export function registerRouteHandlersByTag<Req, Res>(tag: "store", server: ServerForStore<Req, Res>): Route[];
+export function registerRouteHandlersByTag<Req, Res>(tag: "user", server: ServerForUser<Req, Res>): Route[];
 export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<Server<Req, Res>>): Route[] {
   const routes: Route[] = [];
 
   switch (tag) {
     case "pet":
-      if (server.updatePet) {
-        routes.push({
-          method: "put",
-          path: "/pet",
-          handler: server.updatePet as Route["handler"],
-        });
-      }
-      if (server.addPet) {
-        routes.push({
-          method: "post",
-          path: "/pet",
-          handler: server.addPet as Route["handler"],
-        });
-      }
-      if (server.findPetsByStatus) {
-        routes.push({
-          method: "get",
-          path: "/pet/findByStatus",
-          handler: server.findPetsByStatus as Route["handler"],
-        });
-      }
-      if (server.findPetsByTags) {
-        routes.push({
-          method: "get",
-          path: "/pet/findByTags",
-          handler: server.findPetsByTags as Route["handler"],
-        });
-      }
-      if (server.getPetById) {
-        routes.push({
-          method: "get",
-          path: "/pet/{petId}",
-          handler: server.getPetById as Route["handler"],
-        });
-      }
-      if (server.updatePetWithForm) {
-        routes.push({
-          method: "post",
-          path: "/pet/{petId}",
-          handler: server.updatePetWithForm as Route["handler"],
-        });
-      }
-      if (server.deletePet) {
-        routes.push({
-          method: "delete",
-          path: "/pet/{petId}",
-          handler: server.deletePet as Route["handler"],
-        });
-      }
-      if (server.uploadFile) {
-        routes.push({
-          method: "post",
-          path: "/pet/{petId}/uploadImage",
-          handler: server.uploadFile as Route["handler"],
-        });
-      }
+      routes.push({
+        method: "put",
+        path: "/pet",
+        handler: server.updatePet as Route["handler"],
+      });
+      routes.push({
+        method: "post",
+        path: "/pet",
+        handler: server.addPet as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/pet/findByStatus",
+        handler: server.findPetsByStatus as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/pet/findByTags",
+        handler: server.findPetsByTags as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/pet/{petId}",
+        handler: server.getPetById as Route["handler"],
+      });
+      routes.push({
+        method: "post",
+        path: "/pet/{petId}",
+        handler: server.updatePetWithForm as Route["handler"],
+      });
+      routes.push({
+        method: "delete",
+        path: "/pet/{petId}",
+        handler: server.deletePet as Route["handler"],
+      });
+      routes.push({
+        method: "post",
+        path: "/pet/{petId}/uploadImage",
+        handler: server.uploadFile as Route["handler"],
+      });
       break;
     case "store":
-      if (server.getInventory) {
-        routes.push({
-          method: "get",
-          path: "/store/inventory",
-          handler: server.getInventory as Route["handler"],
-        });
-      }
-      if (server.placeOrder) {
-        routes.push({
-          method: "post",
-          path: "/store/order",
-          handler: server.placeOrder as Route["handler"],
-        });
-      }
-      if (server.getOrderById) {
-        routes.push({
-          method: "get",
-          path: "/store/order/{orderId}",
-          handler: server.getOrderById as Route["handler"],
-        });
-      }
-      if (server.deleteOrder) {
-        routes.push({
-          method: "delete",
-          path: "/store/order/{orderId}",
-          handler: server.deleteOrder as Route["handler"],
-        });
-      }
+      routes.push({
+        method: "get",
+        path: "/store/inventory",
+        handler: server.getInventory as Route["handler"],
+      });
+      routes.push({
+        method: "post",
+        path: "/store/order",
+        handler: server.placeOrder as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/store/order/{orderId}",
+        handler: server.getOrderById as Route["handler"],
+      });
+      routes.push({
+        method: "delete",
+        path: "/store/order/{orderId}",
+        handler: server.deleteOrder as Route["handler"],
+      });
       break;
     case "user":
-      if (server.createUser) {
-        routes.push({
-          method: "post",
-          path: "/user",
-          handler: server.createUser as Route["handler"],
-        });
-      }
-      if (server.createUsersWithListInput) {
-        routes.push({
-          method: "post",
-          path: "/user/createWithList",
-          handler: server.createUsersWithListInput as Route["handler"],
-        });
-      }
-      if (server.loginUser) {
-        routes.push({
-          method: "get",
-          path: "/user/login",
-          handler: server.loginUser as Route["handler"],
-        });
-      }
-      if (server.logoutUser) {
-        routes.push({
-          method: "get",
-          path: "/user/logout",
-          handler: server.logoutUser as Route["handler"],
-        });
-      }
-      if (server.getUserByName) {
-        routes.push({
-          method: "get",
-          path: "/user/{username}",
-          handler: server.getUserByName as Route["handler"],
-        });
-      }
-      if (server.updateUser) {
-        routes.push({
-          method: "put",
-          path: "/user/{username}",
-          handler: server.updateUser as Route["handler"],
-        });
-      }
-      if (server.deleteUser) {
-        routes.push({
-          method: "delete",
-          path: "/user/{username}",
-          handler: server.deleteUser as Route["handler"],
-        });
-      }
+      routes.push({
+        method: "post",
+        path: "/user",
+        handler: server.createUser as Route["handler"],
+      });
+      routes.push({
+        method: "post",
+        path: "/user/createWithList",
+        handler: server.createUsersWithListInput as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/user/login",
+        handler: server.loginUser as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/user/logout",
+        handler: server.logoutUser as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/user/{username}",
+        handler: server.getUserByName as Route["handler"],
+      });
+      routes.push({
+        method: "put",
+        path: "/user/{username}",
+        handler: server.updateUser as Route["handler"],
+      });
+      routes.push({
+        method: "delete",
+        path: "/user/{username}",
+        handler: server.deleteUser as Route["handler"],
+      });
       break;
   }
 

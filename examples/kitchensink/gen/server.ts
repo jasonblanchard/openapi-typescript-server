@@ -254,62 +254,50 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
 export type Tag = null;
 
 export interface ServerForUntagged<Req = unknown, Res = unknown> {
-  listPets?: (args: ListPetsArgs<Req, Res>) => ListPetsResult;
-  getPetById?: (args: GetPetByIdArgs<Req, Res>) => GetPetByIdResult;
-  updatePetWithForm?: (args: UpdatePetWithFormArgs<Req, Res>) => UpdatePetWithFormResult;
-  mixedContentTypes?: (args: MixedContentTypesArgs<Req, Res>) => MixedContentTypesResult;
-  getPetImage?: (args: GetPetImageArgs<Req, Res>) => GetPetImageResult;
-  getPetWebpage?: (args: GetPetWebpageArgs<Req, Res>) => GetPetWebpageResult;
+  listPets: (args: ListPetsArgs<Req, Res>) => ListPetsResult;
+  getPetById: (args: GetPetByIdArgs<Req, Res>) => GetPetByIdResult;
+  updatePetWithForm: (args: UpdatePetWithFormArgs<Req, Res>) => UpdatePetWithFormResult;
+  mixedContentTypes: (args: MixedContentTypesArgs<Req, Res>) => MixedContentTypesResult;
+  getPetImage: (args: GetPetImageArgs<Req, Res>) => GetPetImageResult;
+  getPetWebpage: (args: GetPetWebpageArgs<Req, Res>) => GetPetWebpageResult;
 }
 
-export function registerRouteHandlersByTag<Req, Res>(tag: null, server: Partial<ServerForUntagged<Req, Res>>): Route[];
+export function registerRouteHandlersByTag<Req, Res>(tag: null, server: ServerForUntagged<Req, Res>): Route[];
 export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<Server<Req, Res>>): Route[] {
   const routes: Route[] = [];
 
   switch (tag) {
     case null:
-      if (server.listPets) {
-        routes.push({
-          method: "get",
-          path: "/pets",
-          handler: server.listPets as Route["handler"],
-        });
-      }
-      if (server.getPetById) {
-        routes.push({
-          method: "get",
-          path: "/pet/{petId}",
-          handler: server.getPetById as Route["handler"],
-        });
-      }
-      if (server.updatePetWithForm) {
-        routes.push({
-          method: "post",
-          path: "/pet/{petId}",
-          handler: server.updatePetWithForm as Route["handler"],
-        });
-      }
-      if (server.mixedContentTypes) {
-        routes.push({
-          method: "post",
-          path: "/pet/{petId}/mixed-content-types",
-          handler: server.mixedContentTypes as Route["handler"],
-        });
-      }
-      if (server.getPetImage) {
-        routes.push({
-          method: "get",
-          path: "/pet/{petId}/image",
-          handler: server.getPetImage as Route["handler"],
-        });
-      }
-      if (server.getPetWebpage) {
-        routes.push({
-          method: "get",
-          path: "/pet/{petId}/webpage",
-          handler: server.getPetWebpage as Route["handler"],
-        });
-      }
+      routes.push({
+        method: "get",
+        path: "/pets",
+        handler: server.listPets as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/pet/{petId}",
+        handler: server.getPetById as Route["handler"],
+      });
+      routes.push({
+        method: "post",
+        path: "/pet/{petId}",
+        handler: server.updatePetWithForm as Route["handler"],
+      });
+      routes.push({
+        method: "post",
+        path: "/pet/{petId}/mixed-content-types",
+        handler: server.mixedContentTypes as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/pet/{petId}/image",
+        handler: server.getPetImage as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/pet/{petId}/webpage",
+        handler: server.getPetWebpage as Route["handler"],
+      });
       break;
   }
 

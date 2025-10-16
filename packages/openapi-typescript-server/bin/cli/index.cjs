@@ -531,8 +531,8 @@ function generate(spec, types, outpath, version) {
         tagInterface.addProperty({
           name: operationId,
           type: `(args: ${op.args}<Req, Res>) => ${op.result}`,
-          hasQuestionToken: true
-          // Make it optional since it's a partial implementation
+          hasQuestionToken: false
+          // Required - all operations for this tag must be implemented
         });
       }
     });
@@ -557,7 +557,6 @@ function generate(spec, types, outpath, version) {
           operations.forEach((operationId) => {
             const op = operationsById[operationId];
             if (op) {
-              writer.writeLine(`if (server.${operationId}) {`);
               writer.writeLine("routes.push({");
               writer.writeLine(`method: "${op.method}",`);
               writer.writeLine(`path: "${op.path}",`);
@@ -565,7 +564,6 @@ function generate(spec, types, outpath, version) {
                 `handler: server.${operationId} as Route["handler"],`
               );
               writer.writeLine("});");
-              writer.writeLine("}");
             }
           });
           writer.writeLine("break;");
@@ -582,7 +580,7 @@ function generate(spec, types, outpath, version) {
     registerByTagFunc.addOverload({
       parameters: [
         { name: "tag", type: tagValue },
-        { name: "server", type: `Partial<${interfaceName}<Req, Res>>` }
+        { name: "server", type: `${interfaceName}<Req, Res>` }
       ],
       typeParameters: [{ name: "Req" }, { name: "Res" }],
       returnType: "Route[]"
