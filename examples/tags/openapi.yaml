@@ -7,6 +7,8 @@ servers:
 paths:
   /pets:
     get:
+      tags:
+        - pets
       operationId: listPets
       summary: Returns all pets from the system that the user has access to
       responses:
@@ -29,6 +31,8 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
   /pet/{petId}:
     get:
+      tags:
+        - pets
       operationId: getPetById
       parameters:
         - name: petId
@@ -55,6 +59,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
     post:
+      tags:
+        - pets
       operationId: updatePetWithForm
       parameters:
         - name: petId
@@ -151,6 +157,8 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
   /pet/{petId}/image:
     get:
+      tags:
+        - media
       operationId: getPetImage
       parameters:
         - name: petId
@@ -170,6 +178,8 @@ paths:
                 format: binary
   /pet/{petId}/webpage:
     get:
+      tags:
+        - media
       operationId: getPetWebpage
       parameters:
         - name: petId

@@ -129,38 +129,43 @@ describe("mixed content types with different structures", async () => {
 });
 
 describe("listPets", async () => {
-  it("propagates unimplemented error", async () => {
+  it("returns 200", async () => {
     const response = await request(app)
       .get("/api/v3/pets")
       .set("Accept", "application/json");
 
-    assert.equal(response.status, 501);
-    assert.equal(response.body.message, "Not Implemented");
-  });
-
-  describe("getPetImage", async () => {
-    it("returns 200", async () => {
-      const response = await request(app)
-        .get("/api/v3/pet/123/image")
-        .set("Accept", "image/jpeg");
-
-      assert.equal(response.status, 200);
-      assert(response.body);
-      assert.equal(response.headers["content-type"], "image/jpeg");
+    assert.equal(response.status, 200);
+    assert.deepEqual(response.body, {
+      pets: [
+        { id: 1, name: "dog" },
+        { id: 2, name: "cat" },
+      ],
     });
   });
+});
 
-  describe("getPetWebpage", async () => {
-    it("returns 200", async () => {
-      const response = await request(app)
-        .get("/api/v3/pet/123/webpage")
-        .set("Accept", "text/html");
+describe("getPetImage", async () => {
+  it("returns 200", async () => {
+    const response = await request(app)
+      .get("/api/v3/pet/123/image")
+      .set("Accept", "image/jpeg");
 
-      assert.equal(response.status, 200);
-      assert.equal(
-        response.text,
-        "<html><body><h1>Hello, pet 123!</h1></body></html>",
-      );
-    });
+    assert.equal(response.status, 200);
+    assert(response.body);
+    assert.equal(response.headers["content-type"], "image/jpeg");
+  });
+});
+
+describe("getPetWebpage", async () => {
+  it("returns 200", async () => {
+    const response = await request(app)
+      .get("/api/v3/pet/123/webpage")
+      .set("Accept", "text/html");
+
+    assert.equal(response.status, 200);
+    assert.equal(
+      response.text,
+      "<html><body><h1>Hello, pet 123!</h1></body></html>",
+    );
   });
 });

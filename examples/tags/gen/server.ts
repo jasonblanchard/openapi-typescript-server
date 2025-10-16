@@ -3,7 +3,7 @@
  * Do not make direct changes to the file.
  */
 
-import type { paths } from "./schema";
+import type { paths } from "./schema.d.ts";
 import type { Route } from "openapi-typescript-server-runtime";
 import { NotImplementedError } from "openapi-typescript-server-runtime";
 
@@ -218,23 +218,31 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
   ]
 }
 
-export type Tag = null;
+export type Tag = "pets" | "media" | null;
 
-export interface ServerForUntagged<Req = unknown, Res = unknown> {
+export interface ServerForPets<Req = unknown, Res = unknown> {
   listPets: (args: ListPetsArgs<Req, Res>) => ListPetsResult;
   getPetById: (args: GetPetByIdArgs<Req, Res>) => GetPetByIdResult;
   updatePetWithForm: (args: UpdatePetWithFormArgs<Req, Res>) => UpdatePetWithFormResult;
+}
+
+export interface ServerForUntagged<Req = unknown, Res = unknown> {
   mixedContentTypes: (args: MixedContentTypesArgs<Req, Res>) => MixedContentTypesResult;
+}
+
+export interface ServerForMedia<Req = unknown, Res = unknown> {
   getPetImage: (args: GetPetImageArgs<Req, Res>) => GetPetImageResult;
   getPetWebpage: (args: GetPetWebpageArgs<Req, Res>) => GetPetWebpageResult;
 }
 
+export function registerRouteHandlersByTag<Req, Res>(tag: "pets", server: ServerForPets<Req, Res>): Route[];
 export function registerRouteHandlersByTag<Req, Res>(tag: null, server: ServerForUntagged<Req, Res>): Route[];
+export function registerRouteHandlersByTag<Req, Res>(tag: "media", server: ServerForMedia<Req, Res>): Route[];
 export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<Server<Req, Res>>): Route[] {
   const routes: Route[] = [];
 
   switch (tag) {
-    case null:
+    case "pets":
       routes.push({
         method: "get",
         path: "/pets",
@@ -250,11 +258,15 @@ export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<S
         path: "/pet/{petId}",
         handler: server.updatePetWithForm as Route["handler"],
       });
+      break;
+    case null:
       routes.push({
         method: "post",
         path: "/pet/{petId}/mixed-content-types",
         handler: server.mixedContentTypes as Route["handler"],
       });
+      break;
+    case "media":
       routes.push({
         method: "get",
         path: "/pet/{petId}/image",
