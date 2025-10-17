@@ -108,36 +108,15 @@ export const storeService: ServerTypes.ServerForStore<Request, Response> = {
 // Service implementation for untagged operations
 export const untaggedService: ServerTypes.ServerForUntagged<Request, Response> =
   {
-    mixedContentTypes: async ({
-      parameters,
-      requestBody,
-      contentType,
-    }): ServerTypes.MixedContentTypesResult => {
-      const { petId } = parameters.path;
-      let status: "available" | "pending" | "sold" | undefined;
-
-      // Since each content type has different structures,
-      // use the request content type and requestBody discriminator to narrow the type in each case.
-
-      if (
-        contentType === "application/json" &&
-        requestBody.mediaType === "application/json"
-      ) {
-        status = requestBody.content.jsonstatus;
-      }
-
-      if (
-        contentType == "application/xml" &&
-        requestBody.mediaType === "application/xml"
-      ) {
-        status = requestBody.content.xmlstatus;
-      }
-
+    listUsers: async (): ServerTypes.ListUsersResult => {
       return {
         content: {
           200: {
             "application/json": {
-              pet: { id: petId, name: "dog", status },
+              users: [
+                { id: 1, username: "john_doe", email: "john@example.com" },
+                { id: 2, username: "jane_smith", email: "jane@example.com" },
+              ],
             },
           },
         },

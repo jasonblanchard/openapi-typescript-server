@@ -5,7 +5,6 @@ import registerRoutes from "openapi-typescript-server-express";
 import { petsService, storeService, untaggedService } from "./api.ts";
 import OpenApiValidator from "express-openapi-validator";
 import { NotImplementedError } from "openapi-typescript-server-runtime";
-import xmlparser from "express-xml-bodyparser";
 
 export default function makeApp() {
   const app = express();
@@ -15,7 +14,6 @@ export default function makeApp() {
   });
 
   app.use(express.json());
-  app.use(xmlparser());
   app.use(express.urlencoded({ extended: true }));
 
   const apiRouter = express();

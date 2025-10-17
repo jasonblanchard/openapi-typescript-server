@@ -37,16 +37,17 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/pet/{petId}/mixed-content-types": {
+    "/users": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Returns all users from the system */
+        get: operations["listUsers"];
         put?: never;
-        post: operations["mixedContentTypes"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -131,6 +132,12 @@ export interface components {
              * @enum {string}
              */
             status?: "placed" | "approved" | "delivered";
+        };
+        User: {
+            /** Format: int64 */
+            id: number;
+            username: string;
+            email?: string;
         };
     };
     responses: never;
@@ -222,8 +229,6 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["UpdatePetInput"];
-                "application/xml": components["schemas"]["UpdatePetInput"];
-                "application/x-www-form-urlencoded": components["schemas"]["UpdatePetInput"];
             };
         };
         responses: {
@@ -249,37 +254,23 @@ export interface operations {
             };
         };
     };
-    mixedContentTypes: {
+    listUsers: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                /** @description ID of pet that needs to be updated */
-                petId: number;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @enum {string} */
-                    jsonstatus: "available" | "pending" | "sold";
-                };
-                "application/xml": {
-                    /** @enum {string} */
-                    xmlstatus: "available" | "pending" | "sold";
-                };
-            };
-        };
+        requestBody?: never;
         responses: {
-            /** @description successful operation */
+            /** @description A list of users. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": {
-                        pet?: components["schemas"]["Pet"];
+                        users?: components["schemas"]["User"][];
                     };
                 };
             };

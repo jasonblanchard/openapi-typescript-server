@@ -64,14 +64,6 @@ export interface UpdatePetWithFormArgs<Req, Res> {
     mediaType: "application/json";
     content: paths['/pet/{petId}']['post']['requestBody']['content']['application/json']
   }
-  | {
-    mediaType: "application/xml";
-    content: paths['/pet/{petId}']['post']['requestBody']['content']['application/xml']
-  }
-  | {
-    mediaType: "application/x-www-form-urlencoded";
-    content: paths['/pet/{petId}']['post']['requestBody']['content']['application/x-www-form-urlencoded']
-  }
   ;
 }
 
@@ -92,36 +84,27 @@ export async function updatePetWithFormUnimplemented(): UpdatePetWithFormResult 
   throw new NotImplementedError()
 }
 
-export interface MixedContentTypesArgs<Req, Res> {
-  parameters: paths['/pet/{petId}/mixed-content-types']['post']['parameters'];
+export interface ListUsersArgs<Req, Res> {
+  parameters: paths['/users']['get']['parameters'];
   contentType: string;
   req: Req;
   res: Res;
-  requestBody: {
-    mediaType: "application/json";
-    content: paths['/pet/{petId}/mixed-content-types']['post']['requestBody']['content']['application/json']
-  }
-  | {
-    mediaType: "application/xml";
-    content: paths['/pet/{petId}/mixed-content-types']['post']['requestBody']['content']['application/xml']
-  }
-  ;
 }
 
-interface MixedContentTypesResult200 {
-  content: { 200: paths['/pet/{petId}/mixed-content-types']['post']['responses']['200']['content'] };
+interface ListUsersResult200 {
+  content: { 200: paths['/users']['get']['responses']['200']['content'] };
   headers?: { [name: string]: any };
 }
 
-interface MixedContentTypesResultDefault {
-  content: { default: paths['/pet/{petId}/mixed-content-types']['post']['responses']['default']['content'] };
+interface ListUsersResultDefault {
+  content: { default: paths['/users']['get']['responses']['default']['content'] };
   headers?: { [name: string]: any };
   status: number;
 }
 
-export type MixedContentTypesResult = Promise<MixedContentTypesResult200 | MixedContentTypesResultDefault>;
+export type ListUsersResult = Promise<ListUsersResult200 | ListUsersResultDefault>;
 
-export async function mixedContentTypesUnimplemented(): MixedContentTypesResult {
+export async function listUsersUnimplemented(): ListUsersResult {
   throw new NotImplementedError()
 }
 
@@ -189,9 +172,10 @@ export interface Server<Req = unknown, Res = unknown> {
   updatePetWithForm: (
     args: UpdatePetWithFormArgs<Req, Res>
   ) => UpdatePetWithFormResult;
-  mixedContentTypes: (
-    args: MixedContentTypesArgs<Req, Res>
-  ) => MixedContentTypesResult;
+  /** Returns all users from the system */
+  listUsers: (
+    args: ListUsersArgs<Req, Res>
+  ) => ListUsersResult;
   getInventory: (
     args: GetInventoryArgs<Req, Res>
   ) => GetInventoryResult;
@@ -218,9 +202,9 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
       handler: server.updatePetWithForm as Route["handler"],
     },
     {
-      method: "post",
-      path: "/pet/{petId}/mixed-content-types",
-      handler: server.mixedContentTypes as Route["handler"],
+      method: "get",
+      path: "/users",
+      handler: server.listUsers as Route["handler"],
     },
     {
       method: "get",
@@ -244,7 +228,7 @@ export interface ServerForPets<Req = unknown, Res = unknown> {
 }
 
 export interface ServerForUntagged<Req = unknown, Res = unknown> {
-  mixedContentTypes: (args: MixedContentTypesArgs<Req, Res>) => MixedContentTypesResult;
+  listUsers: (args: ListUsersArgs<Req, Res>) => ListUsersResult;
 }
 
 export interface ServerForStore<Req = unknown, Res = unknown> {
@@ -278,9 +262,9 @@ export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<S
       break;
     case null:
       routes.push({
-        method: "post",
-        path: "/pet/{petId}/mixed-content-types",
-        handler: server.mixedContentTypes as Route["handler"],
+        method: "get",
+        path: "/users",
+        handler: server.listUsers as Route["handler"],
       });
       break;
     case "store":
