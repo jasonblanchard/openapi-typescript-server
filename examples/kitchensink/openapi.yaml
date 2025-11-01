@@ -27,6 +27,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /pets/{size}:
+    get:
+      operationId: listPetsBySize
+      summary: Returns all pets with a specific size
+      parameters:
+        - name: size
+          in: path
+          description: Size of the pets to return
+          required: true
+          schema:
+            $ref: "#/components/schemas/PetSize"
+      responses:
+        "200":
+          description: A list of pets.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pets:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Pet"
+        "default":
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /pet/{petId}:
     get:
       operationId: getPetById
@@ -188,6 +217,12 @@ paths:
                 type: string
 components:
   schemas:
+    PetSize:
+      type: string
+      enum:
+        - small
+        - medium
+        - large
     ErrorResponse:
       type: object
       properties:

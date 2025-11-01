@@ -95,6 +95,8 @@ const API: ServerTypes.Server<Request, Response> = {
 
   listPets: server.listPetsUnimplemented,
 
+  listPetsBySize: server.listPetsBySizeUnimplemented,
+
   getPetImage: async (): ServerTypes.GetPetImageResult => {
     const image = await fs.readFile(join(__dirname, `./cat.jpeg`), {
       encoding: "base64",

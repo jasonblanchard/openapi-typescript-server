@@ -137,30 +137,53 @@ describe("listPets", async () => {
     assert.equal(response.status, 501);
     assert.equal(response.body.message, "Not Implemented");
   });
+});
 
-  describe("getPetImage", async () => {
-    it("returns 200", async () => {
-      const response = await request(app)
-        .get("/api/v3/pet/123/image")
-        .set("Accept", "image/jpeg");
+describe("listPetsBySize", async () => {
+  it("propagates unimplemented error", async () => {
+    const response = await request(app)
+      .get("/api/v3/pets/small")
+      .set("Accept", "application/json");
 
-      assert.equal(response.status, 200);
-      assert(response.body);
-      assert.equal(response.headers["content-type"], "image/jpeg");
-    });
+    assert.equal(response.status, 501);
+    assert.equal(response.body.message, "Not Implemented");
   });
 
-  describe("getPetWebpage", async () => {
-    it("returns 200", async () => {
-      const response = await request(app)
-        .get("/api/v3/pet/123/webpage")
-        .set("Accept", "text/html");
+  it("fails with unknown enums", async () => {
+    const response = await request(app)
+      .get("/api/v3/pets/blarge")
+      .set("Accept", "application/json");
 
-      assert.equal(response.status, 200);
-      assert.equal(
-        response.text,
-        "<html><body><h1>Hello, pet 123!</h1></body></html>",
-      );
-    });
+    assert.equal(response.status, 400);
+    assert.equal(
+      response.body.message,
+      "request/params/size must be equal to one of the allowed values: small, medium, large",
+    );
+  });
+});
+
+describe("getPetImage", async () => {
+  it("returns 200", async () => {
+    const response = await request(app)
+      .get("/api/v3/pet/123/image")
+      .set("Accept", "image/jpeg");
+
+    assert.equal(response.status, 200);
+    assert(response.body);
+    assert.equal(response.headers["content-type"], "image/jpeg");
+  });
+});
+
+describe("getPetWebpage", async () => {
+  it("returns 200", async () => {
+    const response = await request(app)
+      .get("/api/v3/pet/123/webpage")
+      .set("Accept", "text/html");
+
+    assert.equal(response.status, 200);
+    assert.equal(
+      response.text,
+      "<html><body><h1>Hello, pet 123!</h1></body></html>",
+    );
   });
 });

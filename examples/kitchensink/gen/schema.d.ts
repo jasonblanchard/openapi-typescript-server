@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/pets/{size}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns all pets with a specific size */
+        get: operations["listPetsBySize"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/pet/{petId}": {
         parameters: {
             query?: never;
@@ -89,6 +106,8 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** @enum {string} */
+        PetSize: "small" | "medium" | "large";
         ErrorResponse: {
             message?: string;
         };
@@ -133,6 +152,40 @@ export interface operations {
             query?: never;
             header?: never;
             path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A list of pets. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        pets?: components["schemas"]["Pet"][];
+                    };
+                };
+            };
+            /** @description unexpected error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    listPetsBySize: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Size of the pets to return */
+                size: components["schemas"]["PetSize"];
+            };
             cookie?: never;
         };
         requestBody?: never;

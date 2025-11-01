@@ -35,9 +35,7 @@ export const OpenAPISpec = z.object({
               name: z.string(),
               in: z.string(),
               required: z.boolean().optional(),
-              schema: z.object({
-                type: z.string(),
-              }),
+              schema: Schema,
             }),
           )
           .optional(),
