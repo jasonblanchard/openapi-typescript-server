@@ -909,7 +909,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description The name that needs to be fetched. Use user1 for testing.  */
+                /** @description The name that needs to be fetched. Use user1 for testing. */
                 username: string;
             };
             cookie?: never;

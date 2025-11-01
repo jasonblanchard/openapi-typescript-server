@@ -7,7 +7,7 @@
     "gen": "openapi-typescript ./openapi.yaml --output ./gen/schema.d.ts && openapi-typescript-server ./openapi.yaml -t ./schema.d.ts -o ./gen/server.ts "
   },
   "dependencies": {
-    "openapi-typescript": "^7.9.1",
+    "openapi-typescript": "^7.10.1",
     "openapi-typescript-server": "0.0.12",
     "openapi-typescript-server-express": "0.0.12"
   }

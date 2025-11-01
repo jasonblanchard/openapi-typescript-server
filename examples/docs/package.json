@@ -15,7 +15,7 @@
     "express": "^4.21.2",
     "express-openapi-validator": "^5.6.0",
     "express-xml-bodyparser": "^0.4.1",
-    "openapi-typescript": "^7.9.1",
+    "openapi-typescript": "^7.10.1",
     "openapi-typescript-server": "0.0.12",
     "openapi-typescript-server-express": "0.0.12",
     "supertest": "^7.1.4",
