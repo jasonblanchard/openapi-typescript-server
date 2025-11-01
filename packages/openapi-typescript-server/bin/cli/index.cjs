@@ -699,7 +699,7 @@ var package_default = {
     build: "tsup src/cli/index.ts --format cjs --out-dir bin/cli --clean"
   },
   dependencies: {
-    commander: "^14.0.1",
+    commander: "^14.0.2",
     "js-yaml": "^4.1.0",
     "openapi-typescript-server-runtime": "0.0.12",
     "ts-morph": "^27.0.0",
