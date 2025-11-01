@@ -41,6 +41,6 @@
     "build": "tsup src/index.ts --dts --format cjs,esm --clean"
   },
   "dependencies": {
-    "zod": "^4.0.14"
+    "zod": "^4.1.12"
   }
 }
