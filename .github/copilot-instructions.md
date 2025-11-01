@@ -17,6 +17,7 @@ OpenAPI Spec → [CLI] → Generated Server Interface → [Your API Implementati
 ```
 
 Key insight: Your handler return values mirror OpenAPI response structure:
+
 ```typescript
 return {
   content: {
@@ -32,6 +33,7 @@ return {
 ### Generated Code Pattern
 
 CLI generates per-operation:
+
 - `<OperationId>Args<Req, Res>` interface with typed parameters, requestBody, and framework objects
 - `<OperationId>Result` type union of all response variants
 - `<OperationId>Unimplemented()` stub throwing `NotImplementedError`
@@ -49,19 +51,21 @@ CLI generates per-operation:
 ## Development Workflow
 
 ### Initial Setup (Required Order)
+
 ```bash
 node --version              # Must be >= 23.6.0
 npm ci                      # 30 seconds - NEVER CANCEL
 npm run build:packages      # 5 seconds - builds .cjs files
 npm run gen:examples        # 5 seconds - validates CLI works
 npm run format:check        # 2 seconds
-npm run typecheck           # 3 seconds  
+npm run typecheck           # 3 seconds
 npm test                    # 1 second
 ```
 
 **NEVER** run `npm ci` with short timeout. Set to 60+ minutes or it will fail.
 
 ### After Code Changes (Validation Sequence)
+
 ```bash
 npm run format              # Auto-fix formatting (required before commit)
 npm run build:packages      # Re-build if CLI or adapters changed
@@ -71,6 +75,7 @@ npm test                    # All tests must pass
 ```
 
 ### Testing Generated Code Locally
+
 ```bash
 cd examples/docs
 npm run start               # Runs: node --watch cmd/index.ts (port 8080)
@@ -83,6 +88,7 @@ curl -X POST http://localhost:8080/api/v3/speak/123 \
 ```
 
 ### Regenerating After OpenAPI Changes
+
 ```bash
 # In example directory or your project:
 openapi-typescript ./openapi.yaml --output ./gen/schema.d.ts
@@ -113,9 +119,9 @@ openapi-typescript-server ./openapi.yaml --types ./schema.d.ts --output ./gen/se
    ```typescript
    registerRoutes(routes, app, {
      serializers: {
-       "application/xml": (content) => json2xml(JSON.stringify(content))
-     }
-   })
+       "application/xml": (content) => json2xml(JSON.stringify(content)),
+     },
+   });
    ```
 
 ### Error Handling Patterns
@@ -136,6 +142,7 @@ See `examples/docs/api.ts` for error pattern with `"default"` response variant.
 - Run: `npm test` at root (runs across all workspaces) or per-package
 
 Example pattern (`examples/docs/app.test.ts`):
+
 ```typescript
 import { describe, it } from "node:test";
 import assert from "node:assert";
@@ -163,12 +170,12 @@ packages/
       index.ts                         # Entry point, arg parsing
       generate.ts                      # Core codegen logic (creates Server interface)
     bin/cli/index.cjs                  # Built binary (created by build:packages)
-  
+
   openapi-typescript-server-runtime/  # Shared types (Route, errors)
     src/
       route.ts                         # Route, HandlerInput, HandlerResponse types
       errors.ts                        # NotImplementedError
-  
+
   openapi-typescript-server-express/  # Express adapter
     src/
       index.ts                         # registerRoutes() function
@@ -189,19 +196,22 @@ examples/
 ## Key Workflows for Common Tasks
 
 ### Adding Support for New Response Pattern
+
 1. Update `packages/openapi-typescript-server/src/cli/generate.ts` response variant logic
 2. Update `packages/openapi-typescript-server-express/src/index.ts` to handle new variant
 3. Add test case to `packages/openapi-typescript-server-express/src/index.test.ts`
 4. Run `npm run build:packages && npm run gen:examples && npm test`
 
 ### Adding New Framework Adapter
+
 1. Create `packages/openapi-typescript-server-<framework>/`
-2. Implement `registerRoutes(routes: Route[], app: FrameworkApp)` 
+2. Implement `registerRoutes(routes: Route[], app: FrameworkApp)`
 3. Handle parameter extraction, content negotiation, serialization per framework conventions
 4. Reference `openapi-typescript-server-express` as template
 5. Add integration tests using framework's test utilities
 
 ### Debugging Type Errors After Regeneration
+
 1. Check OpenAPI spec changed: Compare old/new `openapi.yaml`
 2. Check generated types: `git diff gen/schema.d.ts gen/server.ts`
 3. Restart TS Server: VS Code may cache old types
@@ -211,6 +221,7 @@ examples/
 ## CI/CD Pipeline (`.github/workflows/test.yaml`)
 
 Runs on every commit:
+
 ```yaml
 npm ci
 npm run format:check       # Fails if code not formatted
@@ -235,7 +246,7 @@ npm test
 ## Common Mistakes
 
 - ❌ Forgetting to run `npm run build:packages` after CLI changes (tests import stale code)
-- ❌ Not regenerating examples after CLI changes (CI will fail on diff check)  
+- ❌ Not regenerating examples after CLI changes (CI will fail on diff check)
 - ❌ Using structural typing instead of explicit `Server<Req, Res>` type (loses inference)
 - ❌ Mounting routes without base path (OpenAPI `servers.url` ignored by adapter)
 - ❌ Returning `"default"` response without `status` field (throws error at runtime)
