@@ -255,6 +255,7 @@ export type Tag = null;
 
 export interface ServerForUntagged<Req = unknown, Res = unknown> {
   listPets: (args: ListPetsArgs<Req, Res>) => ListPetsResult;
+  listPetsBySize: (args: ListPetsBySizeArgs<Req, Res>) => ListPetsBySizeResult;
   getPetById: (args: GetPetByIdArgs<Req, Res>) => GetPetByIdResult;
   updatePetWithForm: (args: UpdatePetWithFormArgs<Req, Res>) => UpdatePetWithFormResult;
   mixedContentTypes: (args: MixedContentTypesArgs<Req, Res>) => MixedContentTypesResult;
@@ -272,6 +273,11 @@ export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<S
         method: "get",
         path: "/pets",
         handler: server.listPets as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/pets/{size}",
+        handler: server.listPetsBySize as Route["handler"],
       });
       routes.push({
         method: "get",
