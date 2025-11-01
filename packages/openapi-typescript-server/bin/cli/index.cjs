@@ -703,7 +703,7 @@ var package_default = {
     "js-yaml": "^4.1.0",
     "openapi-typescript-server-runtime": "0.0.12",
     "ts-morph": "^27.0.0",
-    zod: "^4.0.14"
+    zod: "^4.1.12"
   },
   devDependencies: {
     "@types/js-yaml": "^4.0.9",
