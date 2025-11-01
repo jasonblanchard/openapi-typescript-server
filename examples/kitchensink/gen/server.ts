@@ -31,6 +31,30 @@ export async function listPetsUnimplemented(): ListPetsResult {
   throw new NotImplementedError()
 }
 
+export interface ListPetsBySizeArgs<Req, Res> {
+  parameters: paths['/pets/{size}']['get']['parameters'];
+  contentType: string;
+  req: Req;
+  res: Res;
+}
+
+interface ListPetsBySizeResult200 {
+  content: { 200: paths['/pets/{size}']['get']['responses']['200']['content'] };
+  headers?: { [name: string]: any };
+}
+
+interface ListPetsBySizeResultDefault {
+  content: { default: paths['/pets/{size}']['get']['responses']['default']['content'] };
+  headers?: { [name: string]: any };
+  status: number;
+}
+
+export type ListPetsBySizeResult = Promise<ListPetsBySizeResult200 | ListPetsBySizeResultDefault>;
+
+export async function listPetsBySizeUnimplemented(): ListPetsBySizeResult {
+  throw new NotImplementedError()
+}
+
 export interface GetPetByIdArgs<Req, Res> {
   parameters: paths['/pet/{petId}']['get']['parameters'];
   contentType: string;
@@ -166,6 +190,10 @@ export interface Server<Req = unknown, Res = unknown> {
   listPets: (
     args: ListPetsArgs<Req, Res>
   ) => ListPetsResult;
+  /** Returns all pets with a specific size */
+  listPetsBySize: (
+    args: ListPetsBySizeArgs<Req, Res>
+  ) => ListPetsBySizeResult;
   getPetById: (
     args: GetPetByIdArgs<Req, Res>
   ) => GetPetByIdResult;
@@ -189,6 +217,11 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
       method: "get",
       path: "/pets",
       handler: server.listPets as Route["handler"],
+    },
+    {
+      method: "get",
+      path: "/pets/{size}",
+      handler: server.listPetsBySize as Route["handler"],
     },
     {
       method: "get",
