@@ -72,3 +72,32 @@ export function registerRouteHandlers<Req, Res>(server: Server<Req, Res>): Route
     },
   ]
 }
+
+export type Tag = null;
+
+export interface ServerForUntagged<Req = unknown, Res = unknown> {
+  makePetSpeak: (args: MakePetSpeakArgs<Req, Res>) => MakePetSpeakResult;
+  uhoh: (args: UhohArgs<Req, Res>) => UhohResult;
+}
+
+export function registerRouteHandlersByTag<Req, Res>(tag: null, server: ServerForUntagged<Req, Res>): Route[];
+export function registerRouteHandlersByTag<Req, Res>(tag: Tag, server: Partial<Server<Req, Res>>): Route[] {
+  const routes: Route[] = [];
+
+  switch (tag) {
+    case null:
+      routes.push({
+        method: "post",
+        path: "/speak/{petId}",
+        handler: server.makePetSpeak as Route["handler"],
+      });
+      routes.push({
+        method: "get",
+        path: "/uhoh",
+        handler: server.uhoh as Route["handler"],
+      });
+      break;
+  }
+
+  return routes;
+}
