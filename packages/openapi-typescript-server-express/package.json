@@ -1,6 +1,6 @@
 {
   "name": "openapi-typescript-server-express",
-  "version": "0.0.12",
+  "version": "0.0.13-0",
   "description": "Express adapter for openapi-typescript-server",
   "author": "jasonblanchard",
   "license": "MIT",
@@ -48,6 +48,6 @@
     "build": "tsup src/index.ts --dts --format cjs,esm --clean"
   },
   "dependencies": {
-    "openapi-typescript-server-runtime": "0.0.12"
+    "openapi-typescript-server-runtime": "0.0.13-0"
   }
 }
