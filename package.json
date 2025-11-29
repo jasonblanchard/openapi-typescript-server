@@ -1,6 +1,6 @@
 {
   "name": "openapi-typescript-server-monorepo",
-  "version": "0.0.13",
+  "version": "0.0.14-0",
   "private": true,
   "author": "jasonblanchard",
   "license": "MIT",
