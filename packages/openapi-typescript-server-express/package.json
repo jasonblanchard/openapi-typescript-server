@@ -37,11 +37,11 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "devDependencies": {
-    "tsup": "^8.5.0",
+    "tsup": "^8.5.1",
     "xml-js": "^1.6.11"
   },
   "peerDependencies": {
-    "express": "^4.21.2 || ^5.0.0"
+    "express": "^4.21.2"
   },
   "scripts": {
     "test": "node --test",
