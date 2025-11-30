@@ -9,17 +9,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          cache: "npm"
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm run build:packages
-      - run: npm run gen:examples
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run format:check
+      - run: pnpm run build:packages
+      - run: pnpm run gen:examples
       - name: Make sure all changes to the root README.md is copied to the main package before diff check
         run: cp README.md packages/openapi-typescript-server/README.md
       - name: "Make sure there's no uncommitted changes"
         run: git add -A && git diff --exit-code HEAD
-      - run: npm run typecheck
-      - run: npm test
+      - run: pnpm run typecheck
+      - run: pnpm test
