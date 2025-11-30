@@ -19,6 +19,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run format:check
       - run: pnpm run build:packages
+      # Run install again to make sure it picks up the generated binary
+      - run: pnpm install --frozen-lockfile
       - run: pnpm run gen:examples
       - name: Make sure all changes to the root README.md is copied to the main package before diff check
         run: cp README.md packages/openapi-typescript-server/README.md
