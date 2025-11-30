@@ -10,13 +10,13 @@
   },
   "type": "module",
   "scripts": {
-    "test": "npm test --workspaces --if-present",
+    "test": "pnpm -r --filter \"./packages/*\" --filter \"./examples/*\" test",
     "typecheck": "tsc --noEmit",
-    "gen:examples": "npm run gen --workspaces --if-present",
-    "build:packages": "npm run build --workspaces packages/** --if-present",
-    "pack": "npm run build:packages && npm pack --workspaces packages/** --pack-destination /tmp",
-    "format:check": "npx prettier . --check",
-    "format": "npx prettier . --write",
+    "gen:examples": "pnpm -r --filter \"./examples/*\" gen",
+    "build:packages": "pnpm -r --filter \"./packages/*\" build",
+    "pack": "pnpm run build:packages && pnpm -r --filter \"./packages/*\" pack --pack-destination /tmp",
+    "format:check": "pnpm exec prettier . --check",
+    "format": "pnpm exec prettier . --write",
     "propagate:readme": "cp README.md packages/openapi-typescript-server/README.md"
   },
   "engines": {
@@ -29,6 +29,7 @@
     "examples/*"
   ],
   "devDependencies": {
+    "@types/node": "^24.10.1",
     "prettier": "3.6.2",
     "typescript": "^5.9.3"
   },

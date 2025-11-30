@@ -31,19 +31,19 @@ At runtime, your implementation is converted into HTTP handlers for various fram
 Install build-time packages as dev dependencies:
 
 ```bash
-npm install -D openapi-typescript openapi-typescript-server
+pnpm add -D openapi-typescript openapi-typescript-server
 ```
 
 Install runtime adapter (Express example):
 
 ```bash
-npm install openapi-typescript-server-express
+pnpm add openapi-typescript-server-express
 ```
 
 **Recommended**: Install middleware for runtime validation:
 
 ```bash
-npm install express-openapi-validator
+pnpm add express-openapi-validator
 ```
 
 ### Quickstart
@@ -102,13 +102,13 @@ First, follow [recommended setup from openapi-typescript](https://openapi-ts.dev
 Generate types from your OpenAPI spec:
 
 ```bash
-npx openapi-typescript ./openapi.yaml --output ./gen/schema.d.ts
+pnpm exec openapi-typescript ./openapi.yaml --output ./gen/schema.d.ts
 ```
 
 Generate the server interface:
 
 ```bash
-npx openapi-typescript-server ./openapi.yaml --types ./schema.d.ts --output ./gen/server.ts
+pnpm exec openapi-typescript-server ./openapi.yaml --types ./schema.d.ts --output ./gen/server.ts
 ```
 
 > **Note**: The `--types` path is relative to the output directory so the generated code can import it correctly.

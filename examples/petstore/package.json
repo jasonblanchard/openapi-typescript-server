@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "openapi-typescript": "^7.10.1",
-    "openapi-typescript-server": "0.0.14",
-    "openapi-typescript-server-express": "0.0.14"
+    "openapi-typescript-server": "workspace:*",
+    "openapi-typescript-server-express": "workspace:*",
+    "openapi-typescript-server-runtime": "workspace:*"
   }
 }

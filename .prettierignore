@@ -4,3 +4,4 @@ coverage
 **/gen/**
 **/dist/**
 **/bin/**
+pnpm-lock.yaml
