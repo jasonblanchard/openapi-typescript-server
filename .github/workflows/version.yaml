@@ -53,14 +53,6 @@ jobs:
 
       - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      - name: "Align dependencies with version"
-        run: |
-          pnpm install --save-exact --filter openapi-typescript-server openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
-          pnpm install --save-exact --filter openapi-typescript-server-express openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
-          pnpm install --save-exact --filter kitchensink-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
-          pnpm install --save-exact --filter petstore-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
-          pnpm install --save-exact --filter docs-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
-
       - name: Build the packages
         run: pnpm run build:packages
 
