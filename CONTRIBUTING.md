@@ -4,7 +4,16 @@ Contributions are welcome!
 
 ## Development Setup
 
-This is a typical npm monorepo. Follow the `package.json` files and let us know where you get stuck.
+This is a typical pnpm monorepo. Follow the `package.json` files and let us know where you get stuck.
+
+To get started:
+
+```bash
+pnpm install
+pnpm run build:packages
+pnpm run gen:examples
+pnpm test
+```
 
 ## Project Structure
 
