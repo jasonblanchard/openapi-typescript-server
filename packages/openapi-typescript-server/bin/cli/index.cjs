@@ -701,13 +701,16 @@ var package_default = {
   dependencies: {
     commander: "^14.0.2",
     "js-yaml": "^4.1.1",
-    "openapi-typescript-server-runtime": "workspace:*",
     "ts-morph": "^27.0.2",
     zod: "^4.1.13"
+  },
+  peerDependencies: {
+    "openapi-typescript-server-runtime": "workspace:*"
   },
   devDependencies: {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.10.1",
+    "openapi-typescript-server-runtime": "workspace:*",
     tsup: "^8.5.1"
   }
 };
