@@ -53,8 +53,14 @@ jobs:
 
       - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Build the packages
         run: pnpm run build:packages
+
+      - name: Install again to pick up built binary
+        run: pnpm install --frozen-lockfile
 
       - name: Codegen examples with latest version
         run: pnpm run gen:examples
