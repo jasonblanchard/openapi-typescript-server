@@ -39,8 +39,11 @@ export default function generate(
       result: string;
       summary?: string;
       description?: string;
+      tags?: string[];
     }
   > = {};
+
+  const allTags = new Set<string>();
 
   for (const path in spec.paths) {
     const pathSpec = spec.paths[path];
@@ -144,6 +147,10 @@ export default function generate(
         type: `Promise<${responseVariantInterfaceNames.join(" | ")}>`,
       });
 
+      // Track tags for this operation
+      const operationTags = operation.tags || [];
+      operationTags.forEach((tag) => allTags.add(tag));
+
       operationsById[operationId] = {
         path: path,
         method: method,
@@ -151,6 +158,7 @@ export default function generate(
         result: resultType.getName(),
         summary: operation.summary,
         description: operation.description,
+        tags: operationTags,
       };
 
       sourceFile.addFunction({
@@ -225,6 +233,134 @@ export default function generate(
 
       writer.writeLine("]");
     },
+  });
+
+  // Generate Tag type union
+  const tagValues = Array.from(allTags).map((tag) => `"${tag}"`);
+  // Check if there are any untagged operations
+  const hasUntaggedOperations = Object.values(operationsById).some(
+    (op) => !op.tags || op.tags.length === 0,
+  );
+  if (hasUntaggedOperations) {
+    tagValues.push("null");
+  }
+
+  if (tagValues.length > 0) {
+    sourceFile.addTypeAlias({
+      name: "Tag",
+      isExported: true,
+      type: tagValues.join(" | "),
+    });
+  }
+
+  // Generate interfaces for partial servers by tag
+  const tagToOperations: Record<string, string[]> = {};
+
+  // Group operations by tag
+  Object.entries(operationsById).forEach(([operationId, { tags }]) => {
+    if (!tags || tags.length === 0) {
+      // Untagged operations
+      if (!tagToOperations["null"]) {
+        tagToOperations["null"] = [];
+      }
+      tagToOperations["null"].push(operationId);
+    } else {
+      // Add operation to each tag it belongs to
+      tags.forEach((tag) => {
+        if (!tagToOperations[tag]) {
+          tagToOperations[tag] = [];
+        }
+        tagToOperations[tag].push(operationId);
+      });
+    }
+  });
+
+  // Generate a ServerForTag interface for each tag
+  Object.entries(tagToOperations).forEach(([tag, operations]) => {
+    const interfaceName =
+      tag === "null" ? "ServerForUntagged" : `ServerFor${capitalize(tag)}`;
+    const tagInterface = sourceFile.addInterface({
+      name: interfaceName,
+      isExported: true,
+      typeParameters: [
+        { name: "Req", default: "unknown" },
+        { name: "Res", default: "unknown" },
+      ],
+    });
+
+    // Add only operations associated with this tag
+    operations.forEach((operationId) => {
+      const op = operationsById[operationId];
+      if (op) {
+        tagInterface.addProperty({
+          name: operationId,
+          type: `(args: ${op.args}<Req, Res>) => ${op.result}`,
+          hasQuestionToken: false, // Required - all operations for this tag must be implemented
+        });
+      }
+    });
+  });
+
+  // Generate registerRouteHandlersByTag function with overloads
+  const registerByTagFunc = sourceFile.addFunction({
+    name: "registerRouteHandlersByTag",
+    isExported: true,
+    parameters: [
+      { name: "tag", type: "Tag" },
+      { name: "server", type: "Partial<Server<Req, Res>>" },
+    ],
+    typeParameters: [{ name: "Req" }, { name: "Res" }],
+    returnType: "Route[]",
+    statements: (writer) => {
+      writer.writeLine("const routes: Route[] = [];");
+      writer.writeLine("");
+
+      // Generate switch statement for each tag
+      if (Object.keys(tagToOperations).length > 0) {
+        writer.writeLine("switch (tag) {");
+
+        Object.entries(tagToOperations).forEach(([tag, operations]) => {
+          const caseValue = tag === "null" ? "null" : `"${tag}"`;
+          writer.writeLine(`case ${caseValue}:`);
+
+          operations.forEach((operationId) => {
+            const op = operationsById[operationId];
+            if (op) {
+              writer.writeLine("routes.push({");
+              writer.writeLine(`method: "${op.method}",`);
+              writer.writeLine(`path: "${op.path}",`);
+              writer.writeLine(
+                `handler: server.${operationId} as Route["handler"],`,
+              );
+              writer.writeLine("});");
+            }
+          });
+
+          writer.writeLine("break;");
+        });
+
+        writer.writeLine("}");
+      }
+
+      writer.writeLine("");
+      writer.writeLine("return routes;");
+    },
+  });
+
+  // Add overload signatures for each tag
+  Object.entries(tagToOperations).forEach(([tag, _operations]) => {
+    const tagValue = tag === "null" ? "null" : `"${tag}"`;
+    const interfaceName =
+      tag === "null" ? "ServerForUntagged" : `ServerFor${capitalize(tag)}`;
+
+    registerByTagFunc.addOverload({
+      parameters: [
+        { name: "tag", type: tagValue },
+        { name: "server", type: `${interfaceName}<Req, Res>` },
+      ],
+      typeParameters: [{ name: "Req" }, { name: "Res" }],
+      returnType: "Route[]",
+    });
   });
 
   sourceFile.insertText(
