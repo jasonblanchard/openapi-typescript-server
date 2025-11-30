@@ -60,9 +60,9 @@ var __async = (__this, __arguments, generator) => {
   });
 };
 
-// ../../node_modules/ansi-colors/symbols.js
+// ../../node_modules/.pnpm/ansi-colors@4.1.3/node_modules/ansi-colors/symbols.js
 var require_symbols = __commonJS({
-  "../../node_modules/ansi-colors/symbols.js"(exports2, module2) {
+  "../../node_modules/.pnpm/ansi-colors@4.1.3/node_modules/ansi-colors/symbols.js"(exports2, module2) {
     "use strict";
     var isHyper = typeof process !== "undefined" && process.env.TERM_PROGRAM === "Hyper";
     var isWindows = typeof process !== "undefined" && process.platform === "win32";
@@ -130,9 +130,9 @@ var require_symbols = __commonJS({
   }
 });
 
-// ../../node_modules/ansi-colors/index.js
+// ../../node_modules/.pnpm/ansi-colors@4.1.3/node_modules/ansi-colors/index.js
 var require_ansi_colors = __commonJS({
-  "../../node_modules/ansi-colors/index.js"(exports2, module2) {
+  "../../node_modules/.pnpm/ansi-colors@4.1.3/node_modules/ansi-colors/index.js"(exports2, module2) {
     "use strict";
     var isObject = (val) => val !== null && typeof val === "object" && !Array.isArray(val);
     var ANSI_REGEX = /[\u001b\u009b][[\]#;?()]*(?:(?:(?:[^\W_]*;?[^\W_]*)\u0007)|(?:(?:[0-9]{1,4}(;[0-9]{0,4})*)?[~0-9=<>cf-nqrtyA-PRZ]))/g;
@@ -515,7 +515,7 @@ function getOperationId({
 // src/cli/index.ts
 var import_ansi_colors = __toESM(require_ansi_colors(), 1);
 
-// ../../node_modules/supports-color/index.js
+// ../../node_modules/.pnpm/supports-color@10.2.2/node_modules/supports-color/index.js
 var import_node_process = __toESM(require("process"), 1);
 var import_node_os = __toESM(require("os"), 1);
 var import_node_tty = __toESM(require("tty"), 1);
@@ -701,12 +701,13 @@ var package_default = {
   dependencies: {
     commander: "^14.0.2",
     "js-yaml": "^4.1.1",
-    "openapi-typescript-server-runtime": "0.0.14",
+    "openapi-typescript-server-runtime": "workspace:*",
     "ts-morph": "^27.0.2",
     zod: "^4.1.13"
   },
   devDependencies: {
     "@types/js-yaml": "^4.0.9",
+    "@types/node": "^24.10.1",
     tsup: "^8.5.1"
   }
 };

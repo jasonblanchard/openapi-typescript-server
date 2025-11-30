@@ -44,12 +44,13 @@
   "dependencies": {
     "commander": "^14.0.2",
     "js-yaml": "^4.1.1",
-    "openapi-typescript-server-runtime": "0.0.14",
+    "openapi-typescript-server-runtime": "workspace:*",
     "ts-morph": "^27.0.2",
     "zod": "^4.1.13"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
+    "@types/node": "^24.10.1",
     "tsup": "^8.5.1"
   }
 }

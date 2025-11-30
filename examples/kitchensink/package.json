@@ -9,16 +9,20 @@
     "start": "node --watch cmd/index.ts"
   },
   "dependencies": {
-    "@types/express": "^5.0.5",
     "@types/express-xml-bodyparser": "^0.3.5",
-    "@types/supertest": "^6.0.3",
     "express": "^4.21.2",
     "express-openapi-validator": "^5.6.0",
     "express-xml-bodyparser": "^0.4.1",
     "openapi-typescript": "^7.10.1",
-    "openapi-typescript-server": "0.0.14",
-    "openapi-typescript-server-express": "0.0.14",
-    "supertest": "^7.1.4",
+    "openapi-typescript-server": "workspace:*",
+    "openapi-typescript-server-express": "workspace:*",
+    "openapi-typescript-server-runtime": "workspace:*",
     "xml-js": "^1.6.11"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "@types/supertest": "^6.0.3",
+    "supertest": "^7.1.4"
   }
 }
