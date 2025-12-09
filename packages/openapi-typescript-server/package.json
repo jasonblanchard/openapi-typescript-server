@@ -1,6 +1,6 @@
 {
   "name": "openapi-typescript-server",
-  "version": "0.0.15-2",
+  "version": "0.0.15",
   "description": "Codegenerator for OpenAPI server stubs in TypeScript",
   "author": "jasonblanchard",
   "license": "MIT",
