@@ -54,31 +54,31 @@ CLI generates per-operation:
 
 ```bash
 node --version              # Must be >= 23.6.0
-npm ci                      # 30 seconds - NEVER CANCEL
-npm run build:packages      # 5 seconds - builds .cjs files
-npm run gen:examples        # 5 seconds - validates CLI works
-npm run format:check        # 2 seconds
-npm run typecheck           # 3 seconds
-npm test                    # 1 second
+pnpm install                # 30 seconds - NEVER CANCEL
+pnpm run build:packages     # 5 seconds - builds .cjs files
+pnpm run gen:examples       # 5 seconds - validates CLI works
+pnpm run format:check       # 2 seconds
+pnpm run typecheck          # 3 seconds
+pnpm test                   # 1 second
 ```
 
-**NEVER** run `npm ci` with short timeout. Set to 60+ minutes or it will fail.
+**NEVER** run `pnpm install` with short timeout. Set to 60+ minutes or it will fail.
 
 ### After Code Changes (Validation Sequence)
 
 ```bash
-npm run format              # Auto-fix formatting (required before commit)
-npm run build:packages      # Re-build if CLI or adapters changed
-npm run gen:examples        # Re-generate if CLI changed (checks for uncommitted diffs in CI)
-npm run typecheck           # Must pass (no errors)
-npm test                    # All tests must pass
+pnpm run format             # Auto-fix formatting (required before commit)
+pnpm run build:packages     # Re-build if CLI or adapters changed
+pnpm run gen:examples       # Re-generate if CLI changed (checks for uncommitted diffs in CI)
+pnpm run typecheck          # Must pass (no errors)
+pnpm test                   # All tests must pass
 ```
 
 ### Testing Generated Code Locally
 
 ```bash
 cd examples/docs
-npm run start               # Runs: node --watch cmd/index.ts (port 8080)
+pnpm run start              # Runs: node --watch cmd/index.ts (port 8080)
 
 # In another terminal:
 curl -X POST http://localhost:8080/api/v3/speak/123 \
@@ -139,7 +139,7 @@ See `examples/docs/api.ts` for error pattern with `"default"` response variant.
 - Pattern: `describe()` + `it()` with `beforeEach()` for setup
 - HTTP testing: `supertest` library for request/response assertions
 - Location: Co-located `.test.ts` files (e.g., `index.ts` → `index.test.ts`)
-- Run: `npm test` at root (runs across all workspaces) or per-package
+- Run: `pnpm test` at root (runs across all workspaces) or per-package
 
 Example pattern (`examples/docs/app.test.ts`):
 
@@ -200,7 +200,7 @@ examples/
 1. Update `packages/openapi-typescript-server/src/cli/generate.ts` response variant logic
 2. Update `packages/openapi-typescript-server-express/src/index.ts` to handle new variant
 3. Add test case to `packages/openapi-typescript-server-express/src/index.test.ts`
-4. Run `npm run build:packages && npm run gen:examples && npm test`
+4. Run `pnpm run build:packages && pnpm run gen:examples && pnpm test`
 
 ### Adding New Framework Adapter
 
@@ -223,16 +223,16 @@ examples/
 Runs on every commit:
 
 ```yaml
-npm ci
-npm run format:check       # Fails if code not formatted
-npm run build:packages
-npm run gen:examples
+pnpm install --frozen-lockfile
+pnpm run format:check      # Fails if code not formatted
+pnpm run build:packages
+pnpm run gen:examples
 git diff --exit-code        # Fails if generated code differs (means you didn't commit regenerated examples)
-npm run typecheck
-npm test
+pnpm run typecheck
+pnpm test
 ```
 
-**Before pushing**: Always run `npm run format` + validation sequence or CI fails.
+**Before pushing**: Always run `pnpm run format` + validation sequence or CI fails.
 
 ## Design Decisions to Remember
 
@@ -245,7 +245,7 @@ npm test
 
 ## Common Mistakes
 
-- ❌ Forgetting to run `npm run build:packages` after CLI changes (tests import stale code)
+- ❌ Forgetting to run `pnpm run build:packages` after CLI changes (tests import stale code)
 - ❌ Not regenerating examples after CLI changes (CI will fail on diff check)
 - ❌ Using structural typing instead of explicit `Server<Req, Res>` type (loses inference)
 - ❌ Mounting routes without base path (OpenAPI `servers.url` ignored by adapter)
