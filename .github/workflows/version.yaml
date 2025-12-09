@@ -37,40 +37,34 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT }}
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          cache: "npm"
+          cache: "pnpm"
 
       - name: Version packages
-        run: npm --workspaces --include-workspace-root --no-git-tag-version version ${{ github.event.inputs.version_type }}
+        # Ignore exit code since this will fail from the workspace:* protocol for some reason
+        run: pnpm version ${{ github.event.inputs.version_type }} --no-git-tag-version --workspaces --include-workspace-root || true
 
       - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      - name: "Align dependencies with version"
-        # For some reason, these need to be run twice to write the version to package.json
-        run: |
-          npm install --save-exact --workspace openapi-typescript-server openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
-          npm install --save-exact --workspace openapi-typescript-server openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
-
-          npm install --save-exact --workspace openapi-typescript-server-express openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
-          npm install --save-exact --workspace openapi-typescript-server-express openapi-typescript-server-runtime@${{ env.PACKAGE_VERSION }}
-
-          npm install --save-exact --workspace kitchensink-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
-          npm install --save-exact --workspace kitchensink-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
-
-          npm install --save-exact --workspace petstore-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
-          npm install --save-exact --workspace petstore-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
-
-          npm install --save-exact --workspace docs-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
-          npm install --save-exact --workspace docs-example openapi-typescript-server@${{ env.PACKAGE_VERSION }} openapi-typescript-server-express@${{ env.PACKAGE_VERSION }}
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Build the packages
-        run: npm run build:packages
+        run: pnpm run build:packages
+
+      - name: Install again to pick up built binary
+        run: pnpm install --frozen-lockfile
 
       - name: Codegen examples with latest version
-        run: npm run gen:examples
+        run: pnpm run gen:examples
 
       - name: Configure Git
         run: |

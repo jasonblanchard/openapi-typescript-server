@@ -37,7 +37,7 @@ npm install -D openapi-typescript openapi-typescript-server
 Install runtime adapter (Express example):
 
 ```bash
-npm install openapi-typescript-server-express
+npm install openapi-typescript-server-express openapi-typescript-server-runtime
 ```
 
 **Recommended**: Install middleware for runtime validation:

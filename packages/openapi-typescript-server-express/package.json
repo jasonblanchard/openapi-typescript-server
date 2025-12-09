@@ -37,17 +37,21 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "@types/supertest": "^6.0.3",
+    "express": "^4.21.2",
+    "openapi-typescript-server-runtime": "workspace:*",
+    "supertest": "^7.1.4",
     "tsup": "^8.5.1",
     "xml-js": "^1.6.11"
   },
   "peerDependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "openapi-typescript-server-runtime": "workspace:*"
   },
   "scripts": {
     "test": "node --test",
     "build": "tsup src/index.ts --dts --format cjs,esm --clean"
-  },
-  "dependencies": {
-    "openapi-typescript-server-runtime": "0.0.14"
   }
 }
