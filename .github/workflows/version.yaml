@@ -49,7 +49,7 @@ jobs:
           cache: "pnpm"
 
       - name: Version packages
-      # Ignore exit code since this will fail from the workspace:* protocol for some reason
+        # Ignore exit code since this will fail from the workspace:* protocol for some reason
         run: pnpm version ${{ github.event.inputs.version_type }} --no-git-tag-version --workspaces --include-workspace-root || true
 
       - run: echo "PACKAGE_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
