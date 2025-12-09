@@ -1,7 +1,7 @@
 {
   "name": "petstore-example",
   "private": true,
-  "version": "0.0.14",
+  "version": "0.0.15-0",
   "type": "module",
   "scripts": {
     "gen": "openapi-typescript ./openapi.yaml --output ./gen/schema.d.ts && openapi-typescript-server ./openapi.yaml -t ./schema.d.ts -o ./gen/server.ts "
