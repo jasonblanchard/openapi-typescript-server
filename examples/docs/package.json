@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@types/express-xml-bodyparser": "^0.3.5",
-    "express": "^4.21.2",
+    "express": "^4.22.1",
     "express-openapi-validator": "^5.6.0",
     "express-xml-bodyparser": "^0.4.1",
     "openapi-typescript": "^7.10.1",
