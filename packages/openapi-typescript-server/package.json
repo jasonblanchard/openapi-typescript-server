@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.0.3",
     "openapi-typescript-server-runtime": "workspace:*",
     "tsup": "^8.5.1"
   }
