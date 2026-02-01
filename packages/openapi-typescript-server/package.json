@@ -42,7 +42,7 @@
     "build": "tsup src/cli/index.ts --format cjs --out-dir bin/cli --clean"
   },
   "dependencies": {
-    "commander": "^14.0.2",
+    "commander": "^14.0.3",
     "js-yaml": "^4.1.1",
     "ts-morph": "^27.0.2",
     "zod": "^4.1.13"
