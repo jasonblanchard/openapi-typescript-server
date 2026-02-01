@@ -45,7 +45,7 @@
     "commander": "^14.0.2",
     "js-yaml": "^4.1.1",
     "ts-morph": "^27.0.2",
-    "zod": "^4.1.13"
+    "zod": "^4.3.6"
   },
   "peerDependencies": {
     "openapi-typescript-server-runtime": "workspace:*"
